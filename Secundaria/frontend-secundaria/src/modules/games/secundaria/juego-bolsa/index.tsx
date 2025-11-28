@@ -8,7 +8,7 @@ const JuegoBolsaPage = () => {
     </div>
   );
 };
-
+//34
 export default JuegoBolsaPage;
 
 
