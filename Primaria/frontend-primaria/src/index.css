@@ -41,10 +41,20 @@
     /* Panel colors */
     --panel-blue: rgba(25, 118, 210, 0.95);
     --panel-blue-dark: rgba(21, 101, 192, 0.95);
+    
+    /* Futurista Neon Colors */
+    --neon-blue: #00C3FF;
+    --neon-blue-dark: #00A6DF;
+    --dark-blue-bg: rgba(18, 25, 45, 0.85);
+    --input-bg: #343A40;
+    --input-border: #6C757D;
+    --text-white: #FFFFFF;
+    --text-grey: #CED4DA;
+    --error-red: #DC3545;
 }
 
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Roboto', 'Open Sans', 'Lato', 'Montserrat', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background: var(--bg-light-blue);
     background-image: 
         repeating-linear-gradient(45deg, transparent, transparent 50px, rgba(25, 118, 210, 0.03) 50px, rgba(25, 118, 210, 0.03) 100px);
