@@ -1,0 +1,57 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    /* Portal Educativo Color Palette */
+    --white: #ffffff;
+    
+    /* Light Blue Background */
+    --bg-light-blue: #e3f2fd;
+    --bg-blue: #bbdefb;
+    --bg-blue-medium: #90caf9;
+    
+    /* Dark Blue Panel */
+    --blue-panel: #1976d2;
+    --blue-panel-dark: #1565c0;
+    --blue-panel-darker: #0d47a1;
+    
+    /* Orange (Buttons & Accents) */
+    --orange: #ff6b35;
+    --orange-dark: #e55a2b;
+    --orange-light: #ff8c5a;
+    
+    /* Gold (Coins) */
+    --gold: #ffd700;
+    --gold-dark: #d4af37;
+    --gold-light: #ffed4e;
+    
+    /* Grey (Cat) */
+    --grey-light: #d3d3d3;
+    --grey-medium: #a0a0a0;
+    --grey-dark: #808080;
+    --grey-cat: #b0b0b0;
+    
+    /* Brown (Sacks) */
+    --brown-light: #d2b48c;
+    --brown-medium: #8b7355;
+    
+    /* Panel colors */
+    --panel-blue: rgba(25, 118, 210, 0.95);
+    --panel-blue-dark: rgba(21, 101, 192, 0.95);
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: var(--bg-light-blue);
+    background-image: 
+        repeating-linear-gradient(45deg, transparent, transparent 50px, rgba(25, 118, 210, 0.03) 50px, rgba(25, 118, 210, 0.03) 100px);
+    min-height: 100vh;
+    overflow-x: hidden;
+    position: relative;
+    color: var(--white);
+}
+
+
