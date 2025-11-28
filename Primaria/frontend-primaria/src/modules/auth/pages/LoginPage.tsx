@@ -3,83 +3,92 @@ import { LoginForm } from '../components/LoginForm';
 import './LoginPage.css';
 
 export const LoginPage: React.FC = () => {
-  const characterImageRef = useRef<HTMLImageElement>(null);
-  const characterGifRef = useRef<HTMLImageElement>(null);
-  const [showGif, setShowGif] = useState(false);
-
-  const gifSrc = '/images/gato sin fondo.gif';
-  const staticImageSrc = '/images/Michimovil vista frontal (1).png';
+  const videoRef1 = useRef<HTMLVideoElement>(null);
+  const videoRef2 = useRef<HTMLVideoElement>(null);
+  const logoSrc = '/images/logo vector.png';
+  const initialVideoSrc = '/images/gato3d mocimiento.mp4';
+  const afterLoginVideoSrc = '/images/animacion web.mp4';
+  const [showSecondVideo, setShowSecondVideo] = useState(false);
 
   useEffect(() => {
-    // Load GIF on component mount
-    if (characterGifRef.current) {
-      const gifElement = characterGifRef.current;
-      const gifSource = gifElement.getAttribute('data-gif-src') || gifSrc;
-      
-      // Preload the GIF
-      const img = new Image();
-      img.src = gifSource;
-      img.onload = () => {
-        if (gifElement) {
-          gifElement.src = gifSource;
+    // Precargar y reproducir el primer video automáticamente
+    if (videoRef1.current) {
+      videoRef1.current.play().catch((error) => {
+        console.error('Error al reproducir video inicial:', error);
+      });
+    }
+
+    // Precargar y reproducir el segundo video en segundo plano (invisible)
+    // Esto permite una transición perfecta sin cortes
+    if (videoRef2.current) {
+      videoRef2.current.load();
+      videoRef2.current.addEventListener('canplaythrough', () => {
+        if (videoRef2.current) {
+          // Reproducir el segundo video en segundo plano para que esté sincronizado
+          videoRef2.current.play().catch(() => {
+            // Silenciar error, se mostrará cuando sea necesario
+          });
         }
-      };
+      }, { once: true });
     }
-
-    // Toggle between static image and GIF on hover/interaction
-    const handleCharacterInteraction = () => {
-      setShowGif(true);
-      if (characterImageRef.current) {
-        characterImageRef.current.style.opacity = '0';
-      }
-      if (characterGifRef.current) {
-        characterGifRef.current.classList.add('active');
-      }
-    };
-
-    const handleCharacterLeave = () => {
-      setShowGif(false);
-      if (characterImageRef.current) {
-        characterImageRef.current.style.opacity = '1';
-      }
-      if (characterGifRef.current) {
-        characterGifRef.current.classList.remove('active');
-      }
-    };
-
-    const characterSection = document.querySelector('.character-section');
-    if (characterSection) {
-      characterSection.addEventListener('mouseenter', handleCharacterInteraction);
-      characterSection.addEventListener('mouseleave', handleCharacterLeave);
-    }
-
-    return () => {
-      if (characterSection) {
-        characterSection.removeEventListener('mouseenter', handleCharacterInteraction);
-        characterSection.removeEventListener('mouseleave', handleCharacterLeave);
-      }
-    };
   }, []);
 
-  const handleRefresh = () => {
-    // Reload the page or refresh character animation
-    if (characterImageRef.current && characterGifRef.current) {
-      characterImageRef.current.style.opacity = '1';
-      characterGifRef.current.classList.remove('active');
-      setShowGif(false);
+  const switchToSecondVideo = () => {
+    // Transición instantánea y natural al segundo video
+    if (videoRef1.current && videoRef2.current) {
+      // Asegurar que el segundo video esté reproduciéndose
+      if (videoRef2.current.paused) {
+        videoRef2.current.play().catch((error) => {
+          console.error('Error al reproducir segundo video:', error);
+        });
+      }
       
-      // Force reload of GIF
-      const gifElement = characterGifRef.current;
-      const currentSrc = gifElement.src;
-      gifElement.src = '';
-      setTimeout(() => {
-        gifElement.src = currentSrc || gifSrc;
-      }, 100);
+      // Activar el segundo video (crossfade rápido e imperceptible)
+      setShowSecondVideo(true);
+      
+      // Ocultar el primer video gradualmente
+      if (videoRef1.current) {
+        videoRef1.current.style.transition = 'opacity 0.3s ease-out';
+        videoRef1.current.style.opacity = '0';
+        
+        // Pausar el primer video después de la transición
+        setTimeout(() => {
+          if (videoRef1.current) {
+            videoRef1.current.pause();
+          }
+        }, 350);
+      }
     }
+  };
+
+  const playGif = () => {
+    // Cambiar al segundo video cuando el login sea exitoso
+    switchToSecondVideo();
   };
 
   return (
     <div className="login-page">
+      {/* Background Video 1 - Video inicial */}
+      <video
+        ref={videoRef1}
+        className="background-video background-video-1"
+        src={initialVideoSrc}
+        autoPlay
+        loop
+        muted
+        playsInline
+      />
+      
+      {/* Background Video 2 - Video después del login */}
+      <video
+        ref={videoRef2}
+        className={`background-video background-video-2 ${showSecondVideo ? 'active' : ''}`}
+        src={afterLoginVideoSrc}
+        loop
+        muted
+        playsInline
+      />
+      
       {/* Background particles */}
       <div className="particles"></div>
       <div className="moss-texture"></div>
@@ -88,25 +97,16 @@ export const LoginPage: React.FC = () => {
       {/* Header */}
       <header className="header">
         <div className="logo">
-          <div className="controller-icon">
-            <div className="d-pad">
-              <div className="d-pad-up"></div>
-              <div className="d-pad-down"></div>
-              <div className="d-pad-left"></div>
-              <div className="d-pad-right"></div>
-            </div>
-            <div className="buttons">
-              <div className="button button-a"></div>
-              <div className="button button-b"></div>
-            </div>
-          </div>
-          <span className="logo-text">game boy</span>
+          <img 
+            src={logoSrc} 
+            alt="Logo Michi Academy" 
+            className="logo-image"
+            onError={() => {
+              console.error('Error al cargar logo:', logoSrc);
+            }}
+          />
         </div>
-        <nav className="nav">
-          <a href="#" className="nav-link">HOME</a>
-          <button className="btn-join">JOIN</button>
-          <a href="#" className="nav-link">COMMUNITY</a>
-        </nav>
+       
       </header>
 
       {/* Main Content */}
@@ -115,27 +115,11 @@ export const LoginPage: React.FC = () => {
         <div className="login-section">
           <div className="login-panel">
             <div className="login-content">
-              <LoginForm />
+              <LoginForm onLoginSuccess={playGif} />
             </div>
           </div>
         </div>
 
-        {/* Right Section - Character Image/GIF */}
-        <div className="character-section">
-          <img 
-            ref={characterImageRef}
-            src={staticImageSrc} 
-            alt="Character" 
-            className="character-image" 
-          />
-          <img 
-            ref={characterGifRef}
-            src="" 
-            alt="Character" 
-            className="character-gif" 
-            data-gif-src={gifSrc}
-          />
-        </div>
       </main>
 
       {/* Footer */}
@@ -158,9 +142,6 @@ export const LoginPage: React.FC = () => {
           </a>
         </div>
         <div className="footer-right">
-          <button className="refresh-btn" onClick={handleRefresh}>
-            <i className="fas fa-redo footer-icon"></i>
-          </button>
         </div>
       </footer>
     </div>
