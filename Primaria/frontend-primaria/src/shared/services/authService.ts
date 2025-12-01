@@ -1,57 +1,87 @@
-import { LoginResponse, User } from '../types/auth.types';
+import { LoginResponse, User, LoginCredentials, RegisterCredentials } from '../types/auth.types';
+import { apiService } from './api.service';
+import { API_CONFIG } from '../config/api.config';
 
 class AuthService {
   async login(email: string, password: string): Promise<LoginResponse> {
-    // TODO: Implement API call to login endpoint
-    // Example:
-    // const response = await fetch('/api/auth/login', {
-    //   method: 'POST',
-    //   headers: { 'Content-Type': 'application/json' },
-    //   body: JSON.stringify({ email, password }),
-    // });
-    // if (!response.ok) throw new Error('Login failed');
-    // return response.json();
-
-    // Placeholder implementation - replace with actual API call
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        // Simulate API call
-        if (email && password) {
-          resolve({
-            user: {
-              id: '1',
-              email: email,
-              username: email.split('@')[0],
-            },
-            token: 'mock-token',
-          });
-        } else {
-          reject(new Error('Email and password are required'));
-        }
-      }, 1000);
-    });
+    try {
+      const credentials: LoginCredentials = { email, password };
+      const response = await apiService.post<LoginResponse>(
+        API_CONFIG.ENDPOINTS.AUTH.LOGIN,
+        credentials
+      );
+      
+      // Guardar token en localStorage
+      if (response.token) {
+        localStorage.setItem('token', response.token);
+        localStorage.setItem('user', JSON.stringify(response.user));
+      }
+      
+      return response;
+    } catch (error) {
+      throw error;
+    }
   }
 
-  async register(email: string, password: string, username?: string): Promise<LoginResponse> {
-    // TODO: Implement API call to register endpoint
-    throw new Error('Register service not implemented yet');
+  async register(email: string, password: string, nombre?: string): Promise<LoginResponse> {
+    try {
+      const credentials: RegisterCredentials = {
+        email,
+        password,
+        nombre: nombre || email.split('@')[0],
+      };
+      
+      const response = await apiService.post<LoginResponse>(
+        API_CONFIG.ENDPOINTS.AUTH.REGISTER,
+        credentials
+      );
+      
+      // Guardar token en localStorage
+      if (response.token) {
+        localStorage.setItem('token', response.token);
+        localStorage.setItem('user', JSON.stringify(response.user));
+      }
+      
+      return response;
+    } catch (error) {
+      throw error;
+    }
   }
 
   async logout(): Promise<void> {
-    // TODO: Implement logout logic
-    throw new Error('Logout service not implemented yet');
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
   }
 
   getCurrentUser(): User | null {
-    // TODO: Get current user from storage/context
+    const userStr = localStorage.getItem('user');
+    if (userStr) {
+      try {
+        return JSON.parse(userStr);
+      } catch {
+        return null;
+      }
+    }
     return null;
   }
 
   isAuthenticated(): boolean {
-    // TODO: Check if user is authenticated
-    return false;
+    const token = localStorage.getItem('token');
+    return !!token;
+  }
+
+  async fetchCurrentUser(): Promise<User | null> {
+    try {
+      const response = await apiService.get<{ user: User }>(
+        API_CONFIG.ENDPOINTS.AUTH.ME
+      );
+      return response.user;
+    } catch (error) {
+      // Si falla, limpiar el token
+      this.logout();
+      return null;
+    }
   }
 }
 
 export const authService = new AuthService();
-
