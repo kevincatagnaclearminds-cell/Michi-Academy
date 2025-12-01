@@ -1,2 +1,4 @@
-// TODO: definir DTO para login (email, password)
-
+export interface LoginDto {
+  email: string;
+  password: string;
+}
