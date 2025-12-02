@@ -78,6 +78,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onLoginSuccess }) => {
             <div className="input-group">
               <label htmlFor="email">Correo electrónico o usuario</label>
               <div className="input-wrapper">
+                <i className="fas fa-envelope input-icon"></i>
                 <Field
                   type="text"
                   id="email"
@@ -91,7 +92,6 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onLoginSuccess }) => {
                       : ''
                   }
                 />
-                <i className="fas fa-envelope input-icon"></i>
                 {(touched.email || values.email) && errors.email && (
                   <i className="fas fa-exclamation-circle input-icon-error"></i>
                 )}
@@ -107,6 +107,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onLoginSuccess }) => {
             <div className="input-group">
               <label htmlFor="password">contraseña</label>
               <div className="input-wrapper">
+                <i className="fas fa-globe input-icon"></i>
                 <Field
                   type={showPassword ? 'text' : 'password'}
                   id="password"
@@ -120,7 +121,6 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onLoginSuccess }) => {
                       : ''
                   }
                 />
-                <i className="fas fa-lock input-icon"></i>
                 <button
                   type="button"
                   className="toggle-password"

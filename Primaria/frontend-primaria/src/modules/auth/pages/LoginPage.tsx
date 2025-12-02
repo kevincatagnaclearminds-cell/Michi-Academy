@@ -28,38 +28,42 @@ export const LoginPage: React.FC = () => {
 
       {/* Main Content */}
       <main className="main-container">
-        {/* Left Section - Login Form */}
         <div className="login-section">
           <div className="login-panel">
-            <div className="login-content">
-              <LoginForm />
+            {/* Left Section - Image Space */}
+            <div className="login-image-section">
+              <div className="image-container">
+                {/* Espacio para la imagen - puedes reemplazar esto con tu imagen */}
+                <img 
+                  src="/images/login-illustration.png" 
+                  alt="Login Illustration" 
+                  className="login-illustration"
+                  onError={(e) => {
+                    // Si la imagen no existe, mostrar un placeholder
+                    const target = e.target as HTMLImageElement;
+                    target.style.display = 'none';
+                    const placeholder = target.nextElementSibling as HTMLElement;
+                    if (placeholder) {
+                      placeholder.style.display = 'flex';
+                    }
+                  }}
+                />
+                <div className="image-placeholder" style={{ display: 'none' }}>
+                  <i className="fas fa-image"></i>
+                  <p>Espacio para imagen</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Right Section - Login Form */}
+            <div className="login-form-section">
+              <div className="login-content">
+                <LoginForm />
+              </div>
             </div>
           </div>
         </div>
       </main>
-
-      {/* Footer */}
-      <footer className="footer">
-        <div className="footer-left">
-          <i className="fas fa-brain footer-icon"></i>
-        </div>
-        <div className="footer-center">
-          <a href="#" className="social-icon">
-            <i className="fab fa-facebook-f"></i>
-          </a>
-          <a href="#" className="social-icon">
-            <i className="fab fa-twitter"></i>
-          </a>
-          <a href="#" className="social-icon">
-            <i className="fab fa-instagram"></i>
-          </a>
-          <a href="#" className="social-icon">
-            <i className="fab fa-discord"></i>
-          </a>
-        </div>
-        <div className="footer-right">
-        </div>
-      </footer>
     </div>
   );
 };

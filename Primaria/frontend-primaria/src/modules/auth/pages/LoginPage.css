@@ -1,26 +1,44 @@
 /* LoginPage.css - Main page styles */
 .login-page {
     min-height: 100vh;
+    width: 100%;
     position: relative;
     overflow: hidden;
 }
 
-/* Background Image - Original size */
+/* Background Image - Implementación con CSS background-image */
+/* Justificación: Usamos background-image en lugar de <img> porque:
+   - Mejor rendimiento (no requiere elemento DOM adicional)
+   - Más fácil control con media queries para responsividad
+   - Mejor integración con background-color para relleno
+   - No necesita pointer-events: none (no es elemento interactivo)
+   - Más semántico para fondos decorativos */
 .login-page::before {
     content: '';
     position: fixed;
     top: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
-    background-image: url('/images/michi fondo.png');
-    background-size: auto;
+    width: 100vw;
+    height: 100vh;
+    /* Sin background-color - solo la imagen */
+    /* Imagen de fondo del login - ruta absoluta desde public/ */
+    background-image: url('/images/fondo web loggin.png');
+    /* contain muestra toda la imagen completa sin recortes */
+    background-size: contain;
+    /* Centrada horizontal y verticalmente */
     background-position: center center;
+    /* No se repite */
     background-repeat: no-repeat;
+    /* Fija al hacer scroll */
     background-attachment: fixed;
+    /* Detrás de todo el contenido */
     z-index: -10;
+    /* Asegura que no bloquee interacciones */
+    pointer-events: none;
 }
 
+/* Capas decorativas opcionales - Ajustadas para no interferir con la imagen de fondo */
+/* Si necesitas efectos adicionales, puedes ajustar opacidad y z-index */
 /* Texture Background - Cat Pattern */
 .moss-texture {
     position: fixed;
@@ -28,12 +46,14 @@
     left: 0;
     width: 100%;
     height: 100%;
-    z-index: 1;
+    z-index: -9; /* Detrás de la imagen de fondo pero delante del body */
     background-image: 
-        radial-gradient(circle at 20% 30%, rgba(25, 118, 210, 0.05) 0%, transparent 40%),
-        radial-gradient(circle at 80% 70%, rgba(255, 215, 0, 0.05) 0%, transparent 40%);
-    opacity: 0.2;
-    filter: blur(2px);
+        radial-gradient(circle at 20% 30%, rgba(255, 255, 255, 0.1) 0%, transparent 40%),
+        radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.08) 0%, transparent 40%),
+        radial-gradient(circle at 50% 15%, rgba(255, 255, 255, 0.06) 0%, transparent 40%);
+    opacity: 0.3;
+    filter: blur(1px);
+    pointer-events: none;
 }
 
 /* Particles Background - Bokeh Effect */
@@ -43,14 +63,15 @@
     left: 0;
     width: 100%;
     height: 100%;
-    z-index: 0;
+    z-index: -9; /* Detrás de la imagen de fondo pero delante del body */
     background: 
-        radial-gradient(circle at 20% 30%, rgba(25, 118, 210, 0.15) 0%, transparent 40%),
-        radial-gradient(circle at 80% 70%, rgba(255, 215, 0, 0.1) 0%, transparent 40%),
-        radial-gradient(circle at 50% 50%, rgba(187, 222, 251, 0.1) 0%, transparent 50%);
-    filter: blur(30px);
+        radial-gradient(circle at 10% 20%, rgba(255, 255, 255, 0.15) 0%, transparent 30%),
+        radial-gradient(circle at 90% 25%, rgba(255, 255, 255, 0.12) 0%, transparent 30%),
+        radial-gradient(circle at 50% 10%, rgba(255, 255, 255, 0.1) 0%, transparent 35%);
+    filter: blur(20px);
     animation: particleFloat 20s ease-in-out infinite;
-    opacity: 0.5;
+    opacity: 0.4;
+    pointer-events: none;
 }
 
 /* Character Reflection */
@@ -60,13 +81,14 @@
     right: 10%;
     width: 400px;
     height: 500px;
-    z-index: 1;
-    opacity: 0.08;
+    z-index: -9; /* Detrás de la imagen de fondo pero delante del body */
+    opacity: 0.05;
     filter: blur(60px) brightness(1.2);
     background: 
-        radial-gradient(ellipse at center, rgba(25, 118, 210, 0.3) 0%, transparent 70%);
+        radial-gradient(ellipse at center, rgba(25, 118, 210, 0.2) 0%, transparent 70%);
     transform: scaleY(-1) rotate(5deg);
     animation: reflectionFloat 8s ease-in-out infinite;
+    pointer-events: none;
 }
 
 @keyframes reflectionFloat {
@@ -86,7 +108,8 @@
     align-items: center;
     padding: 20px 40px;
     position: relative;
-    z-index: 10;
+    /* z-index: 1 para estar por encima del fondo */
+    z-index: 1;
 }
 
 .logo {
@@ -111,83 +134,115 @@
 /* Main Container */
 .main-container {
     display: flex;
-    justify-content: flex-start;
+    justify-content: center;
     align-items: center;
-    min-height: calc(100vh - 200px);
+    height: calc(100vh - 100px); /* Altura fija sin scroll */
     padding: 40px;
     position: relative;
-    z-index: 5;
+    /* z-index: 1 para estar por encima del fondo */
+    z-index: 1;
+    overflow: hidden; /* Sin scroll */
 }
 
 /* Login Section */
 .login-section {
     display: flex;
     align-items: center;
-    justify-content: flex-start;
+    justify-content: center;
     padding: 40px;
     position: relative;
-    z-index: 5;
+    /* z-index: 1 para estar por encima del fondo */
+    z-index: 1;
+    width: 100%;
 }
 
 .login-panel {
-    background: rgba(18, 25, 45, 0.6);
+    background: #FFB366; /* Light orange como en la imagen */
     backdrop-filter: blur(4px);
     -webkit-backdrop-filter: blur(4px);
-    border-radius: 12px;
-    padding: 30px;
+    border-radius: 20px;
+    padding: 0;
     width: 100%;
-    max-width: 400px;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-    border: 1px solid rgba(255, 255, 255, 0.15);
+    max-width: 1000px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    display: flex;
+    overflow: hidden;
+}
+
+/* Left Section - Image */
+.login-image-section {
+    flex: 1;
+    min-width: 400px;
+    background: transparent; /* Transparente para que se vea el naranja del panel */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+    position: relative;
+    overflow: hidden;
+}
+
+.image-container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.login-illustration {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    max-width: 100%;
+    max-height: 600px;
+}
+
+.image-placeholder {
+    width: 100%;
+    height: 100%;
+    min-height: 400px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px dashed rgba(255, 255, 255, 0.4);
+    border-radius: 8px;
+    color: rgba(0, 0, 0, 0.6);
+    font-size: 18px;
+    gap: 15px;
+}
+
+.image-placeholder i {
+    font-size: 64px;
+    opacity: 0.5;
+}
+
+.image-placeholder p {
+    margin: 0;
+    font-family: 'Roboto', 'Open Sans', 'Lato', 'Montserrat', sans-serif;
+}
+
+/* Right Section - Form */
+.login-form-section {
+    flex: 1;
+    min-width: 400px;
+    padding: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent; /* Transparente para que se vea el naranja del panel */
 }
 
 .login-content {
     width: 100%;
+    max-width: 450px;
 }
 
-/* Footer */
-.footer {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 20px 40px;
-    position: relative;
-    z-index: 10;
-}
-
-.footer-left,
-.footer-right {
-    flex: 1;
-}
-
-.footer-icon {
-    font-size: 24px;
-    color: var(--blue-panel-darker);
-    opacity: 0.8;
-    transition: opacity 0.3s;
-}
-
-.footer-icon:hover {
-    opacity: 1;
-}
-
-.footer-center {
-    display: flex;
-    gap: 25px;
-}
-
-.social-icon {
-    color: var(--blue-panel-darker);
-    font-size: 20px;
-    opacity: 0.8;
-    transition: all 0.3s;
-    text-decoration: none;
-}
-
-.social-icon:hover {
-    opacity: 1;
-    transform: translateY(-3px);
-}
+/* Footer eliminado - sin iconos sociales */
 
 /* Responsive */
 @media (max-width: 1024px) {
@@ -202,7 +257,19 @@
     
     .login-panel {
         width: 90%;
-        max-width: 400px;
+        max-width: 800px;
+        flex-direction: column;
+    }
+
+    .login-image-section {
+        min-width: 100%;
+        min-height: 300px;
+        padding: 30px;
+    }
+
+    .login-form-section {
+        min-width: 100%;
+        padding: 30px;
     }
 }
 
@@ -213,5 +280,22 @@
     
     .main-container {
         padding: 20px;
+    }
+
+    .login-panel {
+        max-width: 100%;
+    }
+
+    .login-image-section {
+        min-height: 250px;
+        padding: 20px;
+    }
+
+    .login-form-section {
+        padding: 20px;
+    }
+
+    .login-illustration {
+        max-height: 300px;
     }
 }
