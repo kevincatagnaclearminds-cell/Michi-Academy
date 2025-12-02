@@ -53,12 +53,37 @@
     --error-red: #DC3545;
 }
 
+/* Root container - Altura completa */
+#root {
+    min-height: 100vh;
+    width: 100%;
+    position: relative;
+}
+
+/* App container - Altura completa */
+.app {
+    min-height: 100vh;
+    width: 100%;
+    position: relative;
+}
+
+html {
+    height: 100%;
+    overflow: hidden; /* Sin scroll en html */
+}
+
 body {
     font-family: 'Roboto', 'Open Sans', 'Lato', 'Montserrat', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    min-height: 100vh;
-    overflow-x: hidden;
+    height: 100vh; /* Altura fija del viewport */
+    overflow: hidden; /* Sin scroll en body */
     position: relative;
     color: var(--white);
+    /* Fondo del body con contain para ver toda la imagen completa */
+    background-image: url('/images/fondo web loggin.png');
+    background-size: contain; /* Muestra toda la imagen sin recortes */
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
 }
 
 
