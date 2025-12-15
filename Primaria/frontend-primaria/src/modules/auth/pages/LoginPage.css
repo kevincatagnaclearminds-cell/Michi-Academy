@@ -1,0 +1,217 @@
+/* LoginPage.css - Main page styles */
+.login-page {
+    min-height: 100vh;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Background Image - Original size */
+.login-page::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('/images/michi fondo.png');
+    background-size: auto;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    z-index: -10;
+}
+
+/* Texture Background - Cat Pattern */
+.moss-texture {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    background-image: 
+        radial-gradient(circle at 20% 30%, rgba(25, 118, 210, 0.05) 0%, transparent 40%),
+        radial-gradient(circle at 80% 70%, rgba(255, 215, 0, 0.05) 0%, transparent 40%);
+    opacity: 0.2;
+    filter: blur(2px);
+}
+
+/* Particles Background - Bokeh Effect */
+.particles {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    background: 
+        radial-gradient(circle at 20% 30%, rgba(25, 118, 210, 0.15) 0%, transparent 40%),
+        radial-gradient(circle at 80% 70%, rgba(255, 215, 0, 0.1) 0%, transparent 40%),
+        radial-gradient(circle at 50% 50%, rgba(187, 222, 251, 0.1) 0%, transparent 50%);
+    filter: blur(30px);
+    animation: particleFloat 20s ease-in-out infinite;
+    opacity: 0.5;
+}
+
+/* Character Reflection */
+.character-reflection {
+    position: fixed;
+    bottom: -100px;
+    right: 10%;
+    width: 400px;
+    height: 500px;
+    z-index: 1;
+    opacity: 0.08;
+    filter: blur(60px) brightness(1.2);
+    background: 
+        radial-gradient(ellipse at center, rgba(25, 118, 210, 0.3) 0%, transparent 70%);
+    transform: scaleY(-1) rotate(5deg);
+    animation: reflectionFloat 8s ease-in-out infinite;
+}
+
+@keyframes reflectionFloat {
+    0%, 100% { transform: scaleY(-1) rotate(5deg) translateY(0); }
+    50% { transform: scaleY(-1) rotate(5deg) translateY(-20px); }
+}
+
+@keyframes particleFloat {
+    0%, 100% { transform: translateY(0) scale(1); }
+    50% { transform: translateY(-20px) scale(1.1); }
+}
+
+/* Header */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 40px;
+    position: relative;
+    z-index: 10;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.logo-image {
+    height: 50px;
+    width: auto;
+    object-fit: contain;
+    max-width: 200px;
+    filter: drop-shadow(0 2px 4px rgba(255, 255, 255, 0.3));
+    transition: filter 0.3s ease;
+}
+
+.logo-image:hover {
+    filter: drop-shadow(0 4px 8px rgba(255, 255, 255, 0.5));
+}
+
+/* Main Container */
+.main-container {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    min-height: calc(100vh - 200px);
+    padding: 40px;
+    position: relative;
+    z-index: 5;
+}
+
+/* Login Section */
+.login-section {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 40px;
+    position: relative;
+    z-index: 5;
+}
+
+.login-panel {
+    background: rgba(18, 25, 45, 0.6);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    border-radius: 12px;
+    padding: 30px;
+    width: 100%;
+    max-width: 400px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.login-content {
+    width: 100%;
+}
+
+/* Footer */
+.footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 40px;
+    position: relative;
+    z-index: 10;
+}
+
+.footer-left,
+.footer-right {
+    flex: 1;
+}
+
+.footer-icon {
+    font-size: 24px;
+    color: var(--blue-panel-darker);
+    opacity: 0.8;
+    transition: opacity 0.3s;
+}
+
+.footer-icon:hover {
+    opacity: 1;
+}
+
+.footer-center {
+    display: flex;
+    gap: 25px;
+}
+
+.social-icon {
+    color: var(--blue-panel-darker);
+    font-size: 20px;
+    opacity: 0.8;
+    transition: all 0.3s;
+    text-decoration: none;
+}
+
+.social-icon:hover {
+    opacity: 1;
+    transform: translateY(-3px);
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+    .main-container {
+        justify-content: center;
+        padding: 20px;
+    }
+    
+    .login-section {
+        justify-content: center;
+    }
+    
+    .login-panel {
+        width: 90%;
+        max-width: 400px;
+    }
+}
+
+@media (max-width: 768px) {
+    .header {
+        padding: 15px 20px;
+    }
+    
+    .main-container {
+        padding: 20px;
+    }
+}

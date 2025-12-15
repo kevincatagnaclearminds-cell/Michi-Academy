@@ -1,0 +1,233 @@
+/* LoginForm.css - Futuristic Form Styles */
+
+/* Títulos */
+.start-free {
+    font-size: 14px;
+    color: var(--text-white);
+    margin-bottom: 10px;
+    opacity: 0.9;
+    font-family: 'Roboto', 'Open Sans', 'Lato', 'Montserrat', sans-serif;
+    font-weight: 500;
+}
+
+.sign-in-title {
+    font-size: 48px;
+    font-weight: bold;
+    color: var(--text-white);
+    margin-bottom: 20px;
+    text-decoration: underline;
+    text-decoration-color: var(--neon-blue);
+    text-decoration-thickness: 3px;
+    text-underline-offset: 10px;
+    font-family: 'Roboto', 'Open Sans', 'Lato', 'Montserrat', sans-serif;
+}
+
+/* Contenedor del formulario */
+.login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+/* Grupos de input */
+.input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.input-group label {
+    color: var(--text-white);
+    font-size: 16px;
+    font-weight: 500;
+    font-family: 'Roboto', 'Open Sans', 'Lato', 'Montserrat', sans-serif;
+    text-transform: none;
+}
+
+/* Wrapper de inputs */
+.input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+/* Campos de entrada */
+.input-wrapper input {
+    width: 100%;
+    padding: 12px 50px 12px 15px;
+    background: #343A40 !important;
+    border: 1px solid #6C757D !important;
+    border-radius: 8px;
+    color: #FFFFFF !important;
+    font-size: 16px;
+    font-family: 'Roboto', 'Open Sans', 'Lato', 'Montserrat', sans-serif;
+    font-weight: 400;
+    transition: all 0.3s ease;
+}
+
+.input-wrapper input::placeholder {
+    color: var(--text-grey);
+    font-family: 'Roboto', 'Open Sans', 'Lato', 'Montserrat', sans-serif;
+    font-weight: 400;
+}
+
+.input-wrapper input:focus {
+    outline: none;
+    border-color: var(--neon-blue);
+    background: var(--input-bg) !important;
+    box-shadow: 0 0 0 3px rgba(0, 195, 255, 0.3);
+    color: var(--text-white);
+}
+
+.input-wrapper input:active,
+.input-wrapper input:hover {
+    background: var(--input-bg) !important;
+    color: var(--text-white);
+}
+
+/* Iconos dentro de los campos */
+.input-icon {
+    position: absolute;
+    right: 15px;
+    color: var(--neon-blue);
+    opacity: 0.9;
+    font-size: 16px;
+}
+
+.toggle-password {
+    position: absolute;
+    right: 45px;
+    background: none;
+    border: none;
+    color: var(--neon-blue);
+    cursor: pointer;
+    opacity: 0.9;
+    transition: opacity 0.3s;
+    font-size: 16px;
+    z-index: 2;
+}
+
+.toggle-password:hover {
+    opacity: 1;
+    color: var(--neon-blue-dark);
+}
+
+/* Botón de login */
+.btn-login {
+    background: var(--neon-blue);
+    color: var(--text-white);
+    border: none;
+    padding: 14px 25px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    font-family: 'Roboto', 'Open Sans', 'Lato', 'Montserrat', sans-serif;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: 10px;
+    box-shadow: 0 4px 15px rgba(0, 195, 255, 0.4);
+}
+
+.btn-login:hover:not(:disabled) {
+    background-color: var(--neon-blue-dark);
+}
+
+.btn-login:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* Enlace recuperar contraseña */
+.forgot-password-container {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 10px;
+    margin-bottom: 5px;
+}
+
+.forgot-password-link {
+    color: var(--neon-blue);
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 14px;
+    font-family: 'Roboto', 'Open Sans', 'Lato', 'Montserrat', sans-serif;
+    transition: all 0.3s;
+}
+
+.forgot-password-link:hover {
+    text-decoration: underline;
+    color: var(--neon-blue-dark);
+}
+
+/* Mensajes de error */
+.error-message {
+    padding: 0.75rem;
+    background: rgba(220, 53, 69, 0.2);
+    border: 1px solid rgba(220, 53, 69, 0.5);
+    border-radius: 8px;
+    color: var(--error-red);
+    font-size: 0.9rem;
+    font-family: 'Roboto', 'Open Sans', 'Lato', 'Montserrat', sans-serif;
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+.error-text {
+    color: var(--error-red);
+    font-size: 0.85rem;
+    font-family: 'Roboto', 'Open Sans', 'Lato', 'Montserrat', sans-serif;
+    margin-top: 0.25rem;
+}
+
+/* Estados de input */
+.input-error {
+    border-color: var(--error-red) !important;
+    background: var(--input-bg) !important;
+}
+
+.input-valid {
+    border-color: var(--neon-blue) !important;
+    background: var(--input-bg) !important;
+}
+
+/* Iconos de validación */
+.input-icon-valid {
+    position: absolute;
+    right: 45px;
+    color: var(--neon-blue);
+    font-size: 16px;
+    z-index: 2;
+}
+
+.input-wrapper:has(.toggle-password) .input-icon-valid {
+    right: 75px;
+}
+
+.input-icon-error {
+    position: absolute;
+    right: 45px;
+    color: var(--error-red);
+    font-size: 16px;
+    z-index: 2;
+}
+
+.input-wrapper:has(.toggle-password) .input-icon-error {
+    right: 75px;
+}
+
+.error-text i {
+    margin-right: 5px;
+    font-size: 12px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .sign-in-title {
+        font-size: 36px;
+    }
+    
+    .login-form {
+        gap: 20px;
+    }
+}
