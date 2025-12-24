@@ -1,0 +1,156 @@
+.game-stats-container {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  margin-bottom: 25px;
+  flex-wrap: wrap;
+}
+
+.stats-card {
+  background: #667eea;
+  border-radius: 20px;
+  padding: 20px 25px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  min-width: 150px;
+  animation: bounceIn 0.6s ease-out;
+}
+
+.stats-card:hover {
+  transform: translateY(-5px) scale(1.05);
+  box-shadow: 0 12px 30px rgba(102, 126, 234, 0.4);
+}
+
+.score-card {
+  background: #f5576c;
+  box-shadow: 0 8px 20px rgba(245, 87, 108, 0.3);
+}
+
+.score-card:hover {
+  box-shadow: 0 12px 30px rgba(245, 87, 108, 0.4);
+}
+
+.lives-card {
+  background: #fa709a;
+  box-shadow: 0 8px 20px rgba(250, 112, 154, 0.3);
+}
+
+.lives-card:hover {
+  box-shadow: 0 12px 30px rgba(250, 112, 154, 0.4);
+}
+
+.progress-card {
+  background: #30cfd0;
+  box-shadow: 0 8px 20px rgba(48, 207, 208, 0.3);
+}
+
+.progress-card:hover {
+  box-shadow: 0 12px 30px rgba(48, 207, 208, 0.4);
+}
+
+.stats-icon {
+  font-size: 2.5rem;
+  animation: pulse 2s ease-in-out infinite;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+}
+
+.stats-content {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.stats-label {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.stats-value {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: white;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.stats-value.hearts {
+  display: flex;
+  gap: 5px;
+  font-size: 1.5rem;
+}
+
+.heart {
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  display: inline-block;
+}
+
+.heart.active {
+  transform: scale(1.2);
+  animation: heartbeat 1s ease-in-out infinite;
+}
+
+.heart.inactive {
+  opacity: 0.3;
+  transform: scale(0.8);
+  filter: grayscale(100%);
+}
+
+@keyframes bounceIn {
+  0% {
+    transform: scale(0.3);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  70% {
+    transform: scale(0.9);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+@keyframes heartbeat {
+  0%, 100% {
+    transform: scale(1.2);
+  }
+  50% {
+    transform: scale(1.4);
+  }
+}
+
+@media (max-width: 768px) {
+  .game-stats-container {
+    gap: 10px;
+  }
+  
+  .stats-card {
+    padding: 15px 20px;
+    min-width: 120px;
+  }
+  
+  .stats-icon {
+    font-size: 2rem;
+  }
+  
+  .stats-value {
+    font-size: 1.5rem;
+  }
+}
+

@@ -1,4 +1,3 @@
-import React from 'react';
 import { UserQuizPage } from './pages/UserQuizPage';
 import { AdminQuizPage } from './pages/AdminQuizPage';
 import './quiz-individual.css';
