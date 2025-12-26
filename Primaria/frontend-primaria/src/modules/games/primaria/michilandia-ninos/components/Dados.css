@@ -1,0 +1,244 @@
+/* ====== DADOS CONTAINER ====== */
+.dados-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: 0.8rem 1rem;
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* ====== LADO IZQUIERDO - DADO ====== */
+.dados-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.dado {
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(145deg, #ffffff 0%, #f5f5f5 100%);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 
+    0 4px 15px rgba(0, 0, 0, 0.25),
+    inset 0 2px 0 rgba(255, 255, 255, 1), 
+    inset 0 -2px 0 rgba(0, 0, 0, 0.06);
+  border: 2px solid rgba(200, 200, 200, 0.4);
+  transition: transform 0.15s ease;
+}
+
+.dado-cara {
+  font-size: 3rem;
+  color: #2c3e50;
+  filter: drop-shadow(1px 1px 2px rgba(0, 0, 0, 0.2));
+}
+
+/* ====== ANIMACIÓN DE TIRAR ====== */
+.dado-tirando {
+  animation: sacudir 0.1s ease-in-out infinite;
+}
+
+@keyframes sacudir {
+  0%, 100% {
+    transform: rotate(-5deg) scale(1.05);
+  }
+  25% {
+    transform: rotate(5deg) scale(0.95);
+  }
+  50% {
+    transform: rotate(-3deg) scale(1.02);
+  }
+  75% {
+    transform: rotate(3deg) scale(0.98);
+  }
+}
+
+/* ====== LADO DERECHO - RESULTADO Y BOTÓN ====== */
+.dados-acciones {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  flex: 1;
+  min-width: 0;
+}
+
+.dados-resultado {
+  text-align: center;
+}
+
+.dados-total {
+  font-family: "Fredoka", "Nunito", sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #1565c0;
+  background: linear-gradient(135deg, rgba(227, 242, 253, 0.95) 0%, rgba(187, 222, 251, 0.95) 100%);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  padding: 0.35rem 0.8rem;
+  border-radius: 15px;
+  box-shadow: 0 2px 10px rgba(25, 118, 210, 0.2);
+  white-space: nowrap;
+  border: 1px solid rgba(25, 118, 210, 0.15);
+}
+
+/* ====== BOTÓN DE TIRAR ====== */
+.dados-boton {
+  font-family: "Poppins", "Nunito", sans-serif;
+  background: linear-gradient(135deg, #ff6b35 0%, #ff8c5a 100%);
+  color: white;
+  font-size: 0.85rem;
+  font-weight: 700;
+  padding: 0.5rem 1.2rem;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(255, 107, 53, 0.4);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  white-space: nowrap;
+  position: relative;
+  overflow: hidden;
+}
+
+.dados-boton::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 50%;
+  background: linear-gradient(180deg, rgba(255,255,255,0.2) 0%, transparent 100%);
+  pointer-events: none;
+}
+
+.dados-boton:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255, 107, 53, 0.5);
+}
+
+.dados-boton:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.dados-boton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  filter: grayscale(20%);
+}
+
+.dados-boton-tirando {
+  animation: pulsarBoton 0.5s ease-in-out infinite;
+}
+
+@keyframes pulsarBoton {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+/* ====== BOTONES DE PRUEBA ====== */
+.dados-prueba {
+  display: flex;
+  gap: 0.4rem;
+  margin-top: 0.3rem;
+}
+
+.btn-prueba {
+  font-family: "Poppins", "Nunito", sans-serif;
+  background: linear-gradient(135deg, #9C27B0 0%, #BA68C8 100%);
+  color: white;
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 0.3rem 0.6rem;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(156, 39, 176, 0.3);
+}
+
+.btn-prueba:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(156, 39, 176, 0.4);
+  background: linear-gradient(135deg, #AB47BC 0%, #CE93D8 100%);
+}
+
+.btn-prueba:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.btn-prueba:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ====== RESPONSIVE ====== */
+@media (max-width: 1024px) {
+  .dados-container {
+    padding: 0.6rem 0.8rem;
+    gap: 0.6rem;
+    flex-direction: column;
+  }
+
+  .dados-acciones {
+    flex-direction: row;
+    gap: 0.6rem;
+  }
+
+  .dado {
+    width: 50px;
+    height: 50px;
+  }
+
+  .dado-cara {
+    font-size: 2.5rem;
+  }
+
+  .dados-total {
+    font-size: 0.85rem;
+    padding: 0.3rem 0.6rem;
+  }
+
+  .dados-boton {
+    font-size: 0.75rem;
+    padding: 0.4rem 0.8rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .dados-container {
+    flex-direction: row;
+  }
+
+  .dados-acciones {
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .dado {
+    width: 45px;
+    height: 45px;
+  }
+
+  .dado-cara {
+    font-size: 2.2rem;
+  }
+}

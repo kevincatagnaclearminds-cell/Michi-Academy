@@ -1,0 +1,621 @@
+/* ==================== MODAL INSTRUCCIONES ==================== */
+
+.modal-instrucciones-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(8px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  padding: 1rem;
+  animation: fadeIn 0.3s ease;
+}
+
+.modal-instrucciones-container {
+  background: linear-gradient(145deg, #1a1a2e 0%, #16213e 50%, #0f0f23 100%);
+  border-radius: 20px;
+  width: 100%;
+  max-width: 900px;
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  border: 3px solid;
+  overflow: hidden;
+  animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.modal-instrucciones-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.2rem 1.5rem;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+.modal-instrucciones-header h2 {
+  margin: 0;
+  font-family: 'Fredoka', sans-serif;
+  font-size: 1.6rem;
+  color: #fff;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+.modal-close-btn {
+  background: rgba(255, 255, 255, 0.15);
+  border: none;
+  color: #fff;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.modal-close-btn:hover {
+  background: rgba(255, 100, 100, 0.5);
+  transform: rotate(90deg);
+}
+
+.modal-instrucciones-body {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+/* ==================== NAVEGACIÓN ==================== */
+
+.instrucciones-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 1rem;
+  background: rgba(0, 0, 0, 0.2);
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
+  min-width: 160px;
+}
+
+.nav-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.8rem 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px solid transparent;
+  border-radius: 10px;
+  color: rgba(255, 255, 255, 0.7);
+  font-family: 'Nunito', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: left;
+}
+
+.nav-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+
+.nav-btn.activo {
+  color: #fff;
+  font-weight: 600;
+}
+
+.nav-emoji {
+  font-size: 1.2rem;
+}
+
+.nav-titulo {
+  white-space: nowrap;
+}
+
+/* ==================== CONTENIDO ==================== */
+
+.instrucciones-contenido {
+  flex: 1;
+  padding: 1.5rem;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--gold, #F7DC6F) transparent;
+}
+
+.instrucciones-contenido::-webkit-scrollbar {
+  width: 8px;
+}
+
+.instrucciones-contenido::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.instrucciones-contenido::-webkit-scrollbar-thumb {
+  background-color: var(--gold, #F7DC6F);
+  border-radius: 10px;
+}
+
+.instrucciones-seccion h3 {
+  font-family: 'Fredoka', sans-serif;
+  font-size: 1.4rem;
+  color: #fff;
+  margin-bottom: 1.2rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+.instrucciones-seccion h4 {
+  font-family: 'Nunito', sans-serif;
+  font-size: 1.1rem;
+  color: #F7DC6F;
+  margin: 0 0 0.5rem 0;
+}
+
+.instrucciones-seccion p {
+  font-family: 'Nunito', sans-serif;
+  color: rgba(255, 255, 255, 0.85);
+  line-height: 1.6;
+  margin: 0 0 0.8rem 0;
+}
+
+.instrucciones-seccion ul {
+  margin: 0.5rem 0 1rem 1.2rem;
+  padding: 0;
+}
+
+.instrucciones-seccion li {
+  font-family: 'Nunito', sans-serif;
+  color: rgba(255, 255, 255, 0.85);
+  line-height: 1.8;
+  margin-bottom: 0.3rem;
+}
+
+/* ==================== OBJETIVO ==================== */
+
+.objetivo-destacado {
+  background: linear-gradient(135deg, rgba(247, 220, 111, 0.15) 0%, rgba(247, 220, 111, 0.05) 100%);
+  border: 2px solid rgba(247, 220, 111, 0.3);
+  border-radius: 12px;
+  padding: 1.2rem;
+  margin-bottom: 1rem;
+}
+
+.objetivo-destacado p {
+  color: #F7DC6F;
+  font-size: 1.1rem;
+}
+
+.lista-patrimonio {
+  margin-left: 1rem !important;
+}
+
+.lista-patrimonio li {
+  color: #fff !important;
+  font-weight: 500;
+}
+
+.tip-box {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: rgba(78, 205, 196, 0.15);
+  border-left: 4px solid #4ECDC4;
+  border-radius: 0 10px 10px 0;
+  padding: 1rem;
+}
+
+.tip-emoji {
+  font-size: 1.8rem;
+}
+
+.tip-box p {
+  margin: 0;
+  color: #4ECDC4;
+  font-weight: 500;
+}
+
+/* ==================== PREPARACIÓN ==================== */
+
+.prep-item {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  padding: 1rem 1.2rem;
+  margin-bottom: 1rem;
+}
+
+.dinero-inicial {
+  margin: 1.5rem 0;
+}
+
+.dinero-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.dinero-card {
+  background: linear-gradient(145deg, rgba(78, 205, 196, 0.2) 0%, rgba(78, 205, 196, 0.05) 100%);
+  border: 2px solid rgba(78, 205, 196, 0.4);
+  border-radius: 12px;
+  padding: 1.2rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.dinero-card.cliente {
+  background: linear-gradient(145deg, rgba(247, 220, 111, 0.2) 0%, rgba(247, 220, 111, 0.05) 100%);
+  border-color: rgba(247, 220, 111, 0.4);
+}
+
+.dinero-quien {
+  font-family: 'Nunito', sans-serif;
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.dinero-cantidad {
+  font-family: 'Fredoka', sans-serif;
+  font-size: 1.8rem;
+  color: #fff;
+  font-weight: 600;
+}
+
+.dinero-detalle {
+  font-family: 'Nunito', sans-serif;
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* ==================== CÓMO JUGAR ==================== */
+
+.turno-pasos {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.paso {
+  display: flex;
+  gap: 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  padding: 1rem;
+  align-items: flex-start;
+}
+
+.paso-numero {
+  width: 36px;
+  height: 36px;
+  background: linear-gradient(135deg, #4ECDC4 0%, #44A08D 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Fredoka', sans-serif;
+  font-size: 1.2rem;
+  color: #fff;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.paso-contenido {
+  flex: 1;
+}
+
+.paso-contenido ul {
+  margin-top: 0.5rem;
+}
+
+.nota-importante {
+  background: rgba(255, 100, 100, 0.15);
+  border-left: 3px solid #FF6B6B;
+  padding: 0.5rem 0.8rem;
+  border-radius: 0 8px 8px 0;
+  font-size: 0.9rem !important;
+  margin-top: 0.5rem !important;
+}
+
+.warning-box {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: rgba(255, 107, 107, 0.15);
+  border: 2px solid rgba(255, 107, 107, 0.4);
+  border-radius: 12px;
+  padding: 1rem;
+  margin-top: 1.5rem;
+}
+
+.warning-emoji {
+  font-size: 2rem;
+}
+
+.warning-box p {
+  margin: 0;
+  color: #FF6B6B;
+}
+
+/* ==================== CASILLAS ==================== */
+
+.casillas-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+.casilla-card {
+  display: flex;
+  gap: 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  padding: 1rem;
+  border-left: 4px solid;
+}
+
+.casilla-card.recarga {
+  border-color: #4ECDC4;
+}
+
+.casilla-card.invertir {
+  border-color: #F7DC6F;
+}
+
+.casilla-card.sorpresa {
+  border-color: #BB8FCE;
+}
+
+.casilla-card.negocio {
+  border-color: #FF6B6B;
+}
+
+.casilla-icono {
+  font-size: 2rem;
+  flex-shrink: 0;
+}
+
+.casilla-info h4 {
+  margin-bottom: 0.3rem !important;
+}
+
+.casilla-info p {
+  font-size: 0.9rem;
+  margin: 0 !important;
+}
+
+/* ==================== FIN DEL JUEGO ==================== */
+
+.fin-condicion {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: linear-gradient(135deg, rgba(255, 107, 107, 0.2) 0%, rgba(255, 107, 107, 0.05) 100%);
+  border: 2px solid rgba(255, 107, 107, 0.4);
+  border-radius: 12px;
+  padding: 1.2rem;
+  margin-bottom: 1.5rem;
+}
+
+.fin-emoji {
+  font-size: 2.5rem;
+}
+
+.fin-condicion p {
+  margin: 0;
+  font-size: 1.1rem;
+}
+
+.calculo-final {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  padding: 1.2rem;
+  margin-bottom: 1.5rem;
+}
+
+.suma-items {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.8rem;
+  margin-top: 1rem;
+}
+
+.suma-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 0.6rem 1rem;
+  border-radius: 8px;
+  font-family: 'Nunito', sans-serif;
+  color: #fff;
+}
+
+.suma-item span:first-child {
+  font-size: 1.2rem;
+}
+
+.suma-operador {
+  font-family: 'Fredoka', sans-serif;
+  font-size: 1.5rem;
+  color: #4ECDC4;
+}
+
+.suma-total {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: linear-gradient(135deg, #F7DC6F 0%, #F0B429 100%);
+  padding: 0.8rem 1.2rem;
+  border-radius: 10px;
+  font-family: 'Fredoka', sans-serif;
+  font-weight: 600;
+  color: #1a1a2e;
+}
+
+.ganador-box {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: linear-gradient(135deg, rgba(247, 220, 111, 0.2) 0%, rgba(247, 220, 111, 0.05) 100%);
+  border: 2px solid rgba(247, 220, 111, 0.4);
+  border-radius: 12px;
+  padding: 1.2rem;
+  text-align: center;
+}
+
+.corona {
+  font-size: 3rem;
+}
+
+.ganador-box p {
+  margin: 0;
+  font-size: 1.05rem;
+}
+
+/* ==================== CONSEJOS ==================== */
+
+.consejos-lista {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.consejo {
+  display: flex;
+  gap: 1rem;
+  background: rgba(78, 205, 196, 0.1);
+  border: 2px solid rgba(78, 205, 196, 0.3);
+  border-radius: 12px;
+  padding: 1rem;
+}
+
+.consejo.alerta {
+  background: rgba(255, 107, 107, 0.1);
+  border-color: rgba(255, 107, 107, 0.3);
+}
+
+.consejo-icono {
+  font-size: 2rem;
+  flex-shrink: 0;
+}
+
+.consejo-texto h4 {
+  margin-bottom: 0.3rem !important;
+}
+
+.consejo-texto p {
+  font-size: 0.95rem;
+  margin: 0 !important;
+}
+
+/* ==================== ANIMACIONES ==================== */
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* ==================== RESPONSIVE ==================== */
+
+@media (max-width: 768px) {
+  .modal-instrucciones-container {
+    max-height: 90vh;
+  }
+
+  .modal-instrucciones-body {
+    flex-direction: column;
+  }
+
+  .instrucciones-nav {
+    flex-direction: row;
+    flex-wrap: wrap;
+    min-width: auto;
+    border-right: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    gap: 0.3rem;
+    padding: 0.8rem;
+  }
+
+  .nav-btn {
+    padding: 0.5rem 0.8rem;
+    font-size: 0.8rem;
+    flex: 0 0 auto;
+  }
+
+  .nav-titulo {
+    display: none;
+  }
+
+  .nav-emoji {
+    font-size: 1.3rem;
+  }
+
+  .dinero-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .casillas-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .suma-items {
+    flex-direction: column;
+  }
+
+  .ganador-box {
+    flex-direction: column;
+    text-align: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .modal-instrucciones-header h2 {
+    font-size: 1.2rem;
+  }
+
+  .instrucciones-contenido {
+    padding: 1rem;
+  }
+
+  .instrucciones-seccion h3 {
+    font-size: 1.2rem;
+  }
+
+  .paso {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .consejo {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .casilla-card {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+}
+
