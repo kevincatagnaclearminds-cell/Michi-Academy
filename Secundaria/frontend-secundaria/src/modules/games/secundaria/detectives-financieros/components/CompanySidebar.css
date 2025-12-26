@@ -1,0 +1,552 @@
+.company-sidebar {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+  position: relative;
+  border: 1px solid #e0e0e0;
+  box-sizing: border-box;
+  border-left: 4px solid #3498db;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  justify-content: flex-start;
+}
+
+/* Caso X/8 */
+.case-number-header {
+  background: #3498db;
+  color: white;
+  padding: 8px 15px;
+  font-weight: bold;
+  font-size: 0.9rem;
+  text-align: center;
+  border-radius: 12px 12px 0 0;
+}
+
+/* Header con Avatar y CEO */
+.sidebar-header {
+  background: #667eea;
+  padding: 15px 15px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: white;
+  position: relative;
+}
+
+.company-avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  flex-shrink: 0;
+}
+
+.ceo-info {
+  flex: 1;
+}
+
+.ceo-label {
+  font-size: 0.75rem;
+  opacity: 0.9;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 5px;
+}
+
+.ceo-name {
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+.ceo-ruc {
+  font-size: 0.75rem;
+  opacity: 0.85;
+  margin-top: 4px;
+  font-family: 'Courier New', monospace;
+}
+
+/* Botones de acción al final */
+.sidebar-actions {
+  padding: 0;
+  display: flex;
+  gap: 10px;
+  margin-top: 0;
+}
+
+.btn-sidebar {
+  padding: 10px 16px;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+  flex: 1;
+}
+
+.btn-sidebar:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-reject {
+  background: #e74c3c;
+  color: white;
+}
+
+.btn-reject:hover:not(:disabled) {
+  background: #c0392b;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(231, 76, 60, 0.3);
+}
+
+.btn-invest {
+  background: #27ae60;
+  color: white;
+}
+
+.btn-invest:hover:not(:disabled) {
+  background: #229954;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(39, 174, 96, 0.3);
+}
+
+/* Información de la empresa */
+.sidebar-company-info {
+  padding: 10px 15px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.company-name-sidebar {
+  font-size: 1.1rem;
+  color: #2c3e50;
+  margin: 0 0 5px 0;
+  font-weight: bold;
+}
+
+.company-sector-sidebar {
+  color: #7f8c8d;
+  font-style: italic;
+  margin-bottom: 6px;
+  font-size: 0.8rem;
+}
+
+.company-description-sidebar {
+  color: #555;
+  line-height: 1.4;
+  font-size: 0.75rem;
+}
+
+/* Estadísticas */
+.sidebar-stats {
+  padding: 10px 15px;
+  background: #f9f9f9;
+  border-bottom: 1px solid #e0e0e0;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 8px;
+}
+
+.stat-item-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.stat-label-sidebar {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  color: #95a5a6;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  line-height: 1.2;
+}
+
+.stat-value-sidebar {
+  font-size: 0.95rem;
+  font-weight: bold;
+  line-height: 1.2;
+}
+
+.stat-value-sidebar.interest {
+  color: #2980b9;
+}
+
+.stat-value-sidebar.investment {
+  color: #27ae60;
+}
+
+.stat-value-sidebar.period {
+  color: #9b59b6;
+}
+
+.stat-value-sidebar.risk {
+  color: white;
+  padding: 5px 10px;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  text-align: center;
+  display: inline-block;
+  width: fit-content;
+}
+
+/* Redes Sociales */
+.sidebar-social {
+  padding: 10px 15px;
+  border-bottom: 1px solid #e0e0e0;
+  background: white;
+}
+
+/* Frame de Decisión Final */
+.decision-frame {
+  margin-top: auto;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  border-radius: 12px;
+  padding: 15px;
+  box-shadow: 0 4px 12px rgba(52, 152, 219, 0.15);
+  position: sticky;
+  bottom: 0;
+  z-index: 10;
+}
+
+.decision-frame-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #3498db;
+}
+
+.decision-icon {
+  font-size: 1.3rem;
+}
+
+.decision-title {
+  font-size: 0.95rem;
+  font-weight: bold;
+  color: #2c3e50;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Selección de Riesgo */
+.sidebar-risk-selection {
+  padding: 0;
+  margin-bottom: 12px;
+  background: transparent;
+}
+
+.risk-selection-title {
+  font-size: 0.85rem;
+  font-weight: bold;
+  color: #2c3e50;
+  margin-bottom: 10px;
+}
+
+.risk-options-sidebar {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.risk-button-sidebar {
+  padding: 8px 12px;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  background: white;
+  color: #2c3e50;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: center;
+}
+
+.risk-button-sidebar:hover:not(:disabled) {
+  border-color: #3498db;
+  background: #e3f2fd;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(52, 152, 219, 0.2);
+}
+
+.risk-button-sidebar.selected {
+  background: #3498db;
+  color: white;
+  border-color: #3498db;
+  box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
+}
+
+.risk-button-sidebar:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.social-title {
+  font-size: 0.9rem;
+  font-weight: bold;
+  color: #2c3e50;
+  margin-bottom: 8px;
+}
+
+.social-links {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.social-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  background: #f9f9f9;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.social-link:hover {
+  background: #e3f2fd;
+  transform: translateX(5px);
+}
+
+.social-icon {
+  font-size: 1.3rem;
+}
+
+.social-text {
+  font-size: 0.9rem;
+  color: #2c3e50;
+  font-weight: 500;
+}
+
+/* Valoración General */
+.sidebar-rating {
+  padding: 20px;
+  border-bottom: 1px solid #e0e0e0;
+  background: white;
+}
+
+.rating-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.rating-icon {
+  font-size: 1.3rem;
+}
+
+.rating-title {
+  font-size: 1rem;
+  font-weight: bold;
+  color: #2c3e50;
+}
+
+.rating-display {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 20px;
+  background: #f5f7fa;
+  border-radius: 12px;
+  margin-bottom: 15px;
+  border: 2px solid #e0e0e0;
+}
+
+.rating-main-number {
+  font-size: 3rem;
+  font-weight: bold;
+  color: #2c3e50;
+  line-height: 1;
+}
+
+.rating-main-stars {
+  display: flex;
+  gap: 5px;
+  font-size: 1.5rem;
+}
+
+.star-filled {
+  opacity: 1;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+}
+
+.star-empty {
+  opacity: 0.3;
+}
+
+.rating-total {
+  font-size: 0.9rem;
+  color: #7f8c8d;
+  font-weight: 600;
+}
+
+.rating-breakdown {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.breakdown-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.breakdown-label {
+  font-size: 0.85rem;
+  color: #7f8c8d;
+  font-weight: 600;
+  min-width: 70px;
+}
+
+.breakdown-bar {
+  flex: 1;
+  height: 8px;
+  background: #e0e0e0;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.breakdown-fill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+.breakdown-fill.positive {
+  background: #27ae60;
+}
+
+.breakdown-fill.negative {
+  background: #e74c3c;
+}
+
+.breakdown-count {
+  font-size: 0.85rem;
+  font-weight: bold;
+  color: #2c3e50;
+  min-width: 30px;
+  text-align: right;
+}
+
+/* Comentarios */
+.sidebar-comments {
+  padding: 20px;
+  background: white;
+}
+
+.comments-title {
+  font-size: 1rem;
+  font-weight: bold;
+  color: #2c3e50;
+  margin-bottom: 15px;
+}
+
+.comments-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.comment-item {
+  padding: 12px;
+  border-radius: 8px;
+  border-left: 3px solid;
+  background: #f9f9f9;
+}
+
+.comment-item.positive {
+  border-color: #27ae60;
+  background: #e8f5e9;
+}
+
+.comment-item.negative {
+  border-color: #e74c3c;
+  background: #ffebee;
+}
+
+.comment-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.comment-author-section {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  flex: 1;
+}
+
+.comment-author {
+  font-weight: bold;
+  color: #2c3e50;
+  font-size: 0.95rem;
+}
+
+.comment-rating {
+  display: flex;
+  gap: 2px;
+  font-size: 0.85rem;
+}
+
+.comment-text {
+  color: #555;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  margin-bottom: 8px;
+}
+
+.comment-date {
+  font-size: 0.75rem;
+  color: #7f8c8d;
+  white-space: nowrap;
+}
+
+@media (max-width: 768px) {
+  .sidebar-stats {
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 6px;
+  }
+  
+  .stat-label-sidebar {
+    font-size: 0.6rem;
+  }
+  
+  .stat-value-sidebar {
+    font-size: 0.85rem;
+  }
+  
+  .company-avatar {
+    width: 60px;
+    height: 60px;
+    font-size: 2rem;
+  }
+  
+  .ceo-name {
+    font-size: 1rem;
+  }
+  
+  .risk-options-sidebar {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
