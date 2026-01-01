@@ -161,7 +161,7 @@ export const UserFabulasPage: React.FC = () => {
         <div className="fabulas-header">
           <div className="fabulas-header-top">
             <div>
-          <h1 className="fabulas-title">📚 Fábulas y Audiolibros</h1>
+          <h1 className="fabulas-title">Fábulas y Videos Educativos</h1>
           <p className="fabulas-subtitle">
             Escucha estas increíbles fábulas y aprende valiosas lecciones
           </p>
