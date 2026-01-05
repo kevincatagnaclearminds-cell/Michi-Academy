@@ -1,0 +1,17 @@
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+
+// https://vitejs.dev/config/
+export default defineConfig({
+  plugins: [react()],
+  server: {
+    port: 3001, // Puerto diferente a Primaria (3000)
+    open: true,
+  },
+  optimizeDeps: {
+    include: ['react', 'react-dom'],
+  },
+});
+
+
+

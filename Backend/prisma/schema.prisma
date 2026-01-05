@@ -7,7 +7,16 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Usuarios {
+model UsuariosPrimaria {
+  id                 Int       @id @default(autoincrement())
+  email              String    @unique @db.VarChar(255)
+  contrasena         String    @db.VarChar(255)
+  tipo_cuenta        String?   @db.VarChar(10)
+  token_recuperacion String?   @db.VarChar(255)
+  expiracion_token   DateTime?
+}
+
+model UsuariosSecundaria {
   id                 Int       @id @default(autoincrement())
   email              String    @unique @db.VarChar(255)
   contrasena         String    @db.VarChar(255)

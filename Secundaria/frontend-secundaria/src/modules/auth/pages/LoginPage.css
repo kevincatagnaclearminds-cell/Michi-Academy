@@ -1,0 +1,116 @@
+.logo-image {
+    height: 50px;
+}
+
+.login-page {
+    min-height: 100vh;
+    width: 100%;
+    position: relative;
+    background-image: url('/images/fondo-login.png');
+    background-size: contain;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+.main-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: calc(100vh - 100px);
+    padding: 40px;
+    position: relative;
+    overflow: hidden;
+}
+
+.login-section {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+    position: relative;
+    width: 100%;
+}
+
+.login-panel {
+    background-color: #d2d2d2;
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    border-radius: 5px;
+    padding: 0;
+    width: 100%;
+    max-width: 1000px;
+    box-shadow: 0 2px 2px rgba(0, 0, 0, 0.3);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    display: flex;
+    overflow: hidden;
+}
+
+.login-image-section {
+    flex: 1;
+    min-width: 400px;
+    background: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+    position: relative;
+    overflow: hidden;
+}
+
+.image-container {
+    width: 100%;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.login-illustration{
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    max-width: 100%;
+    max-height: 600px;
+}
+
+.image-placeholder {
+    width: 100%;
+    height: 100%;
+    min-height: 400px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px dashed rgba(255, 255, 255, 0.4);
+    border-radius: 5px;
+    color: rgba(0, 0, 0, 0.60);
+    font-size: 18px;
+    gap: 15px;
+}
+
+.image-placeholder i {
+    font-size: 64px;
+    opacity: 0.5;
+}
+
+.image-placeholder p {
+    margin: 0;
+    font-family: 'Roboto', 'Open Sans', 'Lato', 'Montserrat', sans-serif;
+}
+
+.login-form-section {
+    flex: 1;
+    min-width: 400px;
+    padding: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+}
+
+.login-content {
+    width: 100%;
+    max-width: 450px;
+}

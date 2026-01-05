@@ -1,9 +1,16 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { LoginForm } from '../components/LoginForm';
 import './LoginPage.css';
 
 export const LoginPage: React.FC = () => {
   const logoSrc = '/images/logo vector.png';
+  const navigate = useNavigate();
+
+  const handleLoginSuccess = () => {
+    console.log('Login exitoso, redirigiendo...');
+    navigate('/primaria/activities');
+  }
 
   return (
     <div className="login-page">
@@ -58,7 +65,7 @@ export const LoginPage: React.FC = () => {
             {/* Right Section - Login Form */}
             <div className="login-form-section">
               <div className="login-content">
-                <LoginForm />
+                <LoginForm onLoginSuccess={handleLoginSuccess} />
               </div>
             </div>
           </div>

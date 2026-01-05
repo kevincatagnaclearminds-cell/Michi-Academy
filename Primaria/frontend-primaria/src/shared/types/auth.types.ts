@@ -3,6 +3,7 @@ export interface User {
   email: string;
   username?: string;
   name?: string;
+  nivel?: 'primaria' | 'secundaria';
 }
 
 export interface LoginCredentials {

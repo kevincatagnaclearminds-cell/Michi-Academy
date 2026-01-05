@@ -1,0 +1,136 @@
+.start-free {
+    font-size: 14px;
+    color: #333333;
+    text-transform: uppercase;
+    opacity: 0.9;
+    font-family: 'Roboto', 'Open Sans', 'Lato';
+    font-weight: 500;
+}
+
+.sign-in-title {
+    font-size: 28px;
+    font-weight: bold;
+    color: #1a1a1a;
+    font-family: 'Roboto';
+    text-transform: uppercase;
+}
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.input-group label {
+    color: #333333;
+    font-size: 16px;
+    font-weight: 500;
+    font-family: 'Roboto';
+}
+
+.input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input-wrapper input {
+    width: 100%;
+    padding: 12px 50px 12px 45px;
+    border-radius: 5px;
+    font-family: 'Robooto';
+    font-weight: 400;
+    transition: all 0.3s ease;
+}
+
+.input-wrapper input::placeholder {
+    color: #999999;
+    font-family: 'Roboto';
+    font-weight: 400;
+}
+
+.input-wrapper input:focus {
+    outline: none;
+    border-color: #4caf50;
+    box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.2);
+    color: #333333;
+}
+
+.input-wrapper input:active,
+.input-wrapper input:hover {
+    background-color: #fff;
+    border-color: #bdbdbd;
+    color: #333333;
+}
+
+.input-icon {
+    position: absolute;
+    left: 15px;
+    color: #666666;
+    opacity: 0.9;
+    font-size: 18px;
+}
+
+.toggle-password {
+    position: absolute;
+    right: 15px;
+    color: #666666;
+    cursor: pointer;
+    font-size: 16px;
+    z-index: 2;
+}
+
+.toggle-password:hover {
+    opacity: 1;
+    color: #333333;
+}
+
+.btn-login {
+    background-color: #4caf50;
+    color: #fff;
+    border: none;
+    padding: 14px 25px;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: bold;
+    font-family: 'Roboto';
+    text-transform: uppercase;
+    cursor: pointer;
+    width: 100%;
+}
+
+.btn-login:hover:not(:disabled) {
+    background-color: #45a049;
+}
+
+.btn-login:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.forgot-password-container {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.forgot-password-link {
+    color: #1976d2;
+    text-decoration: none;
+    font-size: 14px;
+    font-family: 'Roboto';
+}
+
+.forgot-password-link:hover {
+    text-decoration: underline;
+    color: #1565c0;
+}
+
+.error-message {
+    
+}

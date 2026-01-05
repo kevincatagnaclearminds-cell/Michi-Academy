@@ -1,0 +1,55 @@
+# Michi Academy - Root .gitignore
+# Archivos y carpetas generales del proyecto
+
+# Archivos del sistema operativo
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+# Archivos de IDEs y editores
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.project
+.classpath
+.settings/
+*.sublime-project
+*.sublime-workspace
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+pnpm-debug.log*
+
+# Archivos temporales
+*.tmp
+*.temp
+.cache/
+
+# Archivos de backup
+*.bak
+*.backup
+*~
+
+# Variables de entorno (NUNCA commitees estos archivos)
+.env
+.env.local
+.env.development
+.env.staging
+.env.production
+.env.test
+
+# Archivos de configuración local
+config.local.json
+settings.local.json
+
