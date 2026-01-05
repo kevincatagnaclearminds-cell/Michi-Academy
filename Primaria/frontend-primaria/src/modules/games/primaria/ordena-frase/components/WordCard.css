@@ -1,0 +1,75 @@
+.word-card {
+  padding: 0.75rem 1.25rem;
+  border: 2px solid #e5e7eb;
+  border-radius: 8px;
+  background: #fff;
+  color: #111827;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: grab;
+  transition: all 0.2s ease;
+  font-family: inherit;
+  user-select: none;
+}
+
+.word-card:active {
+  cursor: grabbing;
+}
+
+.word-card.available {
+  background: #f9fafb;
+  border-color: #d1d5db;
+}
+
+.word-card.available:hover {
+  background: #f3f4f6;
+  border-color: #9ca3af;
+  transform: translateY(-2px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.word-card.selected {
+  background: #4f46e5;
+  border-color: #4f46e5;
+  color: #fff;
+}
+
+.word-card.selected:hover {
+  background: #4338ca;
+  border-color: #4338ca;
+  transform: translateY(-2px);
+  box-shadow: 0 2px 8px rgba(79, 70, 229, 0.3);
+}
+
+.word-card.dragging {
+  opacity: 0.5;
+  transform: scale(0.95);
+}
+
+.word-card.correct {
+  background: #10b981;
+  border-color: #10b981;
+  animation: correctPulse 0.5s ease;
+}
+
+@keyframes correctPulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+.word-card:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+@media (max-width: 768px) {
+  .word-card {
+    padding: 0.625rem 1rem;
+    font-size: 0.9rem;
+  }
+}
+

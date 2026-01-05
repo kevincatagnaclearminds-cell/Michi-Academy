@@ -1,0 +1,263 @@
+.game-right-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  width: 100%;
+}
+
+.game-header-right {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid #e5e7eb;
+}
+
+.timer-display {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #111827;
+}
+
+.timer-icon {
+  font-size: 1.5rem;
+}
+
+.timer-label {
+  color: #6b7280;
+}
+
+.timer-value {
+  color: #4f46e5;
+  font-size: 1.25rem;
+}
+
+.hint-btn-small {
+  padding: 0.5rem 1rem;
+  background: #fbbf24;
+  color: #78350f;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.hint-btn-small:hover {
+  background: #f59e0b;
+}
+
+.selected-words-area,
+.available-words-area {
+  margin-bottom: 1rem;
+}
+
+.instruction-text {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #374151;
+  margin: 0 0 0.75rem 0;
+}
+
+.selected-words-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  min-height: 120px;
+  padding: 1.5rem;
+  background: #f9fafb;
+  border: 2px dashed #d1d5db;
+  border-radius: 8px;
+  position: relative;
+}
+
+.selected-words-container.empty {
+  border: 2px dashed #9ca3af;
+}
+
+.selected-words-container.empty.drag-over {
+  border-color: #4f46e5;
+  background: #eef2ff;
+}
+
+.word-slot {
+  position: relative;
+}
+
+.word-slot.drag-over::before {
+  content: '';
+  position: absolute;
+  top: -4px;
+  left: -4px;
+  right: -4px;
+  bottom: -4px;
+  border: 2px dashed #4f46e5;
+  border-radius: 8px;
+  background: #eef2ff;
+  z-index: -1;
+}
+
+.word-slot.correct-position .word-card {
+  background: #10b981;
+  border-color: #10b981;
+}
+
+.empty-words-placeholder {
+  width: 100%;
+  text-align: center;
+  color: #9ca3af;
+  font-size: 0.95rem;
+  font-style: italic;
+  padding: 2rem 1rem;
+}
+
+.available-words-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  min-height: 100px;
+  padding: 1.5rem;
+  background: #f9fafb;
+  border: 2px solid #e5e7eb;
+  border-radius: 8px;
+}
+
+.available-words-container.drag-over {
+  border-color: #10b981;
+  background: #f0fdf4;
+}
+
+.game-actions {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  padding-top: 1rem;
+  border-top: 2px solid #e5e7eb;
+}
+
+.action-btn {
+  padding: 0.875rem 2rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.reset-btn {
+  background: #6b7280;
+  color: #fff;
+}
+
+.reset-btn:hover:not(:disabled) {
+  background: #4b5563;
+}
+
+.reset-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.check-btn {
+  background: #4f46e5;
+  color: #fff;
+}
+
+.check-btn:hover:not(:disabled) {
+  background: #4338ca;
+}
+
+.check-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.game-stats {
+  text-align: center;
+}
+
+.attempts-counter {
+  font-size: 0.9rem;
+  color: #6b7280;
+  font-weight: 500;
+}
+
+.result-message {
+  padding: 1rem;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.result-message.incorrect {
+  background: #fee2e2;
+  border: 2px solid #ef4444;
+}
+
+.result-icon {
+  font-size: 2rem;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.result-message p {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #991b1b;
+}
+
+.stars-wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  overflow: hidden;
+  border-radius: 12px;
+}
+
+@media (max-width: 1024px) {
+  .phrase-game-container {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .phrase-game-container {
+    padding: 1rem;
+  }
+
+  .game-left-column,
+  .game-right-column {
+    padding: 1.5rem;
+  }
+
+  .phrase-title {
+    font-size: 1.5rem;
+  }
+
+  .phrase-text {
+    font-size: 1.1rem;
+  }
+
+  .selected-words-container,
+  .available-words-container {
+    padding: 1rem;
+    min-height: 80px;
+  }
+
+  .game-actions {
+    flex-direction: column;
+  }
+
+  .action-btn {
+    width: 100%;
+  }
+}

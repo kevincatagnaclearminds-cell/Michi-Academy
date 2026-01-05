@@ -1,0 +1,125 @@
+.phrase-page {
+  width: 100%;
+  min-height: 100vh;
+  background: #f9fafb;
+  padding: 2rem;
+}
+
+.phrase-content {
+  width: 100%;
+  max-width: 100%;
+}
+
+.phrase-game-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.game-left-column {
+  background: #fff;
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  height: fit-content;
+}
+
+.game-left-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.phrase-display {
+  padding-bottom: 1.5rem;
+  border-bottom: 2px solid #e5e7eb;
+}
+
+.phrase-title {
+  margin: 0 0 1rem 0;
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #111827;
+}
+
+.phrase-text {
+  margin: 0;
+  font-size: 1.25rem;
+  color: #374151;
+  line-height: 1.6;
+  font-weight: 500;
+}
+
+.media-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.hint-section {
+  padding: 1rem 0;
+  border-bottom: 2px solid #e5e7eb;
+}
+
+.hint-btn-left {
+  width: 100%;
+  padding: 0.875rem 1.5rem;
+  background: #fbbf24;
+  color: #78350f;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.hint-btn-left:hover {
+  background: #f59e0b;
+}
+
+.points-section {
+  padding-top: 1.5rem;
+  border-top: 2px solid #e5e7eb;
+}
+
+.game-right-column {
+  background: #fff;
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  position: relative;
+  min-height: 600px;
+}
+
+.phrases-empty {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: #9ca3af;
+  font-size: 1.1rem;
+  background: #fff;
+  border-radius: 12px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+@media (max-width: 1024px) {
+  .phrase-game-container {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .phrase-page {
+    padding: 1rem;
+  }
+
+  .game-left-column,
+  .game-right-column {
+    padding: 1.5rem;
+  }
+}
+

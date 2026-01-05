@@ -1,0 +1,96 @@
+.phrase-card {
+  background: #fff;
+  border: 2px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 1.5rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.phrase-card:hover {
+  border-color: #4f46e5;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.phrase-card.completed {
+  border-color: #10b981;
+  background: #f0fdf4;
+}
+
+.phrase-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 0.75rem;
+}
+
+.phrase-card-title {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #111827;
+  flex: 1;
+}
+
+.phrase-card-badge {
+  width: 32px;
+  height: 32px;
+  background: #10b981;
+  color: #fff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  flex-shrink: 0;
+  margin-left: 0.5rem;
+}
+
+.phrase-card-category {
+  margin: 0 0 1rem 0;
+  font-size: 0.9rem;
+  color: #6b7280;
+  font-weight: 500;
+}
+
+.phrase-card-difficulty {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.difficulty-badge {
+  display: inline-block;
+  padding: 0.375rem 0.75rem;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.difficulty-badge.facil {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.difficulty-badge.medio {
+  background: #fef3c7;
+  color: #78350f;
+}
+
+.difficulty-badge.dificil {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+@media (max-width: 768px) {
+  .phrase-card {
+    padding: 1.25rem;
+  }
+
+  .phrase-card-title {
+    font-size: 1.1rem;
+  }
+}
+
+
+
