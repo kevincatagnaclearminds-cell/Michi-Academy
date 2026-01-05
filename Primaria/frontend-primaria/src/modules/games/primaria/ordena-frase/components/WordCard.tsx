@@ -6,6 +6,7 @@ interface WordCardProps {
   isSelected: boolean;
   isDragging?: boolean;
   isCorrect?: boolean;
+  isIncorrect?: boolean;
   onClick: () => void;
   onDragStart?: (e: React.DragEvent) => void;
   onDragEnd?: () => void;
@@ -16,6 +17,7 @@ export const WordCard: React.FC<WordCardProps> = ({
   isSelected, 
   isDragging = false,
   isCorrect = false,
+  isIncorrect = false,
   onClick,
   onDragStart,
   onDragEnd
@@ -34,7 +36,7 @@ export const WordCard: React.FC<WordCardProps> = ({
 
   return (
     <button
-      className={`word-card ${isSelected ? 'selected' : 'available'} ${isDragging ? 'dragging' : ''} ${isCorrect ? 'correct' : ''}`}
+      className={`word-card ${isSelected ? 'selected' : 'available'} ${isDragging ? 'dragging' : ''} ${isCorrect ? 'correct' : ''} ${isIncorrect ? 'incorrect' : ''}`}
       onClick={onClick}
       draggable={onDragStart !== undefined}
       onDragStart={onDragStart ? handleDragStart : undefined}

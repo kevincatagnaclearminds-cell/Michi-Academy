@@ -17,36 +17,31 @@ export const UserPhrasePage: React.FC = () => {
 
   const [showVictory, setShowVictory] = useState(false);
   const [pointsEarned, setPointsEarned] = useState(0);
+  const [showHint, setShowHint] = useState(false);
+
+  // Determinar frase activa (fallback a la primera si no hay actual pero hay lista)
+  const activePhrase = currentPhrase || (phrases.length > 0 ? phrases[0] : null);
+
+  // Resetear pista al cambiar de frase
+  React.useEffect(() => {
+    setShowHint(false);
+  }, [activePhrase?.id]);
 
   const handleComplete = (isCorrect: boolean, timeSpent: number, pointsEarned: number) => {
-    if (isCorrect && currentPhrase) {
+    if (isCorrect && activePhrase) {
       setPointsEarned(pointsEarned);
-      markPhraseAsCompleted(currentPhrase.id, timeSpent);
+      markPhraseAsCompleted(activePhrase.id, timeSpent);
       setShowVictory(true);
     }
   };
 
   const handleNextPhrase = () => {
     setShowVictory(false);
+    setShowHint(false); // Asegurar reset
     nextPhrase();
   };
 
-  if (!currentPhrase && phrases.length > 0) {
-    // Si no hay frase actual, usar la primera
-    return (
-      <div className="phrase-page">
-        <div className="phrase-content">
-          <PhraseOrderingGame
-            phraseGame={phrases[0]}
-            onComplete={handleComplete}
-            points={points}
-          />
-        </div>
-      </div>
-    );
-  }
-
-  if (!currentPhrase) {
+  if (!activePhrase) {
     return (
       <div className="phrase-page">
         <div className="phrase-content">
@@ -66,27 +61,33 @@ export const UserPhrasePage: React.FC = () => {
           <div className="game-left-column">
             <div className="game-left-content">
               <div className="phrase-display">
-                <h2 className="phrase-title">{currentPhrase.title}</h2>
-                <p className="phrase-text">{currentPhrase.phrase}</p>
+                <h2 className="phrase-title">{activePhrase.title}</h2>
+                <p className="phrase-text">{activePhrase.phrase}</p>
               </div>
 
               <div className="media-section">
                 <MediaPlayer
-                  audioUrl={currentPhrase.audioUrl}
-                  videoUrl={currentPhrase.videoUrl}
-                  title={currentPhrase.title}
-                  text={currentPhrase.phrase}
+                  audioUrl={activePhrase.audioUrl}
+                  videoUrl={activePhrase.videoUrl}
+                  title={activePhrase.title}
+                  text={activePhrase.phrase}
                 />
               </div>
 
-              {currentPhrase.hint && (
+              {activePhrase.hint && (
                 <div className="hint-section">
-                  <button 
-                    className="hint-btn-left"
-                    onClick={() => alert(currentPhrase.hint)}
-                  >
-                    💡 Pista
-                  </button>
+                  {!showHint ? (
+                    <button 
+                      className="hint-btn-left"
+                      onClick={() => setShowHint(true)}
+                    >
+                      💡 Pista
+                    </button>
+                  ) : (
+                    <div className="hint-display fade-in">
+                      <p className="hint-text">💡 {activePhrase.hint}</p>
+                    </div>
+                  )}
                 </div>
               )}
 
@@ -105,7 +106,7 @@ export const UserPhrasePage: React.FC = () => {
               />
             ) : (
               <PhraseOrderingGame
-                phraseGame={currentPhrase}
+                phraseGame={activePhrase}
                 onComplete={handleComplete}
                 points={points}
               />

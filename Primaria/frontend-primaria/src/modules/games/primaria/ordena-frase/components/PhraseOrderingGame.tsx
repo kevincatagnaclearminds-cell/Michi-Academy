@@ -73,7 +73,7 @@ export const PhraseOrderingGame: React.FC<PhraseOrderingGameProps> = ({
 
   // Drag & Drop handlers
   const handleDragStart = (e: React.DragEvent, word: string, source: 'available' | 'selected', index?: number) => {
-    if (isCorrect !== null) {
+    if (isCorrect === true) {
       e.preventDefault();
       return;
     }
@@ -106,7 +106,7 @@ export const PhraseOrderingGame: React.FC<PhraseOrderingGameProps> = ({
   const handleDropOnSelected = (e: React.DragEvent, targetIndex: number) => {
     e.preventDefault();
     e.stopPropagation();
-    if (isCorrect !== null) return;
+    if (isCorrect === true) return;
 
     const word = e.dataTransfer.getData('text/plain');
     const source = e.dataTransfer.getData('source');
@@ -136,7 +136,7 @@ export const PhraseOrderingGame: React.FC<PhraseOrderingGameProps> = ({
   const handleDropOnAvailable = (e: React.DragEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    if (isCorrect !== null) return;
+    if (isCorrect === true) return;
 
     const word = e.dataTransfer.getData('text/plain');
     const source = e.dataTransfer.getData('source');
@@ -157,7 +157,7 @@ export const PhraseOrderingGame: React.FC<PhraseOrderingGameProps> = ({
   const handleDropOnEmptySelected = (e: React.DragEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    if (isCorrect !== null) return;
+    if (isCorrect === true) return;
 
     const word = e.dataTransfer.getData('text/plain');
     const source = e.dataTransfer.getData('source');
@@ -170,28 +170,60 @@ export const PhraseOrderingGame: React.FC<PhraseOrderingGameProps> = ({
     setDraggedWord(null);
   };
 
-  // Verificar orden automáticamente cuando todas las palabras están seleccionadas
+  // Helper para TTS
+  const speakText = (text: string) => {
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.cancel(); // Cancelar lecturas anteriores
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = 'es-ES'; // Configurar idioma español
+      window.speechSynthesis.speak(utterance);
+    }
+  };
+
+  // Leer frase completa al inicio
   useEffect(() => {
-    if (selectedWords.length === words.length && words.length > 0 && isCorrect === null) {
+    // Un pequeño delay para asegurar que el usuario está listo
+    const timer = setTimeout(() => {
+      speakText(phraseGame.phrase);
+    }, 500);
+    return () => clearTimeout(timer);
+  }, [phraseGame.phrase]);
+
+  // Verificación automática
+
+  // Verificación automática
+  useEffect(() => {
+    if (selectedWords.length === words.length && words.length > 0) {
       const userPhrase = selectedWords.join(' ').toLowerCase().trim().replace(/\s+/g, ' ');
       const correctPhrase = words.join(' ').toLowerCase().trim().replace(/\s+/g, ' ');
       
       if (userPhrase === correctPhrase) {
-        setIsCorrect(true);
-        setShowStars(true);
-        const finalTime = Math.floor((Date.now() - startTime) / 1000);
-        setTimeSpent(finalTime);
-        const pointsEarned = calculatePoints(finalTime);
-        setTimeout(() => {
-          onComplete(true, finalTime, pointsEarned);
-        }, 2000);
+        // Solo marcar si es correcto para bloquear y ganar
+        if (!isCorrect) {
+          setIsCorrect(true);
+          setShowStars(true);
+          const finalTime = Math.floor((Date.now() - startTime) / 1000);
+          setTimeSpent(finalTime);
+          const pointsEarned = calculatePoints(finalTime);
+          setTimeout(() => {
+            onComplete(true, finalTime, pointsEarned);
+          }, 2000);
+        }
+      } else {
+        // Si está completo pero mal, marcamos visualmente pero permitimos mover
+        setIsCorrect(false);
+      }
+    } else {
+      // Si no está completa la frase, limpiamos el estado de corrección para remover estilos de error/éxito
+      if (isCorrect !== null) {
+        setIsCorrect(null);
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedWords, words.length]);
 
   const handleReset = () => {
-    if (isCorrect !== null) return;
+    if (isCorrect === true) return;
     const allWords = [...selectedWords, ...shuffledWords];
     const shuffled = [...allWords].sort(() => Math.random() - 0.5);
     setShuffledWords(shuffled);
@@ -202,7 +234,7 @@ export const PhraseOrderingGame: React.FC<PhraseOrderingGameProps> = ({
   };
 
   const handleWordRemove = (index: number) => {
-    if (isCorrect !== null) return;
+    if (isCorrect === true) return;
     const word = selectedWords[index];
     const newSelected = [...selectedWords];
     newSelected.splice(index, 1);
@@ -240,11 +272,19 @@ export const PhraseOrderingGame: React.FC<PhraseOrderingGameProps> = ({
                 </div>
               ) : (
                 selectedWords.map((word, index) => {
-                  const isCorrectPosition = index < words.length && word === words[index];
+                  // Solo mostrar feedback visual si ya se verificó la frase completa
+                  const isGlobalCorrect = isCorrect === true;
+                  const isGlobalIncorrect = isCorrect === false;
+                  
+                  // Si está correcto globalmente, todas las palabras están bien
+                  const showGreen = isGlobalCorrect;
+                  // Si está incorrecto globalmente, mostrar rojo
+                  const showRed = isGlobalIncorrect;
+
                   return (
                     <div
                       key={`selected-${index}-${word}`}
-                      className={`word-slot ${dragOverIndex === index ? 'drag-over' : ''} ${isCorrectPosition && selectedWords.length === words.length && isCorrect ? 'correct-position' : ''}`}
+                      className={`word-slot ${dragOverIndex === index ? 'drag-over' : ''} ${showGreen ? 'correct-position' : ''}`}
                       onDragOver={(e) => handleDragOver(e, index)}
                       onDragLeave={handleDragLeave}
                       onDrop={(e) => handleDropOnSelected(e, index)}
@@ -253,7 +293,8 @@ export const PhraseOrderingGame: React.FC<PhraseOrderingGameProps> = ({
                         word={word}
                         isSelected={true}
                         isDragging={draggedWord === word}
-                        isCorrect={isCorrectPosition && selectedWords.length === words.length && isCorrect === true}
+                        isCorrect={showGreen}
+                        isIncorrect={showRed}
                         onClick={() => handleWordRemove(index)}
                         onDragStart={(e) => handleDragStart(e, word, 'selected', index)}
                         onDragEnd={handleDragEnd}
@@ -298,9 +339,16 @@ export const PhraseOrderingGame: React.FC<PhraseOrderingGameProps> = ({
 
           <div className="game-actions">
             <button 
+              className="action-btn sound-btn"
+              onClick={() => speakText(selectedWords.join(' '))}
+              disabled={selectedWords.length === 0}
+            >
+              🔊 Escuchar
+            </button>
+            <button 
               className="action-btn reset-btn"
               onClick={handleReset}
-              disabled={selectedWords.length === 0 || isCorrect !== null}
+              disabled={selectedWords.length === 0 || isCorrect === true}
             >
               🔄 Reiniciar
             </button>
