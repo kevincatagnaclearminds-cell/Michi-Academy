@@ -1,8 +1,11 @@
 import React from "react";
 import "./Tablero.css";
+import { NEGOCIOS, TABLERO } from "../types";
+import type { Jugador } from "../hooks/types/juego.types";
 
 interface TableroProps {
   posicionJugador: number;
+  jugadores: Jugador[];
 }
 
 // Coordenadas de cada casilla en porcentaje (x, y) sobre la imagen del tablero
@@ -49,7 +52,7 @@ const POSICIONES_CASILLAS: { [key: number]: { x: number; y: number } } = {
   23: { x: 20.5, y: 93.5 }, // Farmacia
 };
 
-const Tablero: React.FC<TableroProps> = ({ posicionJugador }) => {
+const Tablero: React.FC<TableroProps> = ({ posicionJugador, jugadores }) => {
   const posicion = POSICIONES_CASILLAS[posicionJugador] || { x: 10, y: 90 };
 
   return (
@@ -59,6 +62,42 @@ const Tablero: React.FC<TableroProps> = ({ posicionJugador }) => {
         alt="Tablero MichiLandia"
         className="tablero-imagen"
       />
+
+      {/* Owner bars for negocios */}
+      {NEGOCIOS.map((negocio) => {
+        const casillaPos = POSICIONES_CASILLAS[negocio.casillaId];
+        if (!casillaPos) return null;
+        const propietario = jugadores.find((j) =>
+          j.negociosComprados.includes(negocio.id)
+        );
+        if (!propietario) return null;
+        // determine side (top/right/bottom/left) from TABLERO metadata
+        const casillaData = TABLERO.find(
+          (c) => c.posicion === negocio.casillaId || c.id === negocio.casillaId
+        );
+        const lado = casillaData?.lado || "top";
+        return (
+          <div
+            key={negocio.id}
+            className={`negocio-owner-wrapper owner-side-${lado}`}
+            title={`Propietario: ${propietario.nombre}`}
+            style={{
+              left: `${casillaPos.x}%`,
+              top: `${casillaPos.y}%`,
+            }}
+          >
+            <div
+              className={`negocio-owner-badge owner-badge-side-${lado}`}
+              style={{ background: propietario.color }}
+              aria-hidden
+            >
+              <span className="owner-text">
+                {propietario.nombre?.toUpperCase() || ""}
+              </span>
+            </div>
+          </div>
+        );
+      })}
 
       {/* Ficha del jugador posicionada sobre el tablero */}
       <div

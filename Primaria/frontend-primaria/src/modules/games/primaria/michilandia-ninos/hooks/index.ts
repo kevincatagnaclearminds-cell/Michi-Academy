@@ -8,8 +8,10 @@
  * - useNegocios: Compra de negocios (~120 líneas)
  * - useProductos: Compra de productos (~140 líneas)
  * - useCartasIncognita: Cartas sorpresa (~230 líneas)
+ * - useVentas: Venta de productos al cliente (~150 líneas)
+ * - useInversion: Fase de inversión (~180 líneas)
  * - useNotificaciones: Sistema de notificaciones (~145 líneas)
- * 
+ *
  * Archivos de soporte:
  * - types/juego.types.ts: Tipos e interfaces
  * - constants/juego.constants.ts: Constantes y configuración
@@ -25,6 +27,8 @@ export { useMovimiento } from "./useMovimiento";
 export { useNegocios } from "./useNegocios";
 export { useProductos } from "./useProductos";
 export { useCartasIncognita } from "./useCartasIncognita";
+export { useVentas } from "./useVentas";
+export { useInversion } from "./useInversion";
 export { useNotificaciones, MENSAJES } from "./useNotificaciones";
 
 // Tipos
@@ -36,6 +40,8 @@ export type {
   Notificacion,
   ProductoComprado,
   AccionJuego,
+  VentaEnCurso,
+  InversionEnCurso,
 } from "./types/juego.types";
 
 // Constantes

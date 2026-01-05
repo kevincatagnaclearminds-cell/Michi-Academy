@@ -9,11 +9,13 @@
  * - useCartasIncognita: Cartas sorpresa
  */
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { EstadoJuego, ModoJuego, Notificacion } from "./types/juego.types";
 import { CONFIG_JUEGO, ESTADO_INICIAL } from "./constants/juego.constants";
 import { crearJugadores, getCasilla } from "./utils/juego.utils";
 import { useNotificaciones, MENSAJES } from "./useNotificaciones";
+import { useAbandonarJuego } from "./useAbandonarJuego";
+import { useFinalizarPartida } from "./useFinalizarPartida";
 
 // Hooks especializados
 import { useTurnos } from "./useTurnos";
@@ -21,6 +23,11 @@ import { useMovimiento } from "./useMovimiento";
 import { useNegocios } from "./useNegocios";
 import { useProductos } from "./useProductos";
 import { useCartasIncognita } from "./useCartasIncognita";
+import { useVentas } from "./useVentas";
+import { useInversion } from "./useInversion";
+import { useClienteLoco } from "./useClienteLoco";
+import { useSubasta } from "./useSubasta";
+import { ModalGanadoresState } from "./types/juego.types";
 
 // Re-exportar tipos y constantes para uso externo
 export type {
@@ -29,6 +36,8 @@ export type {
   ProductoComprado,
   FaseJuego,
   ModoJuego,
+  VentaEnCurso,
+  InversionEnCurso,
 } from "./types/juego.types";
 export { COLORES_JUGADORES } from "./constants/juego.constants";
 
@@ -62,6 +71,48 @@ export const useJuego = () => {
     [crearNotificacion, programarEliminacion]
   );
 
+  // ====== MODALES INFORMATIVOS ======
+
+  const cerrarModalProductosInsuficientes = useCallback(() => {
+    setEstado((prev) => ({
+      ...prev,
+      modalProductosInsuficientes: null,
+      fase: "jugando",
+    }));
+  }, []);
+
+  const cerrarModalNegocioNoComprado = useCallback(() => {
+    setEstado((prev) => ({
+      ...prev,
+      modalNegocioNoComprado: null,
+      negocioActual: null,
+      // Volver a fase jugando - NO puede comprar
+      fase: "jugando",
+    }));
+  }, []);
+
+  const cerrarModalProductoNoDisponible = useCallback(() => {
+    setEstado((prev) => ({
+      ...prev,
+      modalProductoNoDisponible: null,
+      fase: "jugando",
+    }));
+  }, []);
+
+  const cerrarModalCompraAutomatica = useCallback(() => {
+    setEstado((prev) => ({
+      ...prev,
+      modalCompraAutomatica: null,
+    }));
+  }, []);
+
+  const cerrarModalCompraForzada = useCallback(() => {
+    setEstado((prev) => ({
+      ...prev,
+      modalCompraForzada: null,
+    }));
+  }, []);
+
   // ====== HOOKS ESPECIALIZADOS ======
 
   const { terminarTurno } = useTurnos({
@@ -78,7 +129,7 @@ export const useJuego = () => {
 
   const {
     comprarNegocio,
-    rechazarCompra,
+    rechazarCompra: rechazarCompraBase,
     esNegocioComprado,
     getNegocioPorCasilla,
     getPropietarioNegocio,
@@ -105,29 +156,115 @@ export const useJuego = () => {
     agregarNotificacion,
   });
 
+  const {
+    toggleProductoParaVender,
+    confirmarVenta,
+    cancelarVenta,
+    calcularGananciaVenta,
+  } = useVentas({
+    estado,
+    setEstado,
+    agregarNotificacion,
+  });
+
+  const {
+    iniciarFaseInversion,
+    confirmarCompraInversion,
+    saltarCompraInversion,
+    toggleProductoInversion,
+  } = useInversion({
+    estado,
+    setEstado,
+    agregarNotificacion,
+  });
+
+  const {
+    toggleProductoClienteLoco,
+    confirmarVentaClienteLoco,
+    saltarClienteLoco,
+  } = useClienteLoco({
+    estado,
+    setEstado,
+    agregarNotificacion,
+  });
+
+  const { iniciarSubasta, pujar, retirarse, cerrarSubasta } = useSubasta({
+    estado,
+    setEstado,
+    agregarNotificacion,
+  });
+
   // ====== INICIALIZACIÓN ======
 
   const iniciarJuego = useCallback(
-    (modo: ModoJuego) => {
-      const jugadores = crearJugadores(modo);
+    (
+      modo: ModoJuego,
+      configuracionJugadores?:
+        | {
+            nombre?: string;
+            color?: string;
+            colorFondo?: string;
+            emoji?: string;
+          }[]
+    ) => {
+      const jugadores = crearJugadores(modo, configuracionJugadores);
 
       setEstado({
         ...ESTADO_INICIAL,
         fase: "jugando",
         modoJuego: modo,
         jugadores,
+        jugadoresRetirados: [],
+        modalGanadores: null,
       });
 
       setTimeout(() => {
         const primerJugador = jugadores[0];
         agregarNotificacion(
-          MENSAJES.inicioJuego(primerJugador.emoji, primerJugador.nombre),
+          MENSAJES.inicioJuego(primerJugador.nombre, primerJugador.color),
           "turno"
         );
       }, 500);
     },
     [agregarNotificacion]
   );
+
+  const abandonarJuego = useAbandonarJuego(setEstado, agregarNotificacion);
+  const finalizarPartida = useFinalizarPartida(setEstado, agregarNotificacion);
+
+  const mostrarResumenFinal = useCallback(
+    (motivo: ModalGanadoresState["motivo"]) => {
+      setEstado((prev) => ({
+        ...prev,
+        fase: "fin_partida",
+        ventaEnCurso: null,
+        inversionEnCurso: null,
+        clienteLocoEnCurso: null,
+        subastaEnCurso: null,
+        modalGanadores: { motivo },
+      }));
+    },
+    []
+  );
+
+  const cerrarModalGanadores = useCallback(() => {
+    setEstado(ESTADO_INICIAL);
+  }, []);
+
+  useEffect(() => {
+    if (estado.dineroCliente <= 0 && !estado.modalGanadores) {
+      mostrarResumenFinal("sin_dinero_cliente");
+      agregarNotificacion(
+        "El cliente se quedó sin dinero. Se calculan los ganadores.",
+        "alerta"
+      );
+    }
+  }, [
+    estado.dineroCliente,
+    estado.modalGanadores,
+    mostrarResumenFinal,
+    agregarNotificacion,
+  ]);
 
   // ====== GETTERS ======
 
@@ -141,12 +278,29 @@ export const useJuego = () => {
     [estado.posicionCliente]
   );
 
+  const rechazarCompra = useCallback(() => {
+    const negocioId = estado.negocioActual?.id;
+    if (negocioId) {
+      iniciarSubasta(negocioId, estado.jugadorActual);
+    } else {
+      rechazarCompraBase();
+    }
+  }, [
+    estado.negocioActual,
+    estado.jugadorActual,
+    iniciarSubasta,
+    rechazarCompraBase,
+  ]);
+
   // ====== RETURN ======
 
   return {
     estado,
     // Inicialización
     iniciarJuego,
+    // Control de partida
+    abandonarJuego,
+    finalizarPartida,
     // Turnos
     terminarTurno,
     // Movimiento
@@ -159,8 +313,34 @@ export const useJuego = () => {
     confirmarCompraProductos,
     saltarCompraProductos,
     calcularCostoProductos: calcularCosto,
+    // Ventas (cliente compra a dueño)
+    toggleProductoParaVender,
+    confirmarVenta,
+    cancelarVenta,
+    calcularGananciaVenta,
+    // Inversión (jugadores compran productos para sus negocios)
+    iniciarFaseInversion,
+    confirmarCompraInversion,
+    saltarCompraInversion,
+    toggleProductoInversion,
+    // Cliente Loco
+    toggleProductoClienteLoco,
+    confirmarVentaClienteLoco,
+    saltarClienteLoco,
     // Cartas
     cerrarCartaIncognita,
+    // Subasta
+    iniciarSubasta,
+    pujarSubasta: pujar,
+    retirarseSubasta: retirarse,
+    cerrarSubasta,
+    // Modales informativos
+    cerrarModalProductosInsuficientes,
+    cerrarModalNegocioNoComprado,
+    cerrarModalProductoNoDisponible,
+    cerrarModalCompraAutomatica,
+    cerrarModalCompraForzada,
+    cerrarModalGanadores,
     // Getters
     getJugadorActual,
     getCasillaActual,

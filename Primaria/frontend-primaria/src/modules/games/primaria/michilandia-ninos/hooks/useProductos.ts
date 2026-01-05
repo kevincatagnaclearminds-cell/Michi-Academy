@@ -1,12 +1,17 @@
 /**
  * Hook para compra de productos
- * 
+ *
  * Los IDs de cartas ahora tienen formato "productoId_indice" para soportar
  * productos con múltiples cartas (ej: "michi_cono_simple_0", "michi_cono_simple_1")
  */
 
 import { useCallback } from "react";
-import { EstadoJuego, FaseJuego, ProductoComprado, Notificacion } from "./types/juego.types";
+import {
+  EstadoJuego,
+  FaseJuego,
+  ProductoComprado,
+  Notificacion,
+} from "./types/juego.types";
 import { calcularCostoProductosConIndice } from "./utils/juego.utils";
 import { MENSAJES } from "./useNotificaciones";
 
@@ -28,10 +33,10 @@ interface UseProductosReturn {
  * Formato: "productoId_indice" -> "productoId"
  */
 const extraerProductoId = (cartaId: string): string => {
-  const partes = cartaId.split('_');
+  const partes = cartaId.split("_");
   // El último elemento es el índice, lo removemos
   partes.pop();
-  return partes.join('_');
+  return partes.join("_");
 };
 
 export const useProductos = ({
@@ -39,7 +44,6 @@ export const useProductos = ({
   setEstado,
   agregarNotificacion,
 }: UseProductosParams): UseProductosReturn => {
-
   /**
    * Selecciona o deselecciona una carta de producto
    */
@@ -71,7 +75,9 @@ export const useProductos = ({
       if (!prev.negocioActual) return prev;
 
       const jugador = prev.jugadores[prev.jugadorActual];
-      const costoTotal = calcularCostoProductosConIndice(prev.productosSeleccionados);
+      const costoTotal = calcularCostoProductosConIndice(
+        prev.productosSeleccionados
+      );
 
       // Verificar dinero suficiente
       if (jugador.dinero < costoTotal) {
@@ -83,7 +89,8 @@ export const useProductos = ({
       const productosCantidad: { [productoId: string]: number } = {};
       prev.productosSeleccionados.forEach((cartaId) => {
         const productoId = extraerProductoId(cartaId);
-        productosCantidad[productoId] = (productosCantidad[productoId] || 0) + 1;
+        productosCantidad[productoId] =
+          (productosCantidad[productoId] || 0) + 1;
       });
 
       // Actualizar jugador con productos
@@ -91,7 +98,7 @@ export const useProductos = ({
         if (i !== prev.jugadorActual) return j;
 
         const productosActualizados = [...j.productosComprados];
-        
+
         Object.entries(productosCantidad).forEach(([productoId, cantidad]) => {
           const existente = productosActualizados.find(
             (p) => p.productoId === productoId
@@ -118,7 +125,8 @@ export const useProductos = ({
       if (prev.productosSeleccionados.length > 0) {
         agregarNotificacion(
           MENSAJES.productosComprados(
-            jugador.emoji,
+            jugador.nombre,
+            jugador.color,
             prev.productosSeleccionados.length,
             costoTotal
           ),
@@ -141,9 +149,13 @@ export const useProductos = ({
    */
   const saltarCompraProductos = useCallback(() => {
     const jugador = estado.jugadores[estado.jugadorActual];
-    
+
     agregarNotificacion(
-      MENSAJES.negocioVacio(jugador.emoji, estado.negocioActual?.nombre || ""),
+      MENSAJES.negocioVacio(
+        jugador.nombre,
+        jugador.color,
+        estado.negocioActual?.nombre || ""
+      ),
       "alerta"
     );
 
@@ -168,4 +180,3 @@ export const useProductos = ({
     calcularCosto,
   };
 };
-

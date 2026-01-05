@@ -9,39 +9,65 @@ import { COLORES_JUGADORES, CONFIG_JUEGO } from "../constants/juego.constants";
 /**
  * Crea los jugadores según el modo de juego
  */
-export const crearJugadores = (modo: ModoJuego): Jugador[] => {
-  const cantidad = modo === "solo" ? 1 : 5;
-  return Array.from({ length: cantidad }, (_, i) => ({
-    id: i,
-    nombre: modo === "solo" ? "Tú" : `Jugador ${i + 1}`,
-    color: COLORES_JUGADORES[i].color,
-    colorFondo: COLORES_JUGADORES[i].colorFondo,
-    emoji: COLORES_JUGADORES[i].emoji,
-    dinero: CONFIG_JUEGO.DINERO_INICIAL_JUGADOR,
-    posicion: 0,
-    negociosComprados: [],
-    productosComprados: [],
-  }));
+export const crearJugadores = (
+  modo: ModoJuego,
+  configuracionJugadores?:
+    | {
+        nombre?: string;
+        color?: string;
+        colorFondo?: string;
+        emoji?: string;
+      }[]
+): Jugador[] => {
+  // Si se pasó una configuración explícita, usar su longitud.
+  const cantidad = configuracionJugadores?.length ?? (modo === "solo" ? 1 : 5);
+  return Array.from({ length: cantidad }, (_, i) => {
+    const cfg = configuracionJugadores && configuracionJugadores[i];
+    const nombreDefault = modo === "solo" ? "Tú" : `Jugador ${i + 1}`;
+    // Cuando la configuración es más corta que la cantidad, caer en defaults.
+    const preset = COLORES_JUGADORES[i % COLORES_JUGADORES.length];
+    return {
+      id: i,
+      nombre: cfg?.nombre ?? nombreDefault,
+      color: cfg?.color ?? preset.color,
+      colorFondo: cfg?.colorFondo ?? preset.colorFondo,
+      emoji: cfg?.emoji ?? preset.emoji,
+      dinero: CONFIG_JUEGO.DINERO_INICIAL_JUGADOR,
+      posicion: 0,
+      negociosComprados: [],
+      productosComprados: [],
+      retirado: false,
+    };
+  });
 };
 
 /**
  * Obtiene el jugador actual del array de jugadores
  */
-export const getJugadorActual = (jugadores: Jugador[], indice: number): Jugador => {
+export const getJugadorActual = (
+  jugadores: Jugador[],
+  indice: number
+): Jugador => {
   return jugadores[indice];
 };
 
 /**
  * Busca al propietario de un negocio
  */
-export const buscarPropietarioNegocio = (jugadores: Jugador[], negocioId: string): Jugador | undefined => {
+export const buscarPropietarioNegocio = (
+  jugadores: Jugador[],
+  negocioId: string
+): Jugador | undefined => {
   return jugadores.find((j) => j.negociosComprados.includes(negocioId));
 };
 
 /**
  * Verifica si un negocio ya está comprado por algún jugador
  */
-export const esNegocioComprado = (jugadores: Jugador[], negocioId: string): boolean => {
+export const esNegocioComprado = (
+  jugadores: Jugador[],
+  negocioId: string
+): boolean => {
   return jugadores.some((j) => j.negociosComprados.includes(negocioId));
 };
 
@@ -65,7 +91,7 @@ export const getCasilla = (posicion: number) => {
  * Calcula la nueva posición después de moverse
  */
 export const calcularNuevaPosicion = (
-  posicionActual: number, 
+  posicionActual: number,
   casillas: number
 ): number => {
   return (posicionActual + casillas) % CONFIG_JUEGO.TOTAL_CASILLAS;
@@ -75,10 +101,13 @@ export const calcularNuevaPosicion = (
  * Calcula la posición al retroceder casillas
  */
 export const calcularPosicionRetroceso = (
-  posicionActual: number, 
+  posicionActual: number,
   casillas: number
 ): number => {
-  return (posicionActual - casillas + CONFIG_JUEGO.TOTAL_CASILLAS) % CONFIG_JUEGO.TOTAL_CASILLAS;
+  return (
+    (posicionActual - casillas + CONFIG_JUEGO.TOTAL_CASILLAS) %
+    CONFIG_JUEGO.TOTAL_CASILLAS
+  );
 };
 
 /**
@@ -126,30 +155,34 @@ export const buscarProductoPorId = (productoId: string) => {
  * Formato: "productoId_indice" -> "productoId"
  */
 export const extraerProductoIdDeCartaId = (cartaId: string): string => {
-  const partes = cartaId.split('_');
+  const partes = cartaId.split("_");
   // El último elemento es el índice, lo removemos
   partes.pop();
-  return partes.join('_');
+  return partes.join("_");
 };
 
 /**
  * Calcula el costo total de una lista de productos (IDs simples)
+ * COSTO = lo que el jugador paga para comprar el producto
  */
 export const calcularCostoProductos = (productosIds: string[]): number => {
   return productosIds.reduce((total, id) => {
     const producto = buscarProductoPorId(id);
-    return total + (producto?.precio || 0);
+    return total + (producto?.costo || 0);
   }, 0);
 };
 
 /**
  * Calcula el costo total de cartas con índice (formato "productoId_indice")
+ * COSTO = lo que el jugador paga para comprar el producto
  */
-export const calcularCostoProductosConIndice = (cartasIds: string[]): number => {
+export const calcularCostoProductosConIndice = (
+  cartasIds: string[]
+): number => {
   return cartasIds.reduce((total, cartaId) => {
     const productoId = extraerProductoIdDeCartaId(cartaId);
     const producto = buscarProductoPorId(productoId);
-    return total + (producto?.precio || 0);
+    return total + (producto?.costo || 0);
   }, 0);
 };
 
@@ -157,7 +190,7 @@ export const calcularCostoProductosConIndice = (cartasIds: string[]): number => 
  * Obtiene la cantidad de un producto que tiene un jugador
  */
 export const getCantidadProducto = (
-  productosComprados: ProductoComprado[], 
+  productosComprados: ProductoComprado[],
   productoId: string
 ): number => {
   const comprado = productosComprados.find((p) => p.productoId === productoId);
@@ -168,7 +201,7 @@ export const getCantidadProducto = (
  * Cuenta el total de productos de un negocio específico
  */
 export const contarProductosDeNegocio = (
-  productosComprados: ProductoComprado[], 
+  productosComprados: ProductoComprado[],
   negocioId: string
 ): number => {
   return productosComprados
@@ -181,14 +214,20 @@ export const contarProductosDeNegocio = (
 /**
  * Calcula el nuevo dinero después de un gasto (no baja de 0)
  */
-export const calcularDineroRestante = (dineroActual: number, gasto: number): number => {
+export const calcularDineroRestante = (
+  dineroActual: number,
+  gasto: number
+): number => {
   return Math.max(0, dineroActual - gasto);
 };
 
 /**
  * Verifica si hay suficiente dinero para una compra
  */
-export const tieneSuficienteDinero = (dinero: number, costo: number): boolean => {
+export const tieneSuficienteDinero = (
+  dinero: number,
+  costo: number
+): boolean => {
   return dinero >= costo;
 };
 
@@ -198,7 +237,7 @@ export const tieneSuficienteDinero = (dinero: number, costo: number): boolean =>
  * Calcula el índice del siguiente jugador
  */
 export const calcularSiguienteJugador = (
-  jugadorActual: number, 
+  jugadorActual: number,
   totalJugadores: number
 ): number => {
   return (jugadorActual + 1) % totalJugadores;
@@ -211,3 +250,29 @@ export const esNuevaRonda = (siguienteJugador: number): boolean => {
   return siguienteJugador === 0;
 };
 
+// ====== PATRIMONIO ======
+
+export const calcularValorNegocios = (jugador: Jugador): number => {
+  return jugador.negociosComprados.reduce((total, negocioId) => {
+    const negocio = buscarNegocioPorId(negocioId);
+    return total + (negocio?.precio || 0);
+  }, 0);
+};
+
+export const calcularValorProductos = (jugador: Jugador): number => {
+  return jugador.productosComprados.reduce((total, prod) => {
+    const producto = buscarProductoPorId(prod.productoId);
+    return total + (producto?.costo || 0) * prod.cantidad;
+  }, 0);
+};
+
+export const calcularPatrimonioTotal = (jugador: Jugador) => {
+  const valorNegocios = calcularValorNegocios(jugador);
+  const valorProductos = calcularValorProductos(jugador);
+
+  return {
+    valorNegocios,
+    valorProductos,
+    patrimonio: jugador.dinero + valorNegocios + valorProductos,
+  };
+};

@@ -1,0 +1,1800 @@
+/* ====== VARIABLES GLOBALES ====== */
+:root {
+  --font-title: "Fredoka", "Baloo 2", cursive, sans-serif;
+  --font-body: "Nunito", "Poppins", sans-serif;
+  --font-ui: "Poppins", "Nunito", sans-serif;
+  --blur-light: blur(12px);
+  --blur-medium: blur(20px);
+  --blur-heavy: blur(30px);
+  --glass-bg: rgba(255, 255, 255, 0.12);
+  --glass-border: rgba(255, 255, 255, 0.18);
+  --gold: #ffd700;
+  --gold-dark: #ffb300;
+}
+
+/* ====== SCROLLBAR PERSONALIZADO ====== */
+.michilandia-juego::-webkit-scrollbar {
+  width: 10px;
+}
+
+.michilandia-juego::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+}
+
+.michilandia-juego::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, var(--gold) 0%, var(--gold-dark) 100%);
+  border-radius: 10px;
+  border: 2px solid rgba(0, 0, 0, 0.2);
+}
+
+.michilandia-juego::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #ffe066 0%, var(--gold) 100%);
+}
+
+/* ====== PANTALLA DE INICIO ====== */
+.michilandia-page {
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 2rem 0;
+  position: relative;
+  overflow-y: auto;
+  overflow-x: hidden;
+  font-family: var(--font-body);
+}
+
+/* Scrollbar para pantalla de inicio */
+.michilandia-page::-webkit-scrollbar {
+  width: 10px;
+}
+
+.michilandia-page::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+}
+
+.michilandia-page::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, var(--gold) 0%, var(--gold-dark) 100%);
+  border-radius: 10px;
+  border: 2px solid rgba(0, 0, 0, 0.2);
+}
+
+.michilandia-page::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #ffe066 0%, var(--gold) 100%);
+}
+
+/* Fondo con blur que cubre toda la pantalla */
+.michilandia-page::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: url("/images/fondo web loggin.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  filter: blur(8px);
+  transform: scale(1.08);
+  z-index: -2;
+}
+
+/* Overlay oscuro semitransparente */
+.michilandia-page::after {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(25, 118, 210, 0.75) 0%,
+    rgba(13, 71, 161, 0.85) 50%,
+    rgba(21, 101, 192, 0.8) 100%
+  );
+  z-index: -1;
+}
+
+.michilandia-content {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  padding: 2rem;
+  max-width: 850px;
+  animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.michilandia-title {
+  font-family: var(--font-title);
+  font-size: 4rem;
+  font-weight: 700;
+  color: var(--gold);
+  text-shadow: 3px 3px 0 #ff6b35, 6px 6px 15px rgba(0, 0, 0, 0.5),
+    0 0 40px rgba(255, 215, 0, 0.3);
+  margin-bottom: 0.8rem;
+  letter-spacing: 3px;
+}
+
+.michilandia-subtitle {
+  font-family: var(--font-body);
+  font-size: 1.5rem;
+  color: #ffffff;
+  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.6);
+  margin-bottom: 2.5rem;
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+
+.michilandia-card {
+  background: var(--glass-bg);
+  backdrop-filter: var(--blur-heavy);
+  -webkit-backdrop-filter: var(--blur-heavy);
+  border-radius: 28px;
+  padding: 2.5rem 3rem;
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15), 0 0 60px rgba(0, 0, 0, 0.2);
+}
+
+.michilandia-card p {
+  font-family: var(--font-body);
+  font-size: 1.15rem;
+  color: #f5f5f5;
+  line-height: 1.7;
+  margin-bottom: 2rem;
+  font-weight: 500;
+}
+
+/* Botón ver instrucciones en pantalla de inicio */
+.btn-ver-instrucciones {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 1rem 1.5rem;
+  margin-bottom: 2rem;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 215, 0, 0.2) 0%,
+    rgba(255, 179, 0, 0.15) 100%
+  );
+  border: 2px solid rgba(255, 215, 0, 0.5);
+  border-radius: 12px;
+  color: #f7dc6f;
+  font-family: var(--font-body);
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-ver-instrucciones:hover {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 215, 0, 0.35) 0%,
+    rgba(255, 179, 0, 0.25) 100%
+  );
+  border-color: var(--gold);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(255, 215, 0, 0.2);
+}
+
+.btn-ver-instrucciones:active {
+  transform: translateY(0);
+}
+
+.michilandia-emoji {
+  font-size: 5rem;
+  margin-bottom: 1.5rem;
+  animation: bounce 2s ease-in-out infinite;
+}
+
+.michilandia-michi-img {
+  width: 160px;
+  height: 160px;
+  object-fit: contain;
+  margin-bottom: 1.5rem;
+  animation: bounce 2s ease-in-out infinite;
+  filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.4));
+}
+
+.michilandia-play-btn {
+  font-family: var(--font-ui);
+  background: linear-gradient(135deg, #ff6b35 0%, #ff8c5a 100%);
+  color: white;
+  font-size: 1.2rem;
+  font-weight: 700;
+  padding: 1.1rem 3rem;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 6px 25px rgba(255, 107, 53, 0.5);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.michilandia-play-btn:hover {
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 12px 35px rgba(255, 107, 53, 0.6);
+  background: linear-gradient(135deg, #ff8c5a 0%, #ffaa7a 100%);
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes bounce {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-18px);
+  }
+}
+
+/* ====== PANTALLA DEL JUEGO ====== */
+.michilandia-juego {
+  height: 100vh;
+  width: 100%;
+  background: var(
+    --jugador-fondo,
+    linear-gradient(135deg, #1a237e 0%, #283593 50%, #3949ab 100%)
+  );
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transition: background 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  font-family: var(--font-body);
+}
+
+/* ====== HEADER DEL JUEGO ====== */
+.juego-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.4rem 1rem;
+  background: rgba(0, 0, 0, 0.25);
+  backdrop-filter: var(--blur-medium);
+  -webkit-backdrop-filter: var(--blur-medium);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  flex-shrink: 0;
+}
+
+.juego-info {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  flex: 1;
+}
+
+.juego-turno,
+.casilla-actual-header {
+  font-family: var(--font-ui);
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: var(--blur-light);
+  -webkit-backdrop-filter: var(--blur-light);
+  padding: 0.4rem 0.8rem;
+  border-radius: 20px;
+  color: white;
+  font-weight: 700;
+  font-size: 0.85rem;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.juego-dineros {
+  display: flex;
+  gap: 0.6rem;
+}
+
+.juego-dinero-jugador {
+  font-family: var(--font-ui);
+  background: linear-gradient(135deg, #4caf50 0%, #388e3c 100%);
+  padding: 0.4rem 0.8rem;
+  border-radius: 20px;
+  color: white;
+  font-weight: 700;
+  font-size: 0.8rem;
+  box-shadow: 0 2px 10px rgba(76, 175, 80, 0.3);
+}
+
+.juego-titulo {
+  font-family: var(--font-title);
+  font-size: 1.5rem;
+  color: var(--gold);
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5), 0 0 20px rgba(255, 215, 0, 0.25);
+  margin: 0;
+  letter-spacing: 1px;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.juego-casilla-info {
+  display: flex;
+  align-items: center;
+}
+
+.casilla-actual {
+  font-family: var(--font-ui);
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: var(--blur-light);
+  -webkit-backdrop-filter: var(--blur-light);
+  padding: 0.4rem 0.8rem;
+  border-radius: 20px;
+  color: white;
+  font-weight: 600;
+  font-size: 0.85rem;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+/* Botón de ayuda circular en header */
+.btn-ayuda-circular {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 32px;
+  height: 32px;
+  background: rgba(255, 215, 0, 0.15);
+  border: 2px solid rgba(255, 215, 0, 0.4);
+  border-radius: 50%;
+  color: var(--gold);
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  padding: 0;
+}
+
+.btn-ayuda-circular:hover {
+  background: rgba(255, 215, 0, 0.3);
+  border-color: var(--gold);
+  transform: scale(1.1);
+  box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+}
+
+.btn-ayuda-circular:active {
+  transform: scale(1.05);
+}
+
+.header-actions {
+  display: flex;
+  gap: 0.6rem;
+  align-items: center;
+}
+.btn-abandonar-header,
+.btn-finalizar-header {
+  padding: 0.45rem 0.7rem;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-weight: 700;
+}
+.btn-abandonar-header {
+  background: rgba(255, 255, 255, 0.06);
+  color: #fff;
+}
+.btn-finalizar-header {
+  background: linear-gradient(135deg, #6be56b, #4caf50);
+  color: #fff;
+}
+
+/* ====== ÁREA PRINCIPAL ====== */
+.juego-main {
+  flex: 1;
+  display: flex;
+  padding: 0.5rem 1rem;
+  gap: 0.8rem;
+  overflow: hidden;
+  align-items: stretch;
+  min-height: 0;
+}
+
+/* Panel izquierdo - Jugadores */
+.juego-panel-izquierdo {
+  width: 260px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  flex-shrink: 0;
+  overflow-y: auto;
+  background: rgba(0, 0, 0, 0.15);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: 12px;
+  padding: 0.8rem;
+  margin-left: 0.5rem;
+}
+
+.juego-panel-izquierdo::-webkit-scrollbar {
+  width: 4px;
+}
+
+/* Configuración de jugadores (inicio) */
+.michilandia-config-jugadores {
+  margin-top: 1.2rem;
+  text-align: left;
+}
+.michilandia-config-jugadores .config-titulo {
+  color: #fff;
+  font-weight: 700;
+  margin-bottom: 0.6rem;
+}
+.michilandia-config-jugadores .config-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 0.9rem;
+}
+
+.michilandia-config-jugadores .config-top-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+.players-count-control {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+.count-btn {
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  border: none;
+  background: rgba(255, 255, 255, 0.06);
+  color: #fff;
+  font-size: 20px;
+  cursor: pointer;
+}
+.count-label {
+  color: #fff;
+  font-weight: 700;
+  min-width: 24px;
+  text-align: center;
+}
+.player-config-card {
+  background: rgba(255, 255, 255, 0.04);
+  padding: 0.9rem;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  display: flex;
+  flex-direction: column;
+}
+.player-config-card label {
+  display: block;
+  color: #ddd;
+  font-size: 0.85rem;
+  margin-bottom: 0.35rem;
+}
+.player-config-card input {
+  width: 100%;
+  padding: 0.55rem;
+  border-radius: 8px;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  background: rgba(255, 255, 255, 0.06);
+  color: #fff;
+}
+.color-options {
+  display: flex;
+  gap: 0.6rem;
+  margin-top: 0.6rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.color-swatch {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  border: 3px solid rgba(255, 255, 255, 0.06);
+  cursor: pointer;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+  transition: transform 0.12s ease, outline 0.12s ease;
+}
+.color-swatch.selected {
+  outline: 4px solid rgba(255, 255, 255, 0.16);
+  transform: translateY(-4px);
+}
+.color-swatch.disabled {
+  opacity: 0.28;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+.custom-color input[type="color"] {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  border: none;
+  padding: 0;
+  background: transparent;
+  cursor: pointer;
+}
+.custom-color {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+.color-hex {
+  color: #fff;
+  opacity: 0.85;
+  font-weight: 700;
+  font-size: 0.85rem;
+}
+.player-config-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.remove-player-btn {
+  background: transparent;
+  border: none;
+  color: #ffb3b3;
+  font-weight: 700;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.juego-panel-izquierdo::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+}
+
+.juego-panel-izquierdo::-webkit-scrollbar-thumb {
+  background: rgba(255, 215, 0, 0.5);
+  border-radius: 4px;
+}
+
+/* Centro - Tablero */
+.juego-tablero {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: visible;
+  min-height: 0;
+  height: 100%;
+}
+
+/* Panel derecho */
+/* Panel derecho */
+.juego-panel-derecho {
+  width: 260px;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  flex-shrink: 0;
+  overflow-y: auto;
+  background: rgba(0, 0, 0, 0.15);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: 12px;
+  padding: 0.8rem;
+  margin-right: 0.5rem;
+  justify-content: center;
+}
+
+.panel-dinero-cliente {
+  background: var(--glass-bg);
+  border-radius: 12px;
+  padding: 0.6rem;
+  border: 1px solid var(--glass-border);
+}
+
+.jugador-turno-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.4rem;
+}
+
+.jugador-turno-nombre {
+  font-weight: 800;
+  color: var(--gold);
+}
+
+.jugador-turno-dinero {
+  font-weight: 700;
+  color: #fff;
+}
+
+.dados-ubicacion {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: stretch;
+  gap: 0rem;
+  padding: 0.8rem 1rem;
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.dados-ubicacion .ubicacion-text {
+  display: block;
+  margin-top: 0.25rem;
+  font-weight: 600;
+}
+
+/* New styles for restored and improved player-in-turn card */
+.cliente-dinero-block {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+  width: 100%;
+}
+
+.cliente-dinero-block h3 {
+  margin: 0;
+  font-size: 0.95rem;
+  color: var(--gold);
+  font-weight: 700;
+}
+
+.jugador-turno-card {
+  margin-top: 0.6rem;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.02),
+    rgba(0, 0, 0, 0.08)
+  );
+  padding: 0.45rem;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+.jugador-dot {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  flex: 0 0 auto;
+  border: 2px solid rgba(255, 255, 255, 0.12);
+}
+
+.jugador-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.jugador-turno-nombre {
+  font-weight: 800;
+  color: #fff;
+}
+
+.jugador-turno-dinero {
+  font-weight: 700;
+  color: rgba(255, 215, 0, 0.95);
+}
+
+/* Wrapper card for cliente dinero (separate stacked card) */
+.cliente-dinero-card {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: start;
+  gap: 1rem;
+  padding: 0.8rem 1rem;
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Reuse player-in-turn visual but for the separated card */
+.jugador-en-turno-card {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: stretch;
+  gap: 0.5rem;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(30px);
+  -webkit-backdrop-filter: blur(30px);
+  border-radius: 16px;
+  box-shadow: 0 0 25px rgba(255, 255, 255, 0.5), 0 4px 20px rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.jugador-turno-header {
+  margin-bottom: 0.3rem;
+}
+
+.jugador-turno-header h4 {
+  margin: 0;
+  color: var(--gold);
+  font-family: var(--font-ui);
+  font-size: 0.95rem;
+  font-weight: 700;
+  text-align: center;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.jugador-card-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  color: white;
+}
+
+/* Make ubicacion prettier: small icon + text */
+
+.juego-panel-derecho::-webkit-scrollbar {
+  width: 4px;
+}
+
+.juego-panel-derecho::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+}
+
+.juego-panel-derecho::-webkit-scrollbar-thumb {
+  background: rgba(255, 215, 0, 0.5);
+  border-radius: 4px;
+}
+
+/* Contenedor de acciones (dado + botón) */
+.panel-acciones {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+/* Botón terminar turno */
+.btn-terminar-turno {
+  font-family: var(--font-ui);
+  background: linear-gradient(135deg, #9c27b0 0%, #7b1fa2 100%);
+  color: white;
+  font-size: 0.85rem;
+  font-weight: 700;
+  padding: 0.6rem 1rem;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(156, 39, 176, 0.4);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.btn-terminar-turno:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(156, 39, 176, 0.5);
+}
+
+.btn-terminar-turno:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  filter: grayscale(30%);
+}
+
+/* ====== NOTIFICACIÓN DE MOVIMIENTO ====== */
+.notificacion-movimiento {
+  position: fixed;
+  top: 70px;
+  right: 15px;
+  font-family: var(--font-ui);
+  background: linear-gradient(135deg, #ffd700 0%, #ffb300 100%);
+  padding: 0.4rem 0.8rem;
+  border-radius: 20px;
+  font-weight: 700;
+  font-size: 0.8rem;
+  color: #1a1a1a;
+  box-shadow: 0 4px 15px rgba(255, 215, 0, 0.4);
+  z-index: 100;
+  animation: slideIn 0.3s ease, pulsar 1s ease-in-out infinite;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(120px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes pulsar {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.9;
+    transform: scale(1.02);
+  }
+}
+
+/* ====== NEGOCIOS COMPRADOS ====== */
+.negocios-comprados {
+  background: var(--glass-bg);
+  backdrop-filter: var(--blur-heavy);
+  -webkit-backdrop-filter: var(--blur-heavy);
+  border-radius: 14px;
+  padding: 0.8rem;
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+
+.negocios-comprados h3 {
+  font-family: var(--font-title);
+  color: var(--gold);
+  margin: 0 0 0.5rem 0;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.sin-negocios {
+  font-family: var(--font-body);
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.8rem;
+  margin: 0;
+  font-style: italic;
+}
+
+.lista-negocios {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+}
+
+.negocio-badge {
+  font-family: var(--font-ui);
+  background: linear-gradient(135deg, #4caf50 0%, #2e7d32 100%);
+  color: white;
+  padding: 0.25rem 0.5rem;
+  border-radius: 10px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: capitalize;
+  border: none;
+}
+
+.negocio-badge-clickable {
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.negocio-badge-clickable:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.4);
+  filter: brightness(1.1);
+}
+
+/* ====== INSTRUCCIONES ====== */
+.instrucciones {
+  background: var(--glass-bg);
+  backdrop-filter: var(--blur-heavy);
+  -webkit-backdrop-filter: var(--blur-heavy);
+  border-radius: 14px;
+  padding: 0.8rem;
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+
+.instrucciones h3 {
+  font-family: var(--font-title);
+  color: var(--gold);
+  margin: 0 0 0.5rem 0;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.instrucciones ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.instrucciones li {
+  font-family: var(--font-body);
+  color: white;
+  padding: 0.3rem 0;
+  font-size: 0.8rem;
+  font-weight: 500;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.instrucciones li:last-child {
+  border-bottom: none;
+}
+
+/* Botón ver reglas completas */
+.btn-ver-reglas {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.7rem 1rem;
+  margin-top: 0.8rem;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 215, 0, 0.15) 0%,
+    rgba(255, 179, 0, 0.1) 100%
+  );
+  border: 1.5px solid rgba(255, 215, 0, 0.4);
+  border-radius: 8px;
+  color: var(--gold);
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-ver-reglas-full {
+  font-family: var(--font-ui);
+  color: #222222;
+  font-size: 0.95rem;
+  font-weight: 800;
+  padding: 0.7rem 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  background: rgba(255, 255, 255, 0.737);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+}
+
+.btn-ver-reglas-full:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.18);
+}
+
+.btn-ver-reglas-full:active {
+  transform: translateY(0);
+}
+
+.btn-ver-reglas-full:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  filter: grayscale(20%);
+}
+
+.rules-emoji {
+  font-size: 1.1rem;
+}
+
+.rules-text {
+  display: inline-block;
+}
+.btn-ver-reglas:hover {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 215, 0, 0.25) 0%,
+    rgba(255, 179, 0, 0.2) 100%
+  );
+  border-color: var(--gold);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 15px rgba(255, 215, 0, 0.15);
+}
+
+.btn-ver-reglas:active {
+  transform: translateY(0);
+}
+
+/* ====== BOTONES DE MODO DE JUEGO ====== */
+.michilandia-modos {
+  display: flex;
+  gap: 1.5rem;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+}
+
+.michilandia-modo-btn {
+  font-family: var(--font-ui);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 1.8rem 2.5rem;
+  border: none;
+  border-radius: 24px;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  min-width: 170px;
+  position: relative;
+  overflow: hidden;
+}
+
+.michilandia-modo-btn::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.15) 0%,
+    transparent 50%
+  );
+  pointer-events: none;
+}
+
+.michilandia-modo-btn:hover {
+  transform: translateY(-8px) scale(1.02);
+}
+
+.modo-solo {
+  background: linear-gradient(135deg, #4ecdc4 0%, #44a08d 100%);
+  box-shadow: 0 8px 30px rgba(78, 205, 196, 0.5);
+}
+
+.modo-solo:hover {
+  box-shadow: 0 15px 45px rgba(78, 205, 196, 0.65);
+}
+
+.modo-local {
+  background: linear-gradient(135deg, #ff6b6b 0%, #ee5a5a 100%);
+  box-shadow: 0 8px 30px rgba(255, 107, 107, 0.5);
+}
+
+.modo-local:hover {
+  box-shadow: 0 15px 45px rgba(255, 107, 107, 0.65);
+}
+
+.modo-icono {
+  font-size: 2.8rem;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+}
+
+.modo-titulo {
+  font-family: var(--font-title);
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: white;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.modo-desc {
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.85);
+  font-weight: 600;
+}
+
+/* Preview de colores */
+.michilandia-colores-preview {
+  margin-top: 1.2rem;
+  padding-top: 1.2rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.colores-titulo {
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  color: rgba(255, 255, 255, 0.75);
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+
+.colores-lista {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.color-badge {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3),
+    inset 0 2px 0 rgba(255, 255, 255, 0.3);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.color-badge:hover {
+  transform: scale(1.2) translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+}
+
+/* ====== BANNER JUGADOR ACTUAL ====== */
+.jugador-actual-banner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  padding: 0.3rem 1rem;
+  color: white;
+  font-weight: 700;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.25);
+  backdrop-filter: var(--blur-light);
+  -webkit-backdrop-filter: var(--blur-light);
+  flex-shrink: 0;
+}
+
+.jugador-emoji {
+  font-size: 1.1rem;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.3));
+}
+
+.jugador-nombre {
+  font-family: var(--font-title);
+  font-size: 0.9rem;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+.jugador-dinero {
+  font-family: var(--font-ui);
+  background: rgba(0, 0, 0, 0.2);
+  backdrop-filter: var(--blur-light);
+  -webkit-backdrop-filter: var(--blur-light);
+  padding: 0.2rem 0.6rem;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* ====== LISTA DE JUGADORES ====== */
+.jugadores-lista {
+  background: var(--glass-bg);
+  backdrop-filter: var(--blur-heavy);
+  -webkit-backdrop-filter: var(--blur-heavy);
+  border-radius: 12px;
+  padding: 0.6rem;
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  flex: 1;
+}
+
+.jugadores-lista h3 {
+  font-family: var(--font-title);
+  color: var(--gold);
+  margin: 0 0 0.4rem 0;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+.jugadores-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.jugador-card {
+  background: var(--card-color, rgba(0, 0, 0, 0.15));
+  border-radius: 12px;
+  overflow: hidden;
+  border: none;
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 75px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25);
+}
+
+.jugador-card.jugador-activo {
+  border-color: var(--gold);
+  box-shadow: 0 0 15px rgba(255, 215, 0, 0.6);
+  transform: scale(1.02);
+}
+
+.jugador-card-compact {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.5rem;
+  padding: 0.6rem 0.8rem;
+  color: white;
+}
+
+.jugador-card-title {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.jugador-color-circle {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.jugador-emoji {
+  font-size: 1.3rem;
+  line-height: 1;
+}
+
+.jugador-card-nombre {
+  font-family: var(--font-ui);
+  font-size: 0.9rem;
+  font-weight: 800;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+}
+
+.jugador-card-stats {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.stat {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.stat-emoji {
+  font-size: 1.2rem;
+  line-height: 1;
+}
+
+.stat-value {
+  font-weight: 700;
+}
+
+.jugador-card-body {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.2rem 0.4rem;
+  background: rgba(0, 0, 0, 0.2);
+  color: white;
+  font-family: var(--font-ui);
+  font-size: 0.65rem;
+  font-weight: 600;
+}
+
+.jugador-card-negocios {
+  padding: 0.45rem 0.5rem 0.6rem 0.5rem;
+  background: transparent;
+}
+
+/* Make any inner progress-like bars in the player card thinner (defensive)
+   Targets elements that might be used as progress indicators inside the card. */
+.jugador-card-negocios .progress,
+.jugador-card-negocios .progreso,
+.jugador-card-negocios .bar,
+.jugador-card-negocios > div[role="progressbar"] {
+  height: 6px !important;
+  min-height: 6px !important;
+  max-height: 6px !important;
+  border-radius: 6px !important;
+  margin-top: 6px;
+}
+
+.jugador-no-negocios {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.75rem;
+}
+
+.jugador-negocios-scroll {
+  display: flex;
+  gap: 0.5rem;
+  overflow-x: auto;
+  padding-bottom: 0.25rem;
+}
+.jugador-negocio-pill {
+  flex: 0 0 auto;
+  min-width: 100px;
+  background: rgba(255, 255, 255, 0.03);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  padding: 0.28rem 0.5rem;
+  border-radius: 6px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+/* Thinner horizontal scrollbar for player business list */
+.jugador-negocios-scroll::-webkit-scrollbar {
+  height: 6px;
+}
+.jugador-negocios-scroll::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.06);
+  border-radius: 6px;
+}
+.jugador-negocios-scroll::-webkit-scrollbar-thumb {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 215, 0, 0.95),
+    rgba(255, 179, 0, 0.95)
+  );
+  border-radius: 6px;
+  box-shadow: inset 0 0 0 2px rgba(0, 0, 0, 0.08);
+}
+.jugador-negocios-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 215, 0, 0.95) rgba(0, 0, 0, 0.06);
+}
+
+.jugador-negocio-pill:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.06);
+}
+
+/* ====== SISTEMA DE NOTIFICACIONES ====== */
+.notificaciones-container {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column-reverse;
+  gap: 0.6rem;
+  max-width: 380px;
+  max-height: 60vh;
+  overflow-y: auto;
+  pointer-events: none;
+}
+
+.notificacion {
+  font-family: var(--font-ui);
+  padding: 0.8rem 1.2rem;
+  border-radius: 16px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: white;
+  box-shadow: 0 6px 25px rgba(0, 0, 0, 0.4);
+  animation: slideInLeft 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: auto;
+  backdrop-filter: var(--blur-medium);
+  -webkit-backdrop-filter: var(--blur-medium);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.notificacion {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.notif-color-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.15) inset, 0 1px 3px rgba(0, 0, 0, 0.25);
+  flex: 0 0 14px;
+}
+
+.notificacion-text {
+  display: inline-block;
+}
+
+.notificacion-info {
+  background: linear-gradient(
+    135deg,
+    rgba(33, 150, 243, 0.85) 0%,
+    rgba(25, 118, 210, 0.9) 100%
+  );
+  border-left: 4px solid #2196f3;
+}
+
+.notificacion-exito {
+  background: linear-gradient(
+    135deg,
+    rgba(76, 175, 80, 0.85) 0%,
+    rgba(56, 142, 60, 0.9) 100%
+  );
+  border-left: 4px solid #4caf50;
+}
+
+.notificacion-alerta {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 152, 0, 0.85) 0%,
+    rgba(245, 124, 0, 0.9) 100%
+  );
+  border-left: 4px solid #ff9800;
+}
+
+.notificacion-turno {
+  background: linear-gradient(
+    135deg,
+    rgba(156, 39, 176, 0.85) 0%,
+    rgba(123, 31, 162, 0.9) 100%
+  );
+  border-left: 4px solid #9c27b0;
+}
+
+@keyframes slideInLeft {
+  from {
+    transform: translateX(-120%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* ====== BREATHING / 'RESPIRAR' ANIMATION ====== */
+@keyframes breathe {
+  0% {
+    transform: translateZ(0) scale(1);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  }
+  50% {
+    transform: translateZ(0) scale(1.02);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.22);
+  }
+  100% {
+    transform: translateZ(0) scale(1);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  }
+}
+
+.jugador-negocios-scroll .jugador-negocio-pill {
+  animation: breathe 5.5s ease-in-out infinite;
+  transform-origin: left center;
+  will-change: transform, box-shadow;
+}
+.jugador-negocios-scroll .jugador-negocio-pill:nth-child(odd) {
+  animation-delay: 0.2s;
+}
+.jugador-negocios-scroll .jugador-negocio-pill:nth-child(even) {
+  animation-delay: 0.6s;
+}
+
+/* Honor reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  .jugadores-grid .jugador-card,
+  .jugador-negocios-scroll .jugador-negocio-pill {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* Notificación de recarga */
+.notificacion-recarga {
+  position: fixed;
+  top: 145px;
+  right: 20px;
+  font-family: var(--font-ui);
+  background: linear-gradient(135deg, #4caf50 0%, #388e3c 100%);
+  padding: 0.9rem 1.6rem;
+  border-radius: 30px;
+  font-weight: 700;
+  font-size: 1rem;
+  color: white;
+  box-shadow: 0 6px 25px rgba(76, 175, 80, 0.6), 0 0 40px rgba(76, 175, 80, 0.3);
+  z-index: 100;
+  animation: slideIn 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+    pulsar 1.2s ease-in-out infinite;
+}
+
+/* ====== RESPONSIVE ====== */
+
+/* Pantallas grandes de escritorio */
+@media (min-width: 1400px) {
+  .juego-main {
+    padding: 2rem 3rem;
+    gap: 2.5rem;
+  }
+
+  .juego-panel-lateral {
+    width: 380px;
+    gap: 1.5rem;
+  }
+
+  .juego-header {
+    padding: 1.2rem 2.5rem;
+  }
+}
+
+/* Pantallas medianas-grandes */
+@media (max-width: 1200px) and (min-width: 1025px) {
+  .juego-main {
+    padding: 1rem 1.5rem;
+    gap: 1.5rem;
+  }
+
+  .juego-panel-lateral {
+    width: 280px;
+    gap: 0.8rem;
+  }
+
+  .negocios-comprados,
+  .instrucciones {
+    padding: 1rem;
+  }
+}
+
+/* Tablets */
+@media (max-width: 1024px) {
+  .juego-header {
+    padding: 0.8rem 1rem;
+  }
+
+  .juego-info {
+    gap: 0.5rem;
+  }
+
+  .juego-dineros {
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+
+  .juego-dinero-cliente,
+  .juego-dinero-jugador {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.85rem;
+  }
+
+  .juego-titulo {
+    font-size: 1.5rem;
+  }
+
+  .casilla-actual {
+    font-size: 0.85rem;
+    padding: 0.5rem 0.8rem;
+  }
+
+  .juego-main {
+    flex-direction: column;
+    padding: 0.8rem;
+    gap: 0.8rem;
+    align-items: center;
+    overflow-y: auto;
+  }
+
+  .juego-tablero {
+    width: 100%;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .juego-panel-lateral {
+    width: 100%;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: stretch;
+    gap: 0.8rem;
+    padding: 0 0.5rem;
+  }
+
+  .dados-container {
+    flex: 1;
+    max-width: 300px;
+  }
+
+  .negocios-comprados {
+    flex: 1;
+    max-width: 300px;
+    padding: 1rem;
+  }
+
+  .negocios-comprados h3 {
+    font-size: 0.95rem;
+    margin-bottom: 0.6rem;
+  }
+
+  .instrucciones {
+    display: none;
+  }
+}
+
+/* Móviles */
+@media (max-width: 768px) {
+  .michilandia-title {
+    font-size: 2.8rem;
+  }
+
+  .michilandia-subtitle {
+    font-size: 1.15rem;
+  }
+
+  .michilandia-card {
+    padding: 1.8rem;
+    margin: 0 1rem;
+  }
+
+  .michilandia-modos {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .michilandia-modo-btn {
+    min-width: auto;
+    padding: 1.2rem 1.8rem;
+  }
+
+  .modo-icono {
+    font-size: 2.2rem;
+  }
+
+  .modo-titulo {
+    font-size: 1.1rem;
+  }
+
+  .juego-header {
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 0.6rem 1rem;
+  }
+
+  .juego-info {
+    width: 100%;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+
+  .juego-dineros {
+    flex-direction: row;
+  }
+
+  .juego-titulo {
+    width: 100%;
+    text-align: center;
+    font-size: 1.4rem;
+  }
+
+  .michilandia-emoji {
+    font-size: 4rem;
+  }
+
+  .juego-main {
+    padding: 0.8rem;
+  }
+
+  .notificaciones-container {
+    left: 10px;
+    bottom: 10px;
+    max-width: 300px;
+  }
+
+  .notificacion {
+    font-size: 0.8rem;
+    padding: 0.6rem 1rem;
+  }
+
+  .jugador-actual-banner {
+    padding: 0.5rem 1rem;
+    gap: 0.6rem;
+  }
+
+  .jugador-emoji {
+    font-size: 1.3rem;
+  }
+
+  .jugador-nombre {
+    font-size: 1rem;
+  }
+
+  .jugadores-lista {
+    display: none;
+  }
+}
+
+@media (max-width: 1024px) {
+  .jugadores-grid {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .jugador-card {
+    min-width: 130px;
+    flex: 1;
+    max-width: 160px;
+  }
+
+  .jugadores-lista {
+    flex: 1;
+    max-width: 100%;
+  }
+}
+/* ====== DINERO CLIENTE ====== */
+.panel-dinero-cliente {
+  background: var(--glass-bg);
+  backdrop-filter: var(--blur-heavy);
+  -webkit-backdrop-filter: var(--blur-heavy);
+  border-radius: 14px;
+  padding: 0.6rem 0.9rem;
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.8rem;
+}
+
+.panel-dinero-cliente h3 {
+  font-family: var(--font-title);
+  color: var(--gold);
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 700;
+  flex: 1 1 auto;
+  text-align: left;
+}
+
+.cliente-dinero {
+  font-family: var(--font-ui);
+  background: rgba(0, 0, 0, 0.2);
+  backdrop-filter: var(--blur-light);
+  -webkit-backdrop-filter: var(--blur-light);
+  padding: 0.35rem 0.8rem;
+  border-radius: 12px;
+  font-size: 0.9rem;
+  font-weight: 800;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  white-space: nowrap;
+  flex: 0 0 auto;
+}
+
+/* Responsive: stack vertically on small screens */
+@media (max-width: 520px) {
+  .panel-dinero-cliente {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .panel-dinero-cliente h3 {
+    text-align: left;
+    margin-bottom: 0.4rem;
+  }
+  .cliente-dinero {
+    align-self: flex-start;
+  }
+}
+
+/* Helper layout for turno card row */
+.jugador-turno-row {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 1rem;
+}

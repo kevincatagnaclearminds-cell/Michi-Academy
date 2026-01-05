@@ -4,7 +4,10 @@
 
 import { useCallback } from "react";
 import { EstadoJuego, FaseJuego, Notificacion } from "./types/juego.types";
-import { buscarNegocioPorCasilla, buscarPropietarioNegocio } from "./utils/juego.utils";
+import {
+  buscarNegocioPorCasilla,
+  buscarPropietarioNegocio,
+} from "./utils/juego.utils";
 import { MENSAJES } from "./useNotificaciones";
 
 interface UseNegociosParams {
@@ -17,8 +20,12 @@ interface UseNegociosReturn {
   comprarNegocio: () => void;
   rechazarCompra: () => void;
   esNegocioComprado: (negocioId: string) => boolean;
-  getNegocioPorCasilla: (casillaId: number) => ReturnType<typeof buscarNegocioPorCasilla>;
-  getPropietarioNegocio: (negocioId: string) => ReturnType<typeof buscarPropietarioNegocio>;
+  getNegocioPorCasilla: (
+    casillaId: number
+  ) => ReturnType<typeof buscarNegocioPorCasilla>;
+  getPropietarioNegocio: (
+    negocioId: string
+  ) => ReturnType<typeof buscarPropietarioNegocio>;
 }
 
 export const useNegocios = ({
@@ -26,7 +33,6 @@ export const useNegocios = ({
   setEstado,
   agregarNotificacion,
 }: UseNegociosParams): UseNegociosReturn => {
-
   /**
    * Compra el negocio actual y pasa a comprar productos
    */
@@ -39,7 +45,10 @@ export const useNegocios = ({
 
       // Verificar dinero suficiente
       if (jugador.dinero < precio) {
-        agregarNotificacion(MENSAJES.sinDineroNegocio(jugador.emoji), "alerta");
+        agregarNotificacion(
+          MENSAJES.sinDineroNegocio(jugador.nombre, jugador.color),
+          "alerta"
+        );
         return prev;
       }
 
@@ -49,15 +58,18 @@ export const useNegocios = ({
           ? {
               ...j,
               dinero: j.dinero - precio,
-              negociosComprados: [...j.negociosComprados, prev.negocioActual!.id],
+              negociosComprados: [
+                ...j.negociosComprados,
+                prev.negocioActual!.id,
+              ],
             }
           : j
       );
 
       agregarNotificacion(
         MENSAJES.compraNegocio(
-          jugador.emoji,
           jugador.nombre,
+          jugador.color,
           prev.negocioActual.nombre,
           precio
         ),
@@ -83,7 +95,7 @@ export const useNegocios = ({
 
     if (negocio) {
       agregarNotificacion(
-        MENSAJES.subasta(jugador.emoji, jugador.nombre, negocio.nombre),
+        MENSAJES.subasta(jugador.nombre, jugador.color, negocio.nombre),
         "alerta"
       );
     }
@@ -122,7 +134,8 @@ export const useNegocios = ({
    * Obtiene el propietario de un negocio
    */
   const getPropietarioNegocio = useCallback(
-    (negocioId: string) => buscarPropietarioNegocio(estado.jugadores, negocioId),
+    (negocioId: string) =>
+      buscarPropietarioNegocio(estado.jugadores, negocioId),
     [estado.jugadores]
   );
 
@@ -134,4 +147,3 @@ export const useNegocios = ({
     getPropietarioNegocio,
   };
 };
-

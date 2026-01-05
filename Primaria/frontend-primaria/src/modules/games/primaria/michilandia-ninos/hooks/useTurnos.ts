@@ -23,7 +23,6 @@ export const useTurnos = ({
   setEstado,
   agregarNotificacion,
 }: UseTurnosParams): UseTurnosReturn => {
-  
   /**
    * Cambia al siguiente jugador
    */
@@ -43,7 +42,7 @@ export const useTurnos = ({
       const jugador = prev.jugadores[siguienteJugador];
 
       agregarNotificacion(
-        MENSAJES.cambioTurno(jugador.emoji, jugador.nombre),
+        MENSAJES.cambioTurno(jugador.nombre, jugador.color),
         "turno"
       );
 
@@ -66,7 +65,7 @@ export const useTurnos = ({
 
     const jugador = estado.jugadores[estado.jugadorActual];
     agregarNotificacion(
-      MENSAJES.finTurno(jugador.emoji, jugador.nombre),
+      MENSAJES.finTurno(jugador.nombre, jugador.color),
       "info"
     );
     siguienteTurno();
@@ -83,4 +82,3 @@ export const useTurnos = ({
     siguienteTurno,
   };
 };
-

@@ -1,0 +1,338 @@
+.modal-ganadores-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  z-index: 2000;
+}
+
+.modal-ganadores-container {
+  background: linear-gradient(
+    145deg,
+    rgba(30, 30, 50, 0.96),
+    rgba(15, 18, 30, 0.96)
+  );
+  border-radius: 24px;
+  border: 3px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.65);
+  color: #f4f6fb;
+  padding: 24px;
+  max-height: 90vh;
+  overflow: hidden;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.modal-ganadores-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.ganadores-motivo {
+  margin: 0;
+  color: #b0b4c0;
+  font-size: 14px;
+}
+
+.ganadores-sub {
+  margin: 4px 0 0;
+  color: #8f95a3;
+  font-size: 13px;
+}
+
+.btn-cerrar-ganadores {
+  background: linear-gradient(135deg, #4caf50 0%, #8bc34a 100%);
+  border: none;
+  color: #fff;
+  padding: 12px 18px;
+  border-radius: 16px;
+  font-weight: 800;
+  letter-spacing: 0.6px;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  box-shadow: 0 12px 30px rgba(255, 138, 64, 0.28),
+    0 2px 8px rgba(0, 0, 0, 0.35);
+}
+
+.btn-cerrar-ganadores:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 16px 34px rgba(76, 175, 80, 0.38);
+}
+
+.ganadores-body {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 14px;
+  padding: 6px 4px 10px;
+  max-height: 62vh;
+  overflow-y: auto;
+}
+
+.ganador-card {
+  border: 2px solid rgba(255, 255, 255, 0.06);
+  border-radius: 18px;
+  background: linear-gradient(
+    180deg,
+    rgba(20, 24, 34, 0.9) 0%,
+    rgba(12, 16, 25, 0.92) 100%
+  );
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  min-height: 260px;
+}
+
+.ganador-retirado {
+  opacity: 0.8;
+  filter: grayscale(0.35);
+}
+
+.ganador-rank {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  font-weight: 800;
+  color: #ffffffaa;
+  font-size: 18px;
+}
+
+.ganador-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px;
+  color: #fff;
+}
+
+.ganador-identidad {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.ganador-color-dot {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: inline-block;
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.25);
+}
+
+.ganador-nombre {
+  font-weight: 800;
+  font-size: 16px;
+}
+
+.tag-retirado {
+  display: inline-block;
+  margin-top: 4px;
+  padding: 3px 8px;
+  font-size: 11px;
+  border-radius: 999px;
+  background: #585b63;
+  color: #f1f2f6;
+  letter-spacing: 0.3px;
+}
+
+.ganador-total span {
+  display: block;
+  font-size: 12px;
+  color: #e6e8ed;
+  opacity: 0.85;
+}
+
+.ganador-total strong {
+  font-size: 22px;
+  letter-spacing: 0.5px;
+}
+
+.ganador-stats-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 10px;
+  padding: 12px 14px 6px;
+}
+
+.stat-pill {
+  background: #1b1f27;
+  border: 1px solid #2a2f38;
+  border-radius: 12px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  color: #dfe3ec;
+}
+
+.stat-pill span {
+  font-size: 13px;
+  color: #aeb4c4;
+}
+
+.stat-pill strong {
+  font-size: 17px;
+}
+
+.stat-pill small {
+  font-size: 12px;
+  color: #9aa1b0;
+  margin-left: 4px;
+}
+
+.ganador-listados {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 8px;
+  padding: 6px 14px 14px;
+}
+
+.ganador-listados p {
+  margin: 0 0 6px;
+  font-weight: 700;
+  color: #d7dbe6;
+}
+
+.pill-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.pill {
+  border: 1px solid #3b4250;
+  border-radius: 999px;
+  padding: 6px 10px;
+  font-size: 12px;
+  background: #161a21;
+  color: #e5e8f0;
+}
+
+.pill-light {
+  background: #1f2430;
+  border-color: #313846;
+}
+
+.tag-vacio {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #9aa1b0;
+  font-size: 13px;
+  background: #181c24;
+  padding: 6px 10px;
+  border-radius: 10px;
+  border: 1px dashed #2d333f;
+}
+
+.ganador-negocios-scroll {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  max-height: 88px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.negocio-pill {
+  background: #151923;
+  color: #eaeef7;
+  border: 1px solid #3a4150;
+  border-radius: 14px;
+  padding: 6px 10px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.negocio-pill:hover {
+  background: #1e2431;
+}
+
+.negocio-pill.activo {
+  background: linear-gradient(135deg, #1f2a3a 0%, #1a2230 100%);
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.05);
+}
+
+.negocio-detalle {
+  margin-top: 10px;
+  padding: 10px;
+  border-radius: 12px;
+  background: #141923;
+  border: 1px solid #272d39;
+}
+
+.negocio-detalle-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  gap: 10px;
+}
+
+.negocio-detalle-nombre {
+  font-weight: 700;
+  color: #e5e9f2;
+}
+
+.negocio-detalle-badge {
+  background: #1e293b;
+  color: #dbeafe;
+  border-radius: 999px;
+  padding: 4px 8px;
+  font-size: 11px;
+}
+
+.negocio-detalle-empty {
+  color: #9aa1b0;
+  font-size: 13px;
+}
+
+.producto-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.producto-chip {
+  background: #1e2431;
+  border: 1px solid #323a4a;
+  color: #e7ecf5;
+  border-radius: 12px;
+  padding: 6px 10px;
+  font-size: 12px;
+}
+
+.ganadores-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 10px;
+}
+
+@media (max-width: 640px) {
+  .modal-ganadores-container {
+    padding: 16px;
+  }
+
+  .ganador-stats-row {
+    grid-template-columns: 1fr;
+  }
+
+  .ganador-listados {
+    grid-template-columns: 1fr;
+  }
+
+  .ganador-negocios-scroll {
+    max-height: none;
+  }
+}

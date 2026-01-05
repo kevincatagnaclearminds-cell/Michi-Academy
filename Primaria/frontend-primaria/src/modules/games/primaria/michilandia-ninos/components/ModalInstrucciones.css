@@ -16,9 +16,8 @@
 .modal-instrucciones-container {
   background: linear-gradient(145deg, #1a1a2e 0%, #16213e 50%, #0f0f23 100%);
   border-radius: 20px;
-  width: 100%;
-  max-width: 900px;
-  max-height: 85vh;
+  width: min(1100px, 95vw);
+  height: min(720px, 90vh);
   display: flex;
   flex-direction: column;
   border: 3px solid;
@@ -36,7 +35,7 @@
 
 .modal-instrucciones-header h2 {
   margin: 0;
-  font-family: 'Fredoka', sans-serif;
+  font-family: "Fredoka", sans-serif;
   font-size: 1.6rem;
   color: #fff;
   text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
@@ -86,7 +85,7 @@
   border: 2px solid transparent;
   border-radius: 10px;
   color: rgba(255, 255, 255, 0.7);
-  font-family: 'Nunito', sans-serif;
+  font-family: "Nunito", sans-serif;
   font-size: 0.9rem;
   font-weight: 500;
   cursor: pointer;
@@ -119,7 +118,7 @@
   padding: 1.5rem;
   overflow-y: auto;
   scrollbar-width: thin;
-  scrollbar-color: var(--gold, #F7DC6F) transparent;
+  scrollbar-color: var(--gold, #f7dc6f) transparent;
 }
 
 .instrucciones-contenido::-webkit-scrollbar {
@@ -131,12 +130,12 @@
 }
 
 .instrucciones-contenido::-webkit-scrollbar-thumb {
-  background-color: var(--gold, #F7DC6F);
+  background-color: var(--gold, #f7dc6f);
   border-radius: 10px;
 }
 
 .instrucciones-seccion h3 {
-  font-family: 'Fredoka', sans-serif;
+  font-family: "Fredoka", sans-serif;
   font-size: 1.4rem;
   color: #fff;
   margin-bottom: 1.2rem;
@@ -145,14 +144,14 @@
 }
 
 .instrucciones-seccion h4 {
-  font-family: 'Nunito', sans-serif;
+  font-family: "Nunito", sans-serif;
   font-size: 1.1rem;
-  color: #F7DC6F;
+  color: #f7dc6f;
   margin: 0 0 0.5rem 0;
 }
 
 .instrucciones-seccion p {
-  font-family: 'Nunito', sans-serif;
+  font-family: "Nunito", sans-serif;
   color: rgba(255, 255, 255, 0.85);
   line-height: 1.6;
   margin: 0 0 0.8rem 0;
@@ -164,7 +163,7 @@
 }
 
 .instrucciones-seccion li {
-  font-family: 'Nunito', sans-serif;
+  font-family: "Nunito", sans-serif;
   color: rgba(255, 255, 255, 0.85);
   line-height: 1.8;
   margin-bottom: 0.3rem;
@@ -173,7 +172,11 @@
 /* ==================== OBJETIVO ==================== */
 
 .objetivo-destacado {
-  background: linear-gradient(135deg, rgba(247, 220, 111, 0.15) 0%, rgba(247, 220, 111, 0.05) 100%);
+  background: linear-gradient(
+    135deg,
+    rgba(247, 220, 111, 0.15) 0%,
+    rgba(247, 220, 111, 0.05) 100%
+  );
   border: 2px solid rgba(247, 220, 111, 0.3);
   border-radius: 12px;
   padding: 1.2rem;
@@ -181,7 +184,7 @@
 }
 
 .objetivo-destacado p {
-  color: #F7DC6F;
+  color: #f7dc6f;
   font-size: 1.1rem;
 }
 
@@ -199,7 +202,7 @@
   align-items: center;
   gap: 1rem;
   background: rgba(78, 205, 196, 0.15);
-  border-left: 4px solid #4ECDC4;
+  border-left: 4px solid #4ecdc4;
   border-radius: 0 10px 10px 0;
   padding: 1rem;
 }
@@ -210,7 +213,7 @@
 
 .tip-box p {
   margin: 0;
-  color: #4ECDC4;
+  color: #4ecdc4;
   font-weight: 500;
 }
 
@@ -235,7 +238,11 @@
 }
 
 .dinero-card {
-  background: linear-gradient(145deg, rgba(78, 205, 196, 0.2) 0%, rgba(78, 205, 196, 0.05) 100%);
+  background: linear-gradient(
+    145deg,
+    rgba(78, 205, 196, 0.2) 0%,
+    rgba(78, 205, 196, 0.05) 100%
+  );
   border: 2px solid rgba(78, 205, 196, 0.4);
   border-radius: 12px;
   padding: 1.2rem;
@@ -246,25 +253,29 @@
 }
 
 .dinero-card.cliente {
-  background: linear-gradient(145deg, rgba(247, 220, 111, 0.2) 0%, rgba(247, 220, 111, 0.05) 100%);
+  background: linear-gradient(
+    145deg,
+    rgba(247, 220, 111, 0.2) 0%,
+    rgba(247, 220, 111, 0.05) 100%
+  );
   border-color: rgba(247, 220, 111, 0.4);
 }
 
 .dinero-quien {
-  font-family: 'Nunito', sans-serif;
+  font-family: "Nunito", sans-serif;
   font-size: 0.9rem;
   color: rgba(255, 255, 255, 0.7);
 }
 
 .dinero-cantidad {
-  font-family: 'Fredoka', sans-serif;
+  font-family: "Fredoka", sans-serif;
   font-size: 1.8rem;
   color: #fff;
   font-weight: 600;
 }
 
 .dinero-detalle {
-  font-family: 'Nunito', sans-serif;
+  font-family: "Nunito", sans-serif;
   font-size: 0.8rem;
   color: rgba(255, 255, 255, 0.5);
 }
@@ -289,12 +300,12 @@
 .paso-numero {
   width: 36px;
   height: 36px;
-  background: linear-gradient(135deg, #4ECDC4 0%, #44A08D 100%);
+  background: linear-gradient(135deg, #4ecdc4 0%, #44a08d 100%);
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: 'Fredoka', sans-serif;
+  font-family: "Fredoka", sans-serif;
   font-size: 1.2rem;
   color: #fff;
   font-weight: 600;
@@ -311,7 +322,7 @@
 
 .nota-importante {
   background: rgba(255, 100, 100, 0.15);
-  border-left: 3px solid #FF6B6B;
+  border-left: 3px solid #ff6b6b;
   padding: 0.5rem 0.8rem;
   border-radius: 0 8px 8px 0;
   font-size: 0.9rem !important;
@@ -335,7 +346,7 @@
 
 .warning-box p {
   margin: 0;
-  color: #FF6B6B;
+  color: #ff6b6b;
 }
 
 /* ==================== CASILLAS ==================== */
@@ -356,19 +367,19 @@
 }
 
 .casilla-card.recarga {
-  border-color: #4ECDC4;
+  border-color: #4ecdc4;
 }
 
 .casilla-card.invertir {
-  border-color: #F7DC6F;
+  border-color: #f7dc6f;
 }
 
 .casilla-card.sorpresa {
-  border-color: #BB8FCE;
+  border-color: #bb8fce;
 }
 
 .casilla-card.negocio {
-  border-color: #FF6B6B;
+  border-color: #ff6b6b;
 }
 
 .casilla-icono {
@@ -391,7 +402,11 @@
   display: flex;
   align-items: center;
   gap: 1rem;
-  background: linear-gradient(135deg, rgba(255, 107, 107, 0.2) 0%, rgba(255, 107, 107, 0.05) 100%);
+  background: linear-gradient(
+    135deg,
+    rgba(255, 107, 107, 0.2) 0%,
+    rgba(255, 107, 107, 0.05) 100%
+  );
   border: 2px solid rgba(255, 107, 107, 0.4);
   border-radius: 12px;
   padding: 1.2rem;
@@ -430,7 +445,7 @@
   background: rgba(255, 255, 255, 0.1);
   padding: 0.6rem 1rem;
   border-radius: 8px;
-  font-family: 'Nunito', sans-serif;
+  font-family: "Nunito", sans-serif;
   color: #fff;
 }
 
@@ -439,19 +454,19 @@
 }
 
 .suma-operador {
-  font-family: 'Fredoka', sans-serif;
+  font-family: "Fredoka", sans-serif;
   font-size: 1.5rem;
-  color: #4ECDC4;
+  color: #4ecdc4;
 }
 
 .suma-total {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  background: linear-gradient(135deg, #F7DC6F 0%, #F0B429 100%);
+  background: linear-gradient(135deg, #f7dc6f 0%, #f0b429 100%);
   padding: 0.8rem 1.2rem;
   border-radius: 10px;
-  font-family: 'Fredoka', sans-serif;
+  font-family: "Fredoka", sans-serif;
   font-weight: 600;
   color: #1a1a2e;
 }
@@ -460,7 +475,11 @@
   display: flex;
   align-items: center;
   gap: 1rem;
-  background: linear-gradient(135deg, rgba(247, 220, 111, 0.2) 0%, rgba(247, 220, 111, 0.05) 100%);
+  background: linear-gradient(
+    135deg,
+    rgba(247, 220, 111, 0.2) 0%,
+    rgba(247, 220, 111, 0.05) 100%
+  );
   border: 2px solid rgba(247, 220, 111, 0.4);
   border-radius: 12px;
   padding: 1.2rem;
@@ -618,4 +637,3 @@
     text-align: center;
   }
 }
-

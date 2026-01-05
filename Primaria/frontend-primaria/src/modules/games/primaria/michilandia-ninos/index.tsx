@@ -1,19 +1,32 @@
-import React, { useState } from "react";
+﻿import React, { useEffect, useRef, useState } from "react";
 import Tablero from "./components/Tablero";
-import Dado from "./components/Dados";
-import ModalCompra from "./components/ModalCompra";
-import ModalCompraProductos from "./components/ModalCompraProductos";
-import ModalNegocioDetalle from "./components/ModalNegocioDetalle";
-import ModalInstrucciones from "./components/ModalInstrucciones";
-import ModalCartaIncognita from "./components/ModalCartaIncognita";
+import InicioScreen from "./components/InicioScreen";
+import PlayersPanel from "./components/PlayersPanel";
+import RightPanel from "./components/RightPanel";
+import HeaderActions from "./components/HeaderActions";
+import GameModals from "./components/GameModals";
+import ModalConfigJugadores from "./components/ModalConfigJugadores";
 import { useJuego, COLORES_JUGADORES } from "./hooks/useJuego";
+import type { Jugador } from "./hooks/types/juego.types";
 import { TABLERO, NEGOCIOS } from "./types";
-import "./MichilandiaNinos.css";
+import type { Casilla } from "./types";
+import "./styles/variables.css";
+import "./styles/inicio.css";
+import "./styles/game.css";
 
-const MichilandiaNinosPage = () => {
+type PlayerSetup = {
+  nombre: string;
+  color: string;
+  colorFondo: string;
+  emoji: string;
+};
+
+const MichilandiaNinosPage: React.FC = () => {
   const {
     estado,
     iniciarJuego,
+    abandonarJuego,
+    finalizarPartida,
     tirarDado,
     comprarNegocio,
     rechazarCompra,
@@ -22,99 +35,236 @@ const MichilandiaNinosPage = () => {
     toggleProductoSeleccionado,
     confirmarCompraProductos,
     saltarCompraProductos,
+    toggleProductoParaVender,
+    confirmarVenta,
+    cancelarVenta,
+    iniciarFaseInversion,
+    confirmarCompraInversion,
+    saltarCompraInversion,
+    toggleProductoInversion,
+    toggleProductoClienteLoco,
+    confirmarVentaClienteLoco,
+    saltarClienteLoco,
+    cerrarModalProductosInsuficientes,
+    cerrarModalNegocioNoComprado,
+    cerrarModalProductoNoDisponible,
+    cerrarModalCompraAutomatica,
+    cerrarModalCompraForzada,
+    cerrarModalGanadores,
+    pujarSubasta,
+    retirarseSubasta,
     puedesTirar,
     puedeTerminarTurno,
   } = useJuego();
 
-  // Estado para el modal de detalle del negocio
+  const [mostrarModalAbandonar, setMostrarModalAbandonar] = useState(false);
+  const [mostrarModalFinalizar, setMostrarModalFinalizar] = useState(false);
   const [negocioDetalle, setNegocioDetalle] = useState<string | null>(null);
-
-  // Estado para el modal de instrucciones
   const [mostrarInstrucciones, setMostrarInstrucciones] = useState(false);
+  const [mostrarConfigJugadores, setMostrarConfigJugadores] = useState(false);
 
-  const casillaActual = TABLERO[estado.posicionCliente];
-  const jugadorActual = estado.jugadores[estado.jugadorActual];
+  const [playersSetup, setPlayersSetup] = useState<PlayerSetup[]>(() =>
+    COLORES_JUGADORES.slice(0, 5).map((c, i) => ({
+      nombre: `Jugador ${i + 1}`,
+      color: c.color,
+      colorFondo: c.colorFondo,
+      emoji: c.emoji,
+    }))
+  );
+  const [playersCount, setPlayersCount] = useState<number>(5);
 
-  // Obtener nombre del negocio por ID
+  const inversionIniciada = useRef(false);
+
+  const casillaActual: Casilla = TABLERO[estado.posicionCliente];
+  const jugadorActual: Jugador = estado.jugadores[estado.jugadorActual];
+
+  const generateGradientFromColor = (hex: string) => {
+    const hexClean = hex.replace("#", "");
+    const r = parseInt(hexClean.substring(0, 2), 16);
+    const g = parseInt(hexClean.substring(2, 4), 16);
+    const b = parseInt(hexClean.substring(4, 6), 16);
+    const dark1 = `rgb(${Math.max(0, r - 40)}, ${Math.max(
+      0,
+      g - 40
+    )}, ${Math.max(0, b - 40)})`;
+    const dark2 = `rgb(${Math.max(0, r - 20)}, ${Math.max(
+      0,
+      g - 20
+    )}, ${Math.max(0, b - 20)})`;
+    return `linear-gradient(135deg, ${dark1} 0%, ${dark2} 50%, ${hex} 100%)`;
+  };
+
+  const handleCustomColor = (index: number, colorHex: string) => {
+    setPlayersSetup((prev) => {
+      const usedColors = prev
+        .map((pp, idx) => (idx === index ? null : pp.color))
+        .filter(Boolean) as string[];
+      if (usedColors.includes(colorHex)) return prev;
+      const copy = [...prev];
+      copy[index] = {
+        ...copy[index],
+        color: colorHex,
+        colorFondo: generateGradientFromColor(colorHex),
+      };
+      return copy;
+    });
+  };
+
+  const handleNameChange = (index: number, value: string) => {
+    setPlayersSetup((prev) => {
+      const copy = [...prev];
+      copy[index] = { ...copy[index], nombre: value };
+      return copy;
+    });
+  };
+
+  const handleSelectColor = (index: number, colorIndex: number) => {
+    const col = COLORES_JUGADORES[colorIndex];
+    setPlayersSetup((prev) => {
+      const copy = [...prev];
+      copy[index] = {
+        ...copy[index],
+        color: col.color,
+        colorFondo: col.colorFondo,
+        emoji: col.emoji,
+      };
+      return copy;
+    });
+  };
+
+  const addPlayer = () => {
+    setPlayersSetup((prev) => {
+      if (prev.length >= 5) return prev;
+      const nextIndex = prev.length;
+      const preset = COLORES_JUGADORES[nextIndex % COLORES_JUGADORES.length];
+      return [
+        ...prev,
+        {
+          nombre: `Jugador ${nextIndex + 1}`,
+          color: preset.color,
+          colorFondo: preset.colorFondo,
+          emoji: preset.emoji,
+        },
+      ];
+    });
+    setPlayersCount((c) => Math.min(5, c + 1));
+  };
+
+  const removePlayer = (index: number) => {
+    setPlayersSetup((prev) => {
+      if (prev.length <= 1) return prev;
+      const copy = prev.filter((_, i) => i !== index).map((p) => ({ ...p }));
+      return copy;
+    });
+    setPlayersCount((c) => Math.max(1, c - 1));
+  };
+
+  const decreasePlayers = () => {
+    if (playersCount <= 1) return;
+    setPlayersCount((p) => p - 1);
+    setPlayersSetup((s) => s.slice(0, Math.max(1, s.length - 1)));
+  };
+
+  useEffect(() => {
+    if (
+      estado.fase === "invirtiendo" &&
+      !estado.inversionEnCurso &&
+      !inversionIniciada.current
+    ) {
+      inversionIniciada.current = true;
+      iniciarFaseInversion();
+    }
+    if (estado.fase !== "invirtiendo") {
+      inversionIniciada.current = false;
+    }
+  }, [estado.fase, estado.inversionEnCurso, iniciarFaseInversion]);
+
   const getNombreNegocio = (id: string) => {
     const negocio = NEGOCIOS.find((n) => n.id === id);
     return negocio?.nombre || id;
   };
 
-  // Pantalla de inicio
+  const handleStartSolo = () => {
+    const cfg = playersSetup.slice(0, playersCount).map((p, i) => ({
+      ...p,
+      nombre: p.nombre || (i === 0 ? "Tú" : `Jugador ${i + 1}`),
+    }));
+    setMostrarConfigJugadores(false);
+    iniciarJuego("solo", cfg);
+  };
+
+  const handleStartLocal = () => {
+    setMostrarConfigJugadores(false);
+    iniciarJuego("local", playersSetup.slice(0, playersCount));
+  };
+
   if (estado.fase === "inicio") {
     return (
-      <div className="michilandia-page">
-        {/* Modal de instrucciones en inicio */}
+      <>
         {mostrarInstrucciones && (
-          <ModalInstrucciones onClose={() => setMostrarInstrucciones(false)} />
+          <GameModals
+            estado={estado}
+            jugadorActual={estado.jugadores[0] as Jugador}
+            negocioDetalle={null}
+            mostrarInstrucciones={mostrarInstrucciones}
+            mostrarModalAbandonar={false}
+            mostrarModalFinalizar={false}
+            dineroCliente={estado.dineroCliente}
+            onCloseNegocio={() => undefined}
+            onSetMostrarInstrucciones={setMostrarInstrucciones}
+            onConfirmAbandonar={() => undefined}
+            onCancelAbandonar={() => undefined}
+            onConfirmFinalizar={() => undefined}
+            onCancelFinalizar={() => undefined}
+            onComprarNegocio={() => undefined}
+            onRechazarCompra={() => undefined}
+            onToggleProductoSeleccionado={() => undefined}
+            onConfirmarCompraProductos={() => undefined}
+            onSaltarCompraProductos={() => undefined}
+            onToggleProductoParaVender={() => undefined}
+            onConfirmarVenta={() => undefined}
+            onCancelarVenta={() => undefined}
+            onToggleProductoInversion={() => undefined}
+            onConfirmarInversion={() => undefined}
+            onSaltarInversion={() => undefined}
+            onToggleProductoClienteLoco={() => undefined}
+            onConfirmarVentaClienteLoco={() => undefined}
+            onSaltarClienteLoco={() => undefined}
+            cerrarCartaIncognita={() => undefined}
+            cerrarModalProductosInsuficientes={() => undefined}
+            cerrarModalNegocioNoComprado={() => undefined}
+            cerrarModalProductoNoDisponible={() => undefined}
+            cerrarModalCompraAutomatica={() => undefined}
+            cerrarModalCompraForzada={() => undefined}
+            onCerrarGanadores={() => undefined}
+            onPujarSubasta={() => undefined}
+            onRetirarseSubasta={() => undefined}
+          />
         )}
 
-        <div className="michilandia-content">
-          <img
-            src="/images/ficha_michipolio.png"
-            alt="Michi"
-            className="michilandia-michi-img"
-          />
-          <h1 className="michilandia-title">MichiLandia</h1>
-          <p className="michilandia-subtitle">Nivel Niños - Primaria</p>
+        <ModalConfigJugadores
+          isOpen={mostrarConfigJugadores}
+          playersSetup={playersSetup}
+          playersCount={playersCount}
+          onAddPlayer={addPlayer}
+          onDecreasePlayers={decreasePlayers}
+          onRemovePlayer={removePlayer}
+          onNameChange={handleNameChange}
+          onSelectPresetColor={handleSelectColor}
+          onCustomColor={handleCustomColor}
+          onStartSolo={handleStartSolo}
+          onStartLocal={handleStartLocal}
+          onClose={() => setMostrarConfigJugadores(false)}
+        />
 
-          <div className="michilandia-card">
-            <p>
-              ¡Bienvenido a MichiLandia! Compra negocios y gana dinero cuando el
-              cliente michi caiga en tus tiendas.
-            </p>
-
-            {/* Botón de ver instrucciones */}
-            <button
-              className="btn-ver-instrucciones"
-              onClick={() => setMostrarInstrucciones(true)}
-            >
-              📖 Ver Reglas del Juego
-            </button>
-
-            <div className="michilandia-modos">
-              <button
-                className="michilandia-modo-btn modo-solo"
-                onClick={() => iniciarJuego("solo")}
-              >
-                <span className="modo-icono">🎮</span>
-                <span className="modo-titulo">Jugar Solo</span>
-                <span className="modo-desc">Un jugador</span>
-              </button>
-
-              <button
-                className="michilandia-modo-btn modo-local"
-                onClick={() => iniciarJuego("local")}
-              >
-                <span className="modo-icono">👥</span>
-                <span className="modo-titulo">Jugar Local</span>
-                <span className="modo-desc">5 jugadores</span>
-              </button>
-            </div>
-
-            <div className="michilandia-colores-preview">
-              <p className="colores-titulo">Colores de jugadores:</p>
-              <div className="colores-lista">
-                {COLORES_JUGADORES.map((c, i) => (
-                  <span
-                    key={i}
-                    className="color-badge"
-                    style={{ background: c.color }}
-                    title={c.nombre}
-                  >
-                    {c.emoji}
-                  </span>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+        <InicioScreen
+          onShowConfig={() => setMostrarConfigJugadores(true)}
+          onShowRules={() => setMostrarInstrucciones(true)}
+        />
+      </>
     );
   }
 
-  // Pantalla del juego
   return (
     <div
       className="michilandia-juego"
@@ -127,222 +277,117 @@ const MichilandiaNinosPage = () => {
         } as React.CSSProperties
       }
     >
-      {/* Sistema de Notificaciones */}
       <div className="notificaciones-container">
-        {estado.notificaciones.map((notif) => (
-          <div
-            key={notif.id}
-            className={`notificacion notificacion-${notif.tipo}`}
-          >
-            {notif.mensaje}
-          </div>
-        ))}
+        {estado.notificaciones.map((notif) => {
+          const colorMatch = notif.mensaje.match(
+            /\s*\((#(?:[0-9a-fA-F]{3}|[0-9A-Fa-f]{6}))\)/
+          );
+          const displayMessage = colorMatch
+            ? notif.mensaje.replace(colorMatch[0], "")
+            : notif.mensaje;
+          return (
+            <div
+              key={notif.id}
+              className={`notificacion notificacion-${notif.tipo}`}
+            >
+              {colorMatch && (
+                <span
+                  className="notif-color-dot"
+                  style={{ background: colorMatch[1] }}
+                  aria-hidden
+                />
+              )}
+              <span className="notificacion-text">{displayMessage}</span>
+            </div>
+          );
+        })}
       </div>
 
-      {/* Notificación de movimiento */}
       {estado.fase === "moviendo" && (
         <div className="notificacion-movimiento">
           🐱 ¡Moviendo {estado.dado} casillas!
         </div>
       )}
 
-      {/* Modal de compra de negocio */}
-      {estado.fase === "comprando" && estado.negocioActual && (
-        <ModalCompra
-          negocio={estado.negocioActual}
-          dineroJugador={jugadorActual?.dinero || 0}
-          onComprar={comprarNegocio}
-          onRechazar={rechazarCompra}
-          jugadorNombre={jugadorActual?.nombre}
-          jugadorColor={jugadorActual?.color}
-          jugadorColorFondo={jugadorActual?.colorFondo}
-        />
-      )}
+      <GameModals
+        estado={estado}
+        jugadorActual={jugadorActual as Jugador}
+        negocioDetalle={negocioDetalle}
+        mostrarInstrucciones={mostrarInstrucciones}
+        mostrarModalAbandonar={mostrarModalAbandonar}
+        mostrarModalFinalizar={mostrarModalFinalizar}
+        dineroCliente={estado.dineroCliente}
+        onCloseNegocio={() => setNegocioDetalle(null)}
+        onSetMostrarInstrucciones={setMostrarInstrucciones}
+        onConfirmAbandonar={() => {
+          abandonarJuego();
+          setMostrarModalAbandonar(false);
+        }}
+        onCancelAbandonar={() => setMostrarModalAbandonar(false)}
+        onConfirmFinalizar={() => {
+          finalizarPartida();
+          setMostrarModalFinalizar(false);
+        }}
+        onCancelFinalizar={() => setMostrarModalFinalizar(false)}
+        onComprarNegocio={comprarNegocio}
+        onRechazarCompra={rechazarCompra}
+        onToggleProductoSeleccionado={toggleProductoSeleccionado}
+        onConfirmarCompraProductos={confirmarCompraProductos}
+        onSaltarCompraProductos={saltarCompraProductos}
+        onToggleProductoParaVender={toggleProductoParaVender}
+        onConfirmarVenta={confirmarVenta}
+        onCancelarVenta={cancelarVenta}
+        onToggleProductoInversion={toggleProductoInversion}
+        onConfirmarInversion={confirmarCompraInversion}
+        onSaltarInversion={saltarCompraInversion}
+        onToggleProductoClienteLoco={toggleProductoClienteLoco}
+        onConfirmarVentaClienteLoco={confirmarVentaClienteLoco}
+        onSaltarClienteLoco={saltarClienteLoco}
+        cerrarCartaIncognita={cerrarCartaIncognita}
+        cerrarModalProductosInsuficientes={cerrarModalProductosInsuficientes}
+        cerrarModalNegocioNoComprado={cerrarModalNegocioNoComprado}
+        cerrarModalProductoNoDisponible={cerrarModalProductoNoDisponible}
+        cerrarModalCompraAutomatica={cerrarModalCompraAutomatica}
+        cerrarModalCompraForzada={cerrarModalCompraForzada}
+        onCerrarGanadores={cerrarModalGanadores}
+        onPujarSubasta={pujarSubasta}
+        onRetirarseSubasta={retirarseSubasta}
+      />
 
-      {/* Modal de compra de productos (después de comprar negocio) */}
-      {estado.fase === "comprando_productos" && estado.negocioActual && (
-        <ModalCompraProductos
-          negocio={estado.negocioActual}
-          dineroJugador={jugadorActual?.dinero || 0}
-          productosSeleccionados={estado.productosSeleccionados}
-          productosYaComprados={jugadorActual?.productosComprados || []}
-          onToggleProducto={toggleProductoSeleccionado}
-          onConfirmar={confirmarCompraProductos}
-          onSaltar={saltarCompraProductos}
-          jugadorNombre={jugadorActual?.nombre}
-          jugadorColor={jugadorActual?.color}
-          jugadorColorFondo={jugadorActual?.colorFondo}
-        />
-      )}
+      <HeaderActions
+        turnoNumero={estado.turnoNumero}
+        casillaActual={casillaActual}
+        posicionCliente={estado.posicionCliente}
+        onAbandonar={() => setMostrarModalAbandonar(true)}
+        onFinalizar={() => setMostrarModalFinalizar(true)}
+        onShowRules={() => setMostrarInstrucciones(true)}
+      />
 
-      {/* Modal de detalle de negocio (con productos) */}
-      {negocioDetalle && (
-        <ModalNegocioDetalle
-          negocioId={negocioDetalle}
-          propietarioNombre={jugadorActual?.nombre || ""}
-          propietarioColor={jugadorActual?.color || "#4ECDC4"}
-          productosDelJugador={jugadorActual?.productosComprados || []}
-          onClose={() => setNegocioDetalle(null)}
-        />
-      )}
-
-      {/* Modal de instrucciones durante el juego */}
-      {mostrarInstrucciones && (
-        <ModalInstrucciones
-          onClose={() => setMostrarInstrucciones(false)}
-          jugadorColor={jugadorActual?.color}
-          jugadorColorFondo={jugadorActual?.colorFondo}
-        />
-      )}
-
-      {/* Modal de carta incógnita */}
-      {estado.fase === "carta_incognita" && estado.cartaIncognitaActual && (
-        <ModalCartaIncognita
-          carta={estado.cartaIncognitaActual}
-          onCerrar={cerrarCartaIncognita}
-          jugadorColor={jugadorActual?.color}
-          jugadorColorFondo={jugadorActual?.colorFondo}
-        />
-      )}
-
-      {/* Header del juego */}
-      <div className="juego-header">
-        <div className="juego-info">
-          <span className="juego-turno">🎯 Ronda: {estado.turnoNumero}</span>
-          <div className="juego-dineros">
-            <span className="juego-dinero-cliente" title="Dinero del Cliente">
-              🐱 ${estado.dineroCliente}
-            </span>
-          </div>
-        </div>
-        <h1 className="juego-titulo">MichiLandia</h1>
-        <div className="juego-casilla-info">
-          <span className="casilla-actual">
-            📍 {casillaActual.emoji} {casillaActual.nombre}
-          </span>
-          <button
-            className="btn-ayuda-header"
-            onClick={() => setMostrarInstrucciones(true)}
-            title="Ver reglas del juego"
-          >
-            ❓
-          </button>
-        </div>
-      </div>
-
-      {/* Indicador de jugador actual */}
-      <div
-        className="jugador-actual-banner"
-        style={{ background: jugadorActual?.colorFondo }}
-      >
-        <span className="jugador-emoji">{jugadorActual?.emoji}</span>
-        <span className="jugador-nombre">{jugadorActual?.nombre}</span>
-        <span className="jugador-dinero">💰 ${jugadorActual?.dinero}</span>
-      </div>
-
-      {/* Área principal del juego - NUEVO LAYOUT */}
       <div className="juego-main">
-        {/* Panel izquierdo - Jugadores */}
-        <div className="juego-panel-izquierdo">
-          <div className="jugadores-lista">
-            <h3>👥 Jugadores</h3>
-            <div className="jugadores-grid">
-              {estado.jugadores.map((jugador, idx) => (
-                <div
-                  key={jugador.id}
-                  className={`jugador-card ${
-                    idx === estado.jugadorActual ? "jugador-activo" : ""
-                  }`}
-                  style={{ borderColor: jugador.color }}
-                >
-                  <div
-                    className="jugador-card-header"
-                    style={{ background: jugador.colorFondo }}
-                  >
-                    <span className="jugador-card-emoji">{jugador.emoji}</span>
-                    <span className="jugador-card-nombre">
-                      {jugador.nombre}
-                    </span>
-                  </div>
-                  <div className="jugador-card-body">
-                    <span className="jugador-card-dinero">
-                      💰 ${jugador.dinero}
-                    </span>
-                    <span className="jugador-card-negocios">
-                      🏪 {jugador.negociosComprados.length}
-                    </span>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
+        <PlayersPanel
+          jugadores={estado.jugadores as Jugador[]}
+          jugadorActualIndex={estado.jugadorActual}
+        />
 
-        {/* Centro - Tablero */}
         <div className="juego-tablero">
-          <Tablero posicionJugador={estado.posicionCliente} />
+          <Tablero
+            posicionJugador={estado.posicionCliente}
+            jugadores={estado.jugadores}
+          />
         </div>
 
-        {/* Panel derecho */}
-        <div className="juego-panel-derecho">
-          {/* Dado y botón terminar turno */}
-          <div className="panel-acciones">
-            <Dado
-              onTirar={tirarDado}
-              disabled={!puedesTirar || estado.fase === "moviendo"}
-            />
-
-            {/* Botón terminar turno */}
-            <button
-              className="btn-terminar-turno"
-              onClick={terminarTurno}
-              disabled={!puedeTerminarTurno}
-            >
-              ⏭️ Terminar Turno
-            </button>
-          </div>
-
-          {/* Negocios del jugador actual */}
-          <div className="negocios-comprados">
-            <h3>
-              🏪 Negocios de {jugadorActual?.nombre} (
-              {jugadorActual?.negociosComprados.length || 0})
-            </h3>
-            {jugadorActual?.negociosComprados.length === 0 ? (
-              <p className="sin-negocios">Aún no tiene negocios</p>
-            ) : (
-              <div className="lista-negocios">
-                {jugadorActual?.negociosComprados.map((id) => (
-                  <button
-                    key={id}
-                    className="negocio-badge negocio-badge-clickable"
-                    style={{ borderColor: jugadorActual.color }}
-                    onClick={() => setNegocioDetalle(id)}
-                    title="Click para ver detalles"
-                  >
-                    ✓ {getNombreNegocio(id)}
-                  </button>
-                ))}
-              </div>
-            )}
-          </div>
-
-          <div className="instrucciones">
-            <h3>📋 Guía Rápida</h3>
-            <ul>
-              <li>🎲 Tira el dado para mover al cliente</li>
-              <li>🏪 Compra negocios con tu dinero</li>
-              <li>💰 Gana cuando el cliente visite tus tiendas</li>
-              <li>⏭️ Presiona "Terminar Turno" al finalizar</li>
-            </ul>
-            <button
-              className="btn-ver-reglas"
-              onClick={() => setMostrarInstrucciones(true)}
-            >
-              📖 Ver Reglas Completas
-            </button>
-          </div>
-        </div>
+        <RightPanel
+          dineroCliente={estado.dineroCliente}
+          jugadorActual={jugadorActual}
+          casillaActual={casillaActual}
+          posicionCliente={estado.posicionCliente}
+          onTirarDado={tirarDado}
+          disableDado={!puedesTirar || estado.fase === "moviendo"}
+          onTerminarTurno={terminarTurno}
+          puedeTerminarTurno={puedeTerminarTurno}
+          onOpenNegocio={setNegocioDetalle}
+          getNombreNegocio={getNombreNegocio}
+        />
       </div>
     </div>
   );

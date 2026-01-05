@@ -29,7 +29,6 @@ export const useMovimiento = ({
   setEstado,
   agregarNotificacion,
 }: UseMovimientoParams): UseMovimientoReturn => {
-
   /**
    * Procesa la llegada a una casilla después del movimiento
    */
@@ -40,7 +39,7 @@ export const useMovimiento = ({
         const jugadorActivo = prev.jugadores[prev.jugadorActual];
 
         let nuevoDineroCliente = prev.dineroCliente;
-        
+
         // Bonus por pasar por recarga
         if (pasoRecarga) {
           nuevoDineroCliente += CONFIG_JUEGO.RECARGA_BANCO;
@@ -53,7 +52,8 @@ export const useMovimiento = ({
         // Notificar casilla actual
         agregarNotificacion(
           MENSAJES.cayoEnCasilla(
-            jugadorActivo.emoji,
+            jugadorActivo.nombre,
+            jugadorActivo.color,
             casillaActual.emoji,
             casillaActual.nombre
           ),
@@ -67,7 +67,7 @@ export const useMovimiento = ({
               Math.floor(Math.random() * CARTAS_INCOGNITA.length)
             ];
           agregarNotificacion(
-            MENSAJES.accionSorpresa(jugadorActivo.emoji),
+            MENSAJES.accionSorpresa(jugadorActivo.nombre, jugadorActivo.color),
             "alerta"
           );
 
@@ -99,21 +99,74 @@ export const useMovimiento = ({
           };
         }
 
-        // Tienda ya comprada por alguien
+        // Tienda ya comprada por alguien - VENTA AL DUEÑO
         if (negocio && negociosComprados.includes(negocio.id)) {
-          const propietario = buscarPropietarioNegocio(
-            prev.jugadores,
-            negocio.id
+          const propietarioIndex = prev.jugadores.findIndex((j) =>
+            j.negociosComprados.includes(negocio.id)
           );
+          const propietario = prev.jugadores[propietarioIndex];
+
           if (propietario) {
-            agregarNotificacion(
-              MENSAJES.negocioPropietario(
-                propietario.emoji,
-                propietario.nombre
-              ),
-              "info"
+            // Obtener productos disponibles del propietario en este negocio
+            const productosDisponibles = propietario.productosComprados.filter(
+              (p) => p.negocioId === negocio.id && p.cantidad > 0
             );
+
+            const totalProductosDisponibles = productosDisponibles.reduce(
+              (sum, p) => sum + p.cantidad,
+              0
+            );
+
+            if (totalProductosDisponibles >= 3) {
+              // El dueño tiene productos para vender - abrir modal de venta
+              agregarNotificacion(
+                `🛒 ¡El cliente quiere comprar en ${negocio.nombre}! ${
+                  propietario.nombre
+                }${
+                  propietario.color ? ` (${propietario.color})` : ""
+                } debe elegir 3 productos para vender.`,
+                "turno"
+              );
+
+              return {
+                ...prev,
+                fase: "vendiendo_productos" as FaseJuego,
+                negocioActual: negocio,
+                dineroCliente: nuevoDineroCliente,
+                mensajeRecarga: pasoRecarga,
+                ventaEnCurso: {
+                  propietarioIndex,
+                  negocioId: negocio.id,
+                  productosAVender: [],
+                  cantidadRequerida: 3,
+                },
+              };
+            } else {
+              // El dueño NO tiene suficientes productos - mostrar modal
+              return {
+                ...prev,
+                dineroCliente: nuevoDineroCliente,
+                mensajeRecarga: pasoRecarga,
+                modalProductosInsuficientes: {
+                  nombreJugador: propietario.nombre,
+                  productosActuales: totalProductosDisponibles,
+                  jugadorColor: propietario.color,
+                  jugadorColorFondo: propietario.colorFondo,
+                },
+              };
+            }
           }
+        }
+
+        // Casilla de Invertir - todos los jugadores pueden comprar productos
+        if (casillaActual.tipo === "esquina-invertir") {
+          return {
+            ...prev,
+            fase: "invirtiendo" as FaseJuego,
+            dineroCliente: nuevoDineroCliente,
+            mensajeRecarga: pasoRecarga,
+            // La inicialización completa se hace desde el componente principal
+          };
         }
 
         // Casilla normal o especial sin acción
@@ -137,7 +190,7 @@ export const useMovimiento = ({
       const jugador = estado.jugadores[estado.jugadorActual];
 
       agregarNotificacion(
-        MENSAJES.tiroDado(jugador.emoji, jugador.nombre, resultado),
+        MENSAJES.tiroDado(jugador.nombre, jugador.color, resultado),
         "info"
       );
 
@@ -172,11 +225,16 @@ export const useMovimiento = ({
 
       setTimeout(moverPaso, CONFIG_JUEGO.TIEMPO_INICIO_MOVIMIENTO);
     },
-    [estado.jugadores, estado.jugadorActual, setEstado, agregarNotificacion, procesarLlegada]
+    [
+      estado.jugadores,
+      estado.jugadorActual,
+      setEstado,
+      agregarNotificacion,
+      procesarLlegada,
+    ]
   );
 
   return {
     tirarDado,
   };
 };
-

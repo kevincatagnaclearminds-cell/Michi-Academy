@@ -71,23 +71,49 @@ const Dado: React.FC<DadoProps> = ({ onTirar, disabled = false }) => {
           {tirando ? "🎲 Tirando..." : "🎲 ¡Tirar!"}
         </button>
 
-        {/* Botones de prueba */}
+        {/* Botones de prueba para fijar el dado */}
         <div className="dados-prueba">
+          <button
+            className="btn-prueba"
+            onClick={() => tirarConValor(1)}
+            disabled={disabled || tirando}
+          >
+            1
+          </button>
+          <button
+            className="btn-prueba"
+            onClick={() => tirarConValor(2)}
+            disabled={disabled || tirando}
+          >
+            2
+          </button>
           <button
             className="btn-prueba"
             onClick={() => tirarConValor(3)}
             disabled={disabled || tirando}
-            title="Tirar 3 (prueba)"
           >
-            🎯 3
+            3
+          </button>
+          <button
+            className="btn-prueba"
+            onClick={() => tirarConValor(4)}
+            disabled={disabled || tirando}
+          >
+            4
+          </button>
+          <button
+            className="btn-prueba"
+            onClick={() => tirarConValor(5)}
+            disabled={disabled || tirando}
+          >
+            5
           </button>
           <button
             className="btn-prueba"
             onClick={() => tirarConValor(6)}
             disabled={disabled || tirando}
-            title="Tirar 6 (prueba)"
           >
-            🎯 6
+            6
           </button>
         </div>
       </div>
