@@ -9,7 +9,7 @@ export const CONFIG_JUEGO = {
   DINERO_INICIAL_JUGADOR: 1000,
   RECARGA_BANCO: 100,
   MAX_NOTIFICACIONES: 8,
-  DURACION_NOTIFICACION: 10000, // 10 segundos
+  DURACION_NOTIFICACION: 5000, // 5 segundos
   TIEMPO_MOVIMIENTO: 300, // ms entre cada paso
   TIEMPO_INICIO_MOVIMIENTO: 500, // ms antes de empezar a mover
   GASTO_CLIENTE_LOCO: 20, // $ por negocio en cliente loco
