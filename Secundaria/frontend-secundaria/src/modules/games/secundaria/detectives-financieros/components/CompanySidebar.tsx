@@ -6,11 +6,7 @@ interface CompanySidebarProps {
   company: Company;
   currentIndex: number;
   totalCompanies: number;
-  onInvest: () => void;
-  onReject: () => void;
   disabled: boolean;
-  selectedRiskLevel: 'Bajo' | 'Medio' | 'Alto' | 'Estafa' | null;
-  onRiskLevelChange: (riskLevel: 'Bajo' | 'Medio' | 'Alto' | 'Estafa') => void;
 }
 
 // Función para generar datos simulados según la empresa
@@ -72,11 +68,7 @@ const CompanySidebar: React.FC<CompanySidebarProps> = ({
   company, 
   currentIndex, 
   totalCompanies,
-  onInvest,
-  onReject,
   disabled,
-  selectedRiskLevel,
-  onRiskLevelChange
 }) => {
   const data = generateCompanyData(company);
   const getRiskColor = (risk: string) => {
@@ -90,101 +82,74 @@ const CompanySidebar: React.FC<CompanySidebarProps> = ({
 
   return (
     <div className="company-sidebar">
-      {/* Caso X/8 */}
-      <div className="case-number-header">
-        Caso {currentIndex + 1} / {totalCompanies}
-      </div>
-
-      {/* Avatar y CEO */}
-      <div className="sidebar-header">
-        <div className="company-avatar">{data.avatar}</div>
-        <div className="ceo-info">
-          <div className="ceo-label">CEO / Director</div>
-          <div className="ceo-name">{data.ceoName}</div>
-          <div className="ceo-ruc">RUC: {data.ceoRuc}</div>
+      {/* Banner y Caso */}
+      <div className="sidebar-banner">
+        <div className="case-badge">
+          Caso {currentIndex + 1} / {totalCompanies}
+        </div>
+        <div className="verified-seal">
+          <span className="seal-icon">💠</span>
+          <span className="seal-text">Business Verified</span>
         </div>
       </div>
 
-      {/* Información de la empresa */}
-      <div className="sidebar-company-info">
-        <h2 className="company-name-sidebar">{company.name}</h2>
-        <div className="company-sector-sidebar">{company.sector}</div>
-        <div className="company-description-sidebar">{company.description}</div>
-      </div>
-
-      {/* Estadísticas financieras */}
-      <div className="sidebar-stats">
-        <div className="stat-item-sidebar">
-          <div className="stat-label-sidebar">Tasa de Interés</div>
-          <div className="stat-value-sidebar interest">{company.interestRate}%</div>
+      {/* Tarjeta del CEO Superpuesta */}
+      <div className="ceo-profile-card">
+        <div className="avatar-wrapper">
+          <div className="avatar-circle">{data.avatar}</div>
         </div>
-        <div className="stat-item-sidebar">
-          <div className="stat-label-sidebar">Monto de Inversión</div>
-          <div className="stat-value-sidebar investment">${company.investmentAmount.toLocaleString()}</div>
-        </div>
-        <div className="stat-item-sidebar">
-          <div className="stat-label-sidebar">Período</div>
-          <div className="stat-value-sidebar period">{company.investmentPeriod} año{company.investmentPeriod !== 1 ? 's' : ''}</div>
-        </div>
-      </div>
-
-      {/* Redes Sociales */}
-      <div className="sidebar-social">
-        <div className="social-title">📱 Redes Sociales</div>
-        <div className="social-links">
-          <div className="social-link">
-            <span className="social-icon">🐦</span>
-            <span className="social-text">{data.twitter}</span>
+        <div className="ceo-details">
+          <div className="ceo-header-row">
+            <span className="role-chip">CEO & FOUNDER</span>
           </div>
+          <h3 className="ceo-name">{data.ceoName}</h3>
+          <div className="ceo-ruc-badge">RUC: {data.ceoRuc}</div>
         </div>
       </div>
 
-      {/* Frame de Decisión Final */}
-      <div className="decision-frame">
-        <div className="decision-frame-header">
-          <span className="decision-icon">⚖️</span>
-          <span className="decision-title">Decisión Final</span>
+      <div className="sidebar-scrollable-content">
+        {/* Información de la Empresa */}
+        <div className="info-card-sidebar">
+          <h2 className="company-main-name">{company.name}</h2>
+          <div className="sector-pill">{company.sector}</div>
+          <p className="company-desc-text">{company.description}</p>
         </div>
-        
-        {/* Selección de Riesgo */}
-        <div className="sidebar-risk-selection">
-          <div className="risk-selection-title">Elige el tipo de riesgo:</div>
-          <div className="risk-options-sidebar">
-            {(['Bajo', 'Medio', 'Alto', 'Estafa'] as const).map(risk => (
-              <button
-                key={risk}
-                className={`risk-button-sidebar ${selectedRiskLevel === risk ? 'selected' : ''}`}
-                onClick={() => onRiskLevelChange(risk)}
-                disabled={disabled}
-              >
-                {risk}
-              </button>
-            ))}
+
+        {/* Dash de Inversión */}
+        <div className="investment-dash">
+          <h4 className="dash-title">📊 Perfil de Inversión</h4>
+          <div className="dash-grid">
+            <div className="dash-item">
+              <span className="dash-label">Retorno</span>
+              <span className="dash-value highlight">{company.interestRate}%</span>
+              <span className="dash-sub">Anual</span>
+            </div>
+            <div className="dash-item">
+              <span className="dash-label">Capital</span>
+              <span className="dash-value">${company.investmentAmount.toLocaleString()}</span>
+              <span className="dash-sub">Mínimo</span>
+            </div>
+            <div className="dash-item">
+              <span className="dash-label">Plazo</span>
+              <span className="dash-value">{company.investmentPeriod}</span>
+              <span className="dash-sub">Años</span>
+            </div>
           </div>
         </div>
 
-        {/* Botones de acción */}
-        <div className="sidebar-actions">
-          <button
-            className="btn-sidebar btn-reject"
-            onClick={onReject}
-            disabled={disabled}
-          >
-            ❌ Rechazar
-          </button>
-          <button
-            className="btn-sidebar btn-invest"
-            onClick={onInvest}
-            disabled={disabled}
-          >
-            💼 Invertir
-          </button>
+        {/* Presencia Digital */}
+        <div className="digital-presence-card">
+          <h4 className="dash-title">🌐 Canales Digitales</h4>
+          <div className="social-pill-container">
+            <div className="social-pill">
+              <span className="pill-icon">🐦</span>
+              <span className="pill-handle">{data.twitter}</span>
+            </div>
+          </div>
         </div>
       </div>
-
     </div>
   );
 };
 
 export default CompanySidebar;
-

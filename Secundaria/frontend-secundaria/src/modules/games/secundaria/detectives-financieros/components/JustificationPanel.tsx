@@ -8,6 +8,8 @@ interface JustificationPanelProps {
     selectedRiskLevel: 'Bajo' | 'Medio' | 'Alto' | 'Estafa' | null;
     onSourceJustificationChange: (sourceType: SourceJustification['sourceType'], answer: string) => void;
     onRiskLevelChange: (riskLevel: 'Bajo' | 'Medio' | 'Alto' | 'Estafa') => void;
+    onInvest: () => void;
+    onReject: () => void;
 }
 
 // Opciones de respuesta para cada fuente
@@ -99,24 +101,17 @@ const JustificationPanel: React.FC<JustificationPanelProps> = ({
     sourceJustifications,
     selectedRiskLevel,
     onSourceJustificationChange,
-    onRiskLevelChange
+    onRiskLevelChange,
+    onInvest,
+    onReject
 }) => {
-    // Fuentes disponibles según el sector
-    const getAvailableSources = (): SourceJustification['sourceType'][] => {
-        const baseSources: SourceJustification['sourceType'][] = [
-            'superintendencia',
-            'sri',
-            'judicial',
-            'google',
-            'redes'
-        ];
-        
-        // Banco Central removido de las opciones de justificación
-        
-        return baseSources;
-    };
-    
-    const availableSources = getAvailableSources();
+    const availableSources = [
+        'superintendencia',
+        'sri',
+        'judicial',
+        'google',
+        'redes'
+    ] as SourceJustification['sourceType'][];
 
     const getSourceName = (sourceType: SourceJustification['sourceType']): string => {
         switch (sourceType) {
@@ -125,7 +120,6 @@ const JustificationPanel: React.FC<JustificationPanelProps> = ({
             case 'judicial': return 'Función Judicial';
             case 'google': return 'Google Reviews';
             case 'redes': return 'Redes Sociales';
-            case 'banco': return 'Banco Central';
             default: return '';
         }
     };
@@ -137,73 +131,117 @@ const JustificationPanel: React.FC<JustificationPanelProps> = ({
             case 'judicial': return '⚖️';
             case 'google': return '⭐';
             case 'redes': return '🐦';
-            case 'banco': return '🏦';
             default: return '📊';
         }
     };
 
-    const handleAnswerSelect = (sourceType: SourceJustification['sourceType'], answer: string) => {
-        onSourceJustificationChange(sourceType, answer);
-    };
-
-    const getJustificationForSource = (sourceType: SourceJustification['sourceType']): SourceJustification | undefined => {
-        return sourceJustifications.find(j => j.sourceType === sourceType);
-    };
-
     return (
         <div className="justification-panel">
-            <h3 className="justification-title">📋 Justifica tu Decisión</h3>
-            <p className="justification-subtitle">
-                Según tu investigación, selecciona la respuesta para cada fuente:
-            </p>
-            
-            <div className="justification-matrix">
-                <table className="justification-table">
-                    <thead>
-                        <tr>
-                            <th className="source-column">Fuente</th>
-                            <th className="answer-column">Respuesta</th>
-                        </tr>
-                    </thead>
-                    <tbody>
+            <div className="justification-container">
+                <div className="justification-main-content">
+                    <div className="justification-header-section">
+                        <h3 className="justification-title">🔍 Evidencias Recolectadas</h3>
+                        <p className="justification-subtitle">
+                            Resumen de tus conclusiones basadas en las fuentes investigadas.
+                        </p>
+                    </div>
+                    
+                    <div className="investigation-summary-grid">
                         {availableSources.map(sourceType => {
-                            const justification = getJustificationForSource(sourceType);
-                            const options = getSourceOptions(sourceType, company);
-                            const correctAnswer = getCorrectAnswer(sourceType, company);
+                            const justification = sourceJustifications.find(j => j.sourceType === sourceType);
                             const isAnswered = justification?.selectedAnswer !== null && justification?.selectedAnswer !== undefined;
                             const isCorrect = justification?.isCorrect === true;
                             
                             return (
-                                <tr key={sourceType} className={`matrix-row ${isAnswered ? (isCorrect ? 'correct' : 'incorrect') : ''}`}>
-                                    <td className="source-cell">
-                                        <div className="source-info">
+                                <div key={sourceType} className={`summary-card ${isAnswered ? 'is-answered' : 'is-pending'}`}>
+                                    <div className="card-top">
+                                        <div className="source-label">
                                             <span className="source-icon">{getSourceIcon(sourceType)}</span>
                                             <span className="source-name">{getSourceName(sourceType)}</span>
                                         </div>
-                                    </td>
-                                    <td className="answer-cell">
-                                        <select
-                                            className={`answer-select ${isAnswered ? (isCorrect ? 'answer-correct' : 'answer-incorrect') : ''}`}
-                                            value={justification?.selectedAnswer || ''}
-                                            onChange={(e) => handleAnswerSelect(sourceType, e.target.value)}
-                                            disabled={isAnswered}
-                                        >
-                                            <option value="">Selecciona una respuesta...</option>
-                                            {options.map((option, idx) => (
-                                                <option key={idx} value={option}>{option}</option>
-                                            ))}
-                                        </select>
                                         {isAnswered && (
-                                            <div className={`answer-feedback ${isCorrect ? 'feedback-correct' : 'feedback-incorrect'}`}>
-                                                {isCorrect ? '✅ Correcto' : '❌ Incorrecto'}
+                                            <div className="status-indicator">
+                                                ✅
                                             </div>
                                         )}
-                                    </td>
-                                </tr>
+                                    </div>
+                                    <div className="card-body">
+                                        {isAnswered ? (
+                                            <>
+                                                <p className="actual-conclusion">"{justification.selectedAnswer}"</p>
+                                                <span className="verdict-badge justified">
+                                                    Investigación Completada
+                                                </span>
+                                            </>
+                                        ) : (
+                                            <div className="empty-state">
+                                                <span className="empty-icon">⏳</span>
+                                                <p>Sin investigar</p>
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
                             );
                         })}
-                    </tbody>
-                </table>
+                    </div>
+                </div>
+
+                <div className="justification-sidebar">
+                    <div className="decision-card">
+                        <div className="decision-header">
+                            <h4>👨‍⚖️ Veredicto Final</h4>
+                            <p>Define tu estrategia basándote en el riesgo detectado.</p>
+                        </div>
+
+                        <div className="risk-selection-area">
+                            <label>Nivel de Riesgo Estimado:</label>
+                            <div className="risk-buttons-grid">
+                                {(['Bajo', 'Medio', 'Alto', 'Estafa'] as const).map(risk => (
+                                    <button
+                                        key={risk}
+                                        className={`risk-btn ${risk.toLowerCase()} ${selectedRiskLevel === risk ? 'active' : ''}`}
+                                        onClick={() => onRiskLevelChange(risk)}
+                                    >
+                                        <span className="risk-dot"></span>
+                                        {risk}
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+
+                        <div className="decision-actions">
+                            <button 
+                                className="action-btn invest" 
+                                onClick={onInvest}
+                                disabled={!selectedRiskLevel}
+                            >
+                                <span className="icon">💰</span>
+                                <div className="text-group">
+                                    <span className="main-text">Realizar Inversión</span>
+                                    <span className="sub-text">Confío en este negocio</span>
+                                </div>
+                            </button>
+                            
+                            <button 
+                                className="action-btn reject" 
+                                onClick={onReject}
+                                disabled={!selectedRiskLevel}
+                            >
+                                <span className="icon">🚫</span>
+                                <div className="text-group">
+                                    <span className="main-text">Rechazar Negocio</span>
+                                    <span className="sub-text">Demasiado arriesgado</span>
+                                </div>
+                            </button>
+                        </div>
+
+                        {!selectedRiskLevel && (
+                            <p className="selection-reminder">
+                                💡 Debes investigar todas las fuentes y seleccionar un nivel de riesgo antes de decidir.
+                            </p>
+                        )}
+                    </div>
+                </div>
             </div>
         </div>
     );

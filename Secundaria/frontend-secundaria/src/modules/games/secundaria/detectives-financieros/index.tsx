@@ -144,11 +144,7 @@ const DetectivesFinancierosPage = () => {
               company={currentCompany}
               currentIndex={gameState.currentCompanyIndex}
               totalCompanies={gameCases.length > 0 ? gameCases.length : 3}
-              onInvest={handleInvest}
-              onReject={handleReject}
               disabled={gameState.feedback !== null}
-              selectedRiskLevel={gameState.selectedRiskLevel}
-              onRiskLevelChange={setRiskLevel}
             />
           </div>
 
@@ -165,6 +161,8 @@ const DetectivesFinancierosPage = () => {
                   selectedSources={gameState.selectedSources}
                   onToggleSource={toggleSource}
                   company={currentCompany}
+                  sourceJustifications={gameState.sourceJustifications}
+                  onSourceJustificationChange={setSourceJustification}
                 />
               )}
 
@@ -185,6 +183,8 @@ const DetectivesFinancierosPage = () => {
                   selectedRiskLevel={gameState.selectedRiskLevel}
                   onSourceJustificationChange={setSourceJustification}
                   onRiskLevelChange={setRiskLevel}
+                  onInvest={handleInvest}
+                  onReject={handleReject}
                 />
               )}
 

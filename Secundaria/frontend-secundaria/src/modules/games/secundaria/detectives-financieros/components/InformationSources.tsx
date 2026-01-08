@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { InformationSource, Company } from '../types';
+import { InformationSource, Company, SourceJustification } from '../types';
 import { companies } from '../data';
 import './InformationSources.css';
 
@@ -8,6 +8,8 @@ interface InformationSourcesProps {
     selectedSources: string[];
     onToggleSource: (sourceId: string) => void;
     company: Company;
+    sourceJustifications: SourceJustification[];
+    onSourceJustificationChange: (sourceType: SourceJustification['sourceType'], answer: string) => void;
 }
 
 // Datos de CEOs y empresas
@@ -147,13 +149,59 @@ const InformationSources: React.FC<InformationSourcesProps> = ({
     sources, 
     selectedSources, 
     onToggleSource,
-    company
+    company,
+    sourceJustifications,
+    onSourceJustificationChange
 }) => {
+    // Opciones de respuesta para cada fuente (Copiado de JustificationPanel para consistencia)
+    const getSourceOptions = (sourceType: SourceJustification['sourceType']) => {
+        switch (sourceType) {
+            case 'superintendencia':
+                return [
+                    'Empresa con pérdidas y alto endeudamiento',
+                    'Empresa con ganancias estables',
+                    'Empresa con crecimiento constante',
+                    'No se encontró información'
+                ];
+            case 'sri':
+                return [
+                    'Empresa al día con sus obligaciones fiscales',
+                    'Empresa con deudas fiscales pendientes',
+                    'Empresa con declaraciones pendientes',
+                    'No se encontró información'
+                ];
+            case 'judicial':
+                return [
+                    'Sin casos legales pendientes',
+                    'Casos legales pendientes',
+                    'Empresa en proceso judicial',
+                    'No se encontró información'
+                ];
+            case 'google':
+                return [
+                    'Reseñas mayormente positivas',
+                    'Reseñas mayormente negativas',
+                    'Reseñas mixtas',
+                    'No se encontraron reseñas'
+                ];
+            case 'redes':
+                return [
+                    'Información confiable y verificada',
+                    'Información no confiable con muchos bots',
+                    'Información mixta con dudas',
+                    'No se encontró información'
+                ];
+            default:
+                return [];
+        }
+    };
+
     const [selectedUrl, setSelectedUrl] = useState<string>('');
     const [searchedRuc, setSearchedRuc] = useState<string>('');
     const [searchedUsername, setSearchedUsername] = useState<string>('');
     const [searchResults, setSearchResults] = useState<any>(null);
     const [twitterProfile, setTwitterProfile] = useState<string | null>(null);
+    const [isJustificationModalOpen, setIsJustificationModalOpen] = useState<boolean>(false);
     
     const availableUrls = getAvailableUrls();
     
@@ -259,7 +307,7 @@ const InformationSources: React.FC<InformationSourcesProps> = ({
     
     const renderWebsiteInterface = () => {
         if (!selectedUrl) {
-    return (
+            return (
                 <div className="browser-placeholder">
                     <div className="placeholder-icon">🌐</div>
                     <div className="placeholder-text">Selecciona una URL para comenzar la investigación</div>
@@ -267,434 +315,217 @@ const InformationSources: React.FC<InformationSourcesProps> = ({
             );
         }
         
-        // X/Twitter Interface
-        if (selectedUrl.includes('x.com') || selectedUrl.includes('twitter')) {
-            if (!twitterProfile) {
-    return (
-                    <div className="website-interface twitter-interface">
-                        <div className="twitter-header">
-                            <div className="twitter-logo">𝕏</div>
-                            <div className="twitter-nav">
-                                <span className="nav-item active">Inicio</span>
-                                <span className="nav-item">Explorar</span>
-                                <span className="nav-item">Notificaciones</span>
+        return (
+            <div className="website-result-container">
+                {selectedUrl && (selectedUrl.includes('x.com') || selectedUrl.includes('twitter')) ? (
+                    // ... (rest of the social media interface logic remains the same)
+                    // (I'll keep the existing logic here for brevity in the replacement chunk)
+                    twitterProfile ? (
+                        <div className="website-interface twitter-interface">
+                            <div className="twitter-header">
+                                <div className="twitter-logo">𝕏</div>
+                                <div className="twitter-nav">
+                                    <span className="nav-item" onClick={() => setTwitterProfile(null)}>← Volver</span>
+                                </div>
+                                <div className="twitter-user">@UsuarioInvestigador</div>
                             </div>
-                            <div className="twitter-user">@UsuarioInvestigador</div>
-                        </div>
-                        <div className="twitter-content">
-                            <div className="twitter-search-section">
-                                <h3 className="search-title">Buscar usuario</h3>
-                                <div className="search-box">
-                                    <input
-                                        type="text"
-                                        className="username-input"
-                                        placeholder={`Ejemplo: ${getCompanyTwitterUsername()}`}
-                                        value={searchedUsername}
-                                        onChange={(e) => setSearchedUsername(e.target.value)}
-                                        onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
-                                    />
-                                    <button className="search-button" onClick={handleSearch}>
-                                        🔍 Buscar
-                                    </button>
-                                </div>
-                                <div className="search-hint">
-                                    💡 Copie el nombre de usuario de la tarjeta de información de la empresa
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                );
-            } else {
-                // Mostrar perfil de X/Twitter
-                const isSuperintendence = twitterProfile === '@SuperintendenciaEC';
-                const isCompanyProfile = twitterProfile === getCompanyTwitterUsername();
-                const currentCompanyForProfile = isCompanyProfile ? company : null;
-                    
-                    return (
-                    <div className="website-interface twitter-interface">
-                        <div className="twitter-header">
-                            <div className="twitter-logo">𝕏</div>
-                            <div className="twitter-nav">
-                                <span className="nav-item" onClick={() => setTwitterProfile(null)}>← Volver</span>
-                            </div>
-                            <div className="twitter-user">@UsuarioInvestigador</div>
-                                </div>
-                        <div className="twitter-content">
-                            <div className="twitter-profile">
-                                <div className="profile-header">
-                                    <div className="profile-avatar">{isSuperintendence ? '🏛️' : '🏢'}</div>
-                                    <div className="profile-info">
-                                        <div className="profile-name">{isSuperintendence ? 'Superintendencia Oficial' : company.name}</div>
-                                        <div className="profile-username">{twitterProfile}</div>
-                                        {isSuperintendence && (
-                                            <div className="verified-badge">✓ Verificado</div>
-                                        )}
-                                    </div>
-                                </div>
-                                <div className="profile-posts">
-                                    {isSuperintendence ? (
-                                        <div className="posts-list">
-                                            {generateSuperintendencePosts().map((post, idx) => (
-                                                <div key={idx} className="twitter-post verified-post">
-                                                    <div className="post-header">
-                                                        <span className="post-author">🏛️ Superintendencia Oficial</span>
-                                                        <span className="post-date">{post.date}</span>
-                                                    </div>
-                                                    <div className="post-content">{post.text}</div>
-                                                    <div className="post-tags">Etiquetado: {post.companyName}</div>
-                                                </div>
-                                            ))}
+                            <div className="twitter-content">
+                                <div className="twitter-profile">
+                                    <div className="profile-header">
+                                        <div className="profile-avatar">{twitterProfile === '@SuperintendenciaEC' ? '🏛️' : '🏢'}</div>
+                                        <div className="profile-info">
+                                            <div className="profile-name">{twitterProfile === '@SuperintendenciaEC' ? 'Superintendencia Oficial' : company.name}</div>
+                                            <div className="profile-username">{twitterProfile}</div>
+                                            {twitterProfile === '@SuperintendenciaEC' && <div className="verified-badge">✓ Verificado</div>}
                                         </div>
-                                    ) : currentCompanyForProfile && (
-                                        <div className="posts-list">
-                                            {generateCEOPosts(currentCompanyForProfile, getCurrentCEO()).map((post, idx) => {
-                                                const replies = generatePostReplies(post);
-                                                return (
-                                                    <div key={idx} className="twitter-post">
+                                    </div>
+                                    <div className="profile-posts">
+                                        {twitterProfile === '@SuperintendenciaEC' ? (
+                                            <div className="posts-list">
+                                                {generateSuperintendencePosts().map((post, idx) => (
+                                                    <div key={idx} className="twitter-post verified-post">
                                                         <div className="post-header">
-                                                            <span className="post-author">{company.name}</span>
+                                                            <span className="post-author">🏛️ Superintendencia Oficial</span>
                                                             <span className="post-date">{post.date}</span>
                                                         </div>
                                                         <div className="post-content">{post.text}</div>
-                                                        <div className="post-reactions">
-                                                            <div className="reaction-item">
-                                                                <span className="reaction-icon">👍</span>
-                                                                <span className="reaction-count">{post.likes}</span>
+                                                        <div className="post-tags">Etiquetado: {post.companyName}</div>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        ) : twitterProfile === getCompanyTwitterUsername() && (
+                                            <div className="posts-list">
+                                                {generateCEOPosts(company, getCurrentCEO()).map((post, idx) => {
+                                                    const replies = generatePostReplies(post);
+                                                    return (
+                                                        <div key={idx} className="twitter-post">
+                                                            <div className="post-header">
+                                                                <span className="post-author">{company.name}</span>
+                                                                <span className="post-date">{post.date}</span>
                                                             </div>
-                                                            <div className="reaction-item">
-                                                                <span className="reaction-icon">👎</span>
-                                                                <span className="reaction-count">{post.dislikes}</span>
+                                                            <div className="post-content">{post.text}</div>
+                                                            <div className="post-reactions">
+                                                                <div className="reaction-item"><span className="reaction-icon">👍</span><span className="reaction-count">{post.likes}</span></div>
+                                                                <div className="reaction-item"><span className="reaction-icon">👎</span><span className="reaction-count">{post.dislikes}</span></div>
+                                                                <div className="reaction-item"><span className="reaction-icon">😠</span><span className="reaction-count">{post.angryReactions}</span></div>
                                                             </div>
-                                                            <div className="reaction-item">
-                                                                <span className="reaction-icon">😠</span>
-                                                                <span className="reaction-count">{post.angryReactions}</span>
-                                                            </div>
-                                                        </div>
-                                                        <div className="post-replies">
-                                                            {replies.map((reply, replyIdx) => {
-                                                                const initial = reply.username.charAt(0).toUpperCase();
-                                                                return (
+                                                            <div className="post-replies">
+                                                                {replies.map((reply, replyIdx) => (
                                                                     <div key={replyIdx} className="reply-item">
                                                                         <div className="reply-header">
-                                                                            <div className={`reply-avatar ${reply.isBot ? 'bot-avatar' : 'user-avatar'}`}>
-                                                                                {reply.isBot ? '🤖' : initial}
-                                                                            </div>
+                                                                            <div className={`reply-avatar ${reply.isBot ? 'bot-avatar' : 'user-avatar'}`}>{reply.isBot ? '🤖' : reply.username.charAt(0).toUpperCase()}</div>
                                                                             <span className="reply-username">{reply.username}</span>
                                                                         </div>
                                                                         <div className="reply-content">{reply.text}</div>
-                        </div>
-                    );
-                })}
+                                                                    </div>
+                                                                ))}
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                );
-                                            })}
-                                        </div>
-                                    )}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                );
-            }
-        }
-        
-        // Otras interfaces
-        if (!searchResults) {
-            // Interfaz de búsqueda
-            if (selectedUrl.includes('superintendencias')) {
-                return (
-                    <div className="website-interface">
-                        <div className="website-header">
-                            <div className="website-logo">🏛️</div>
-                            <div className="website-title">{getSuperintendenceType(company.sector)}</div>
-                        </div>
-                        <div className="website-content">
-                            <div className="search-section">
-                                <h3 className="search-title">¿Qué empresa quiere consultar?</h3>
-                                <div className="search-box">
-                                    <input
-                                        type="text"
-                                        className="ruc-input"
-                                        placeholder="Ingrese el RUC de la empresa"
-                                        value={searchedRuc}
-                                        onChange={(e) => setSearchedRuc(e.target.value)}
-                                        onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
-                                    />
-                                    <button className="search-button" onClick={handleSearch}>
-                                        🔍 Buscar
-                                    </button>
-                                </div>
-                                <div className="search-hint">
-                                    💡 Copie el RUC de la tarjeta de información de la empresa
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                );
-            } else if (selectedUrl.includes('sri')) {
-                return (
-                    <div className="website-interface">
-                        <div className="website-header">
-                            <div className="website-logo">📋</div>
-                            <div className="website-title">SERVICIO DE RENTAS INTERNAS (SRI)</div>
-                        </div>
-                        <div className="website-content">
-                            <div className="search-section">
-                                <h3 className="search-title">Consulta de Estado Fiscal</h3>
-                                <div className="search-box">
-                                    <input
-                                        type="text"
-                                        className="ruc-input"
-                                        placeholder="Ingrese el RUC de la empresa"
-                                        value={searchedRuc}
-                                        onChange={(e) => setSearchedRuc(e.target.value)}
-                                        onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
-                                    />
-                                    <button className="search-button" onClick={handleSearch}>
-                                        🔍 Buscar
-                                    </button>
-                                </div>
-                                <div className="search-hint">
-                                    💡 Copie el RUC de la tarjeta de información de la empresa
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                );
-            } else if (selectedUrl.includes('funcionjudicial')) {
-                return (
-                    <div className="website-interface">
-                        <div className="website-header">
-                            <div className="website-logo">⚖️</div>
-                            <div className="website-title">FUNCIÓN JUDICIAL</div>
-                        </div>
-                        <div className="website-content">
-                            <div className="search-section">
-                                <h3 className="search-title">Consulta de Casos Judiciales</h3>
-                                <div className="search-box">
-                                    <input
-                                        type="text"
-                                        className="ruc-input"
-                                        placeholder="Ingrese el RUC del CEO"
-                                        value={searchedRuc}
-                                        onChange={(e) => setSearchedRuc(e.target.value)}
-                                        onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
-                                    />
-                                    <button className="search-button" onClick={handleSearch}>
-                                        🔍 Buscar
-                                    </button>
-                                </div>
-                                <div className="search-hint">
-                                    💡 Copie el RUC del CEO de la tarjeta de información de la empresa
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                );
-            } else if (selectedUrl.includes('google')) {
-                return (
-                    <div className="website-interface">
-                        <div className="website-header">
-                            <div className="website-logo">⭐</div>
-                            <div className="website-title">Google Reviews</div>
-                        </div>
-                        <div className="website-content">
-                            <div className="search-section">
-                                <h3 className="search-title">Buscar reseñas de empresa</h3>
-                                <div className="search-box">
-                                    <input
-                                        type="text"
-                                        className="ruc-input"
-                                        placeholder="Ingrese el nombre de la empresa"
-                                        value={searchedRuc}
-                                        onChange={(e) => setSearchedRuc(e.target.value)}
-                                        onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
-                                    />
-                                    <button className="search-button" onClick={handleSearch}>
-                                        🔍 Buscar
-                                    </button>
-                                </div>
-                                <div className="search-hint">
-                                    💡 Escriba el nombre de la empresa para ver sus reseñas
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                );
-            }
-        } else {
-            // Mostrar resultados
-            if (searchResults.type === 'superintendencia') {
-                return (
-                    <div className="website-interface">
-                        <div className="website-header">
-                            <div className="website-logo">🏛️</div>
-                            <div className="website-title">{getSuperintendenceType(company.sector)}</div>
-                        </div>
-                        <div className="website-content">
-                            <div className="search-info">
-                                <div className="search-result-header">
-                                    <span className="result-label">RUC consultado:</span>
-                                    <span className="result-ruc">{searchedRuc}</span>
-                                </div>
-                            </div>
-                            <div className="financial-results">
-                                <div className="financial-metrics">
-                                    <div className="metric">
-                                        <span className="metric-label">Activos:</span>
-                                        <span className="metric-value positive">+${searchResults.assets.toLocaleString()}</span>
-                                    </div>
-                                    <div className="metric">
-                                        <span className="metric-label">Pasivos:</span>
-                                        <span className="metric-value negative">-${searchResults.liabilities.toLocaleString()}</span>
-                                    </div>
-                                    <div className="metric">
-                                        <span className="metric-label">Patrimonio:</span>
-                                        <span className={`metric-value ${searchResults.isGood ? 'positive' : 'negative'}`}>
-                                            ${searchResults.equity.toLocaleString()}
-                                        </span>
-                                    </div>
-                                    <div className="metric">
-                                        <span className="metric-label">Utilidad:</span>
-                                        <span className={`metric-value ${searchResults.profit > 0 ? 'positive' : 'negative'}`}>
-                                            {searchResults.profit > 0 ? '+' : ''}${searchResults.profit.toLocaleString()}
-                                        </span>
-                                    </div>
-                                </div>
-                                <div className="rating-info">
-                                    <div className="rating-note">
-                                        ⚠️ La calificación de riesgo debe ser evaluada por el usuario basándose en estos datos financieros.
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                );
-            } else if (searchResults.type === 'sri') {
-                return (
-                    <div className="website-interface">
-                        <div className="website-header">
-                            <div className="website-logo">📋</div>
-                            <div className="website-title">SERVICIO DE RENTAS INTERNAS (SRI)</div>
-                        </div>
-                        <div className="website-content">
-                            <div className="search-info">
-                                <div className="search-result-header">
-                                    <span className="result-label">RUC consultado:</span>
-                                    <span className="result-ruc">{searchedRuc}</span>
-                                </div>
-                            </div>
-                            <div className="sri-results">
-                                <div className={`sri-status ${searchResults.taxStatus.includes('DEBE') ? 'negative' : 'positive'}`}>
-                                    <span className="status-label">Estado Fiscal:</span>
-                                    <span className="status-value">{searchResults.taxStatus}</span>
-                                </div>
-                                <div className="sri-details">
-                                    <div className="sri-detail-item">
-                                        <span className="detail-label">Declaraciones:</span>
-                                        <span className={`detail-value ${searchResults.taxStatus.includes('DEBE') ? 'negative' : 'positive'}`}>
-                                            {searchResults.declarations}
-                                </span>
-                                    </div>
-                                    <div className="sri-detail-item">
-                                        <span className="detail-label">Cumplimiento:</span>
-                                        <span className={`detail-value ${searchResults.taxStatus.includes('DEBE') ? 'negative' : 'positive'}`}>
-                                            {searchResults.compliance}
-                                </span>
-                            </div>
-                                    <div className="sri-detail-item">
-                                        <span className="detail-label">Último Pago:</span>
-                                        <span className="detail-value">{searchResults.lastPayment}</span>
-                                    </div>
-                                    {searchResults.taxDebt > 0 && (
-                                        <div className="sri-detail-item">
-                                            <span className="detail-label">Deuda Fiscal:</span>
-                                            <span className="detail-value negative">${searchResults.taxDebt.toLocaleString()}</span>
-                                </div>
-                            )}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                );
-            } else if (searchResults.type === 'judicial') {
-                return (
-                    <div className="website-interface">
-                        <div className="website-header">
-                            <div className="website-logo">⚖️</div>
-                            <div className="website-title">FUNCIÓN JUDICIAL</div>
-                        </div>
-                        <div className="website-content">
-                            <div className="search-info">
-                                <div className="search-result-header">
-                                    <span className="result-label">RUC consultado:</span>
-                                    <span className="result-ruc">{searchedRuc}</span>
-                                </div>
-                            </div>
-                            <div className="judicial-results">
-                                <div className={`judicial-status ${searchResults.hasIssues ? 'negative' : 'positive'}`}>
-                                    <span className="status-label">Estado Legal:</span>
-                                    <span className="status-value">{searchResults.status}</span>
-                                </div>
-                                <div className="judicial-details">
-                                    <div className="judicial-detail-item">
-                                        <span className="detail-label">Casos Pendientes:</span>
-                                        <span className={`detail-value ${searchResults.hasIssues ? 'negative' : 'positive'}`}>
-                                            {searchResults.cases}
-                                        </span>
-                                    </div>
-                                    <div className="judicial-detail-item">
-                                        <span className="detail-label">Descripción:</span>
-                                        <span className="detail-value">{searchResults.description}</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                );
-            } else if (searchResults.type === 'google') {
-                return (
-                    <div className="website-interface">
-                        <div className="website-header">
-                            <div className="website-logo">⭐</div>
-                            <div className="website-title">Google Reviews - {company.name}</div>
-                        </div>
-                        <div className="website-content">
-                            <div className="google-results">
-                                <div className="average-rating">
-                                    <div className="rating-number">{searchResults.averageRating}</div>
-                                    <div className="rating-stars">
-                                        {Array.from({ length: 5 }, (_, i) => (
-                                            <span key={i} className={i < Math.round(parseFloat(searchResults.averageRating)) ? 'star-filled' : 'star-empty'}>
-                                                ⭐
-                                            </span>
-                                        ))}
-                                    </div>
-                                    <div className="rating-count">{searchResults.reviews.length} reseñas</div>
-                                </div>
-                                <div className="reviews-list">
-                                    {searchResults.reviews.map((review: any, idx: number) => (
-                                        <div key={idx} className="review-item">
-                                            <div className="review-header">
-                                                <span className="review-author">{review.author}</span>
-                                                <span className="review-rating">{'⭐'.repeat(review.rating)}{'☆'.repeat(5 - review.rating)}</span>
-                                                <span className="review-date">{review.date}</span>
+                                                    );
+                                                })}
                                             </div>
-                                            <div className="review-text">{review.text}</div>
-                                        </div>
-                                    ))}
+                                        )}
+                                    </div>
                                 </div>
                             </div>
                         </div>
+                    ) : (
+                        <div className="website-interface twitter-interface">
+                            <div className="twitter-header">
+                                <div className="twitter-logo">𝕏</div>
+                                <div className="twitter-nav">
+                                    <span className="nav-item active">Inicio</span>
+                                    <span className="nav-item">Explorar</span>
+                                    <span className="nav-item">Notificaciones</span>
+                                </div>
+                                <div className="twitter-user">@UsuarioInvestigador</div>
+                            </div>
+                            <div className="twitter-content">
+                                <div className="twitter-search-section">
+                                    <h3 className="search-title">Buscar usuario</h3>
+                                    <div className="search-box">
+                                        <input
+                                            type="text"
+                                            className="username-input"
+                                            placeholder={`Ejemplo: ${getCompanyTwitterUsername()}`}
+                                            value={searchedUsername}
+                                            onChange={(e) => setSearchedUsername(e.target.value)}
+                                            onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
+                                        />
+                                        <button className="search-button" onClick={handleSearch}>🔍 Buscar</button>
+                                    </div>
+                                    <div className="search-hint">💡 Copie el nombre de usuario de la tarjeta de información de la empresa</div>
+                                </div>
+                            </div>
                         </div>
-                    );
-            }
-        }
+                    )
+                ) : (
+                    <>
+                        {!searchResults ? (
+                            selectedUrl.includes('superintendencias') ? (
+                                <div className="website-interface">
+                                    <div className="website-header"><div className="website-logo">🏛️</div><div className="website-title">{getSuperintendenceType(company.sector)}</div></div>
+                                    <div className="website-content"><div className="search-section"><h3 className="search-title">¿Qué empresa quiere consultar?</h3><div className="search-box"><input type="text" className="ruc-input" placeholder="Ingrese el RUC de la empresa" value={searchedRuc} onChange={(e) => setSearchedRuc(e.target.value)} onKeyPress={(e) => e.key === 'Enter' && handleSearch()}/><button className="search-button" onClick={handleSearch}>🔍 Buscar</button></div><div className="search-hint">💡 Copie el RUC de la tarjeta de información de la empresa</div></div></div>
+                                </div>
+                            ) : selectedUrl.includes('sri') ? (
+                                <div className="website-interface">
+                                    <div className="website-header"><div className="website-logo">📋</div><div className="website-title">SERVICIO DE RENTAS INTERNAS (SRI)</div></div>
+                                    <div className="website-content"><div className="search-section"><h3 className="search-title">Consulta de Estado Fiscal</h3><div className="search-box"><input type="text" className="ruc-input" placeholder="Ingrese el RUC de la empresa" value={searchedRuc} onChange={(e) => setSearchedRuc(e.target.value)} onKeyPress={(e) => e.key === 'Enter' && handleSearch()}/><button className="search-button" onClick={handleSearch}>🔍 Buscar</button></div><div className="search-hint">💡 Copie el RUC de la tarjeta de información de la empresa</div></div></div>
+                                </div>
+                            ) : selectedUrl.includes('funcionjudicial') ? (
+                                <div className="website-interface">
+                                    <div className="website-header"><div className="website-logo">⚖️</div><div className="website-title">FUNCIÓN JUDICIAL</div></div>
+                                    <div className="website-content"><div className="search-section"><h3 className="search-title">Consulta de Casos Judiciales</h3><div className="search-box"><input type="text" className="ruc-input" placeholder="Ingrese el RUC del CEO" value={searchedRuc} onChange={(e) => setSearchedRuc(e.target.value)} onKeyPress={(e) => e.key === 'Enter' && handleSearch()}/><button className="search-button" onClick={handleSearch}>🔍 Buscar</button></div><div className="search-hint">💡 Copie el RUC del CEO de la tarjeta de información de la empresa</div></div></div>
+                                </div>
+                            ) : selectedUrl.includes('google') ? (
+                                <div className="website-interface">
+                                    <div className="website-header"><div className="website-logo">⭐</div><div className="website-title">Google Reviews</div></div>
+                                    <div className="website-content"><div className="search-section"><h3 className="search-title">Buscar reseñas de empresa</h3><div className="search-box"><input type="text" className="ruc-input" placeholder="Ingrese el nombre de la empresa" value={searchedRuc} onChange={(e) => setSearchedRuc(e.target.value)} onKeyPress={(e) => e.key === 'Enter' && handleSearch()}/><button className="search-button" onClick={handleSearch}>🔍 Buscar</button></div><div className="search-hint">💡 Escriba el nombre de la empresa para ver sus reseñas</div></div></div>
+                                </div>
+                            ) : null
+                        ) : (
+                            searchResults.type === 'superintendencia' ? (
+                                <div className="website-interface">
+                                    <div className="website-header"><div className="website-logo">🏛️</div><div className="website-title">{getSuperintendenceType(company.sector)}</div></div>
+                                    <div className="website-content"><div className="search-info"><div className="search-result-header"><span className="result-label">RUC consultado:</span><span className="result-ruc">{searchedRuc}</span></div></div><div className="financial-results"><div className="financial-metrics"><div className="metric"><span className="metric-label">Activos:</span><span className="metric-value positive">+${searchResults.assets.toLocaleString()}</span></div><div className="metric"><span className="metric-label">Pasivos:</span><span className="metric-value negative">-${searchResults.liabilities.toLocaleString()}</span></div><div className="metric"><span className="metric-label">Patrimonio:</span><span className={`metric-value ${searchResults.isGood ? 'positive' : 'negative'}`}>${searchResults.equity.toLocaleString()}</span></div><div className="metric"><span className="metric-label">Utilidad:</span><span className={`metric-value ${searchResults.profit > 0 ? 'positive' : 'negative'}`}>{searchResults.profit > 0 ? '+' : ''}${searchResults.profit.toLocaleString()}</span></div></div><div className="rating-info"><div className="rating-note">⚠️ La calificación de riesgo debe ser evaluada por el usuario basándose en estos datos financieros.</div></div></div></div>
+                                </div>
+                            ) : searchResults.type === 'sri' ? (
+                                <div className="website-interface">
+                                    <div className="website-header"><div className="website-logo">📋</div><div className="website-title">SERVICIO DE RENTAS INTERNAS (SRI)</div></div>
+                                    <div className="website-content"><div className="search-info"><div className="search-result-header"><span className="result-label">RUC consultado:</span><span className="result-ruc">{searchedRuc}</span></div></div><div className="sri-results"><div className={`sri-status ${searchResults.taxStatus.includes('DEBE') ? 'negative' : 'positive'}`}><span className="status-label">Estado Fiscal:</span><span className="status-value">{searchResults.taxStatus}</span></div><div className="sri-details"><div className="sri-detail-item"><span className="detail-label">Declaraciones:</span><span className={`detail-value ${searchResults.taxStatus.includes('DEBE') ? 'negative' : 'positive'}`}>{searchResults.declarations}</span></div><div className="sri-detail-item"><span className="detail-label">Cumplimiento:</span><span className={`detail-value ${searchResults.taxStatus.includes('DEBE') ? 'negative' : 'positive'}`}>{searchResults.compliance}</span></div><div className="sri-detail-item"><span className="detail-label">Último Pago:</span><span className="detail-value">{searchResults.lastPayment}</span></div>{searchResults.taxDebt > 0 && (<div className="sri-detail-item"><span className="detail-label">Deuda Fiscal:</span><span className="detail-value negative">${searchResults.taxDebt.toLocaleString()}</span></div>)}</div></div></div>
+                                </div>
+                            ) : searchResults.type === 'judicial' ? (
+                                <div className="website-interface">
+                                    <div className="website-header"><div className="website-logo">⚖️</div><div className="website-title">FUNCIÓN JUDICIAL</div></div>
+                                    <div className="website-content"><div className="search-info"><div className="search-result-header"><span className="result-label">RUC consultado:</span><span className="result-ruc">{searchedRuc}</span></div></div><div className="judicial-results"><div className={`judicial-status ${searchResults.hasIssues ? 'negative' : 'positive'}`}><span className="status-label">Estado Legal:</span><span className="status-value">{searchResults.status}</span></div><div className="judicial-details"><div className="judicial-detail-item"><span className="detail-label">Casos Pendientes:</span><span className={`detail-value ${searchResults.hasIssues ? 'negative' : 'positive'}`}>{searchResults.cases}</span></div><div className="judicial-detail-item"><span className="detail-label">Descripción:</span><span className="detail-value">{searchResults.description}</span></div></div></div></div>
+                                </div>
+                            ) : searchResults.type === 'google' ? (
+                                <div className="website-interface">
+                                    <div className="website-header"><div className="website-logo">⭐</div><div className="website-title">Google Reviews - {company.name}</div></div>
+                                    <div className="website-content"><div className="google-results"><div className="average-rating"><div className="rating-number">{searchResults.averageRating}</div><div className="rating-stars">{Array.from({ length: 5 }, (_, i) => (<span key={i} className={i < Math.round(parseFloat(searchResults.averageRating)) ? 'star-filled' : 'star-empty'}>⭐</span>))}</div><div className="rating-count">{searchResults.reviews.length} reseñas</div></div><div className="reviews-list">{searchResults.reviews.map((review: any, idx: number) => (<div key={idx} className="review-item"><div className="review-header"><span className="review-author">{review.author}</span><span className="review-rating">{'⭐'.repeat(review.rating)}{'☆'.repeat(5 - review.rating)}</span><span className="review-date">{review.date}</span></div><div className="review-text">{review.text}</div></div>))}</div></div></div>
+                                </div>
+                            ) : null
+                        )}
+                    </>
+                )}
+                {/* La justificación ahora se maneja exclusivamente a través del modal flotante */}
+            </div>
+        );
+    };
+
+    const renderJustificationBox = () => {
+        if (!selectedUrl) return null;
         
-        return null;
+        let sourceType: SourceJustification['sourceType'] | null = null;
+        if (selectedUrl.includes('superintendencias')) sourceType = 'superintendencia';
+        else if (selectedUrl.includes('sri')) sourceType = 'sri';
+        else if (selectedUrl.includes('funcionjudicial')) sourceType = 'judicial';
+        else if (selectedUrl.includes('google')) sourceType = 'google';
+        else if (selectedUrl.includes('x.com') || selectedUrl.includes('twitter')) sourceType = 'redes';
+
+        if (!sourceType || (!searchResults && !twitterProfile)) return null;
+
+        const justification = sourceJustifications.find(j => j.sourceType === sourceType);
+        const options = getSourceOptions(sourceType);
+        const isAnswered = justification?.selectedAnswer !== null && justification?.selectedAnswer !== undefined;
+        const isCorrect = justification?.isCorrect === true;
+
+        return (
+            <div className="source-justification-box">
+                <div className="justification-header">
+                    <h4>🔍 Justifica tu hallazgo</h4>
+                    <p>¿Qué concluyes de esta información?</p>
+                </div>
+                <div className="justification-controls">
+                    <select
+                        className="justification-select"
+                        value={justification?.selectedAnswer || ''}
+                        onChange={(e) => onSourceJustificationChange(sourceType!, e.target.value)}
+                        disabled={!!isAnswered}
+                    >
+                        <option value="">Selecciona una conclusión...</option>
+                        {options.map((option, idx) => (
+                            <option key={idx} value={option}>{option}</option>
+                        ))}
+                    </select>
+                </div>
+            </div>
+        );
     };
     
+    // Calcular si la fuente actual ha sido justificada
+    const getCurrentSourceType = (): SourceJustification['sourceType'] | null => {
+        if (selectedUrl.includes('superintendencias')) return 'superintendencia';
+        if (selectedUrl.includes('sri')) return 'sri';
+        if (selectedUrl.includes('funcionjudicial')) return 'judicial';
+        if (selectedUrl.includes('google')) return 'google';
+        if (selectedUrl.includes('x.com') || selectedUrl.includes('twitter')) return 'redes';
+        return null;
+    };
+
+    const currentSourceType = getCurrentSourceType();
+    const isJustified = currentSourceType ? sourceJustifications.find(j => j.sourceType === currentSourceType)?.selectedAnswer : null;
+
     return (
         <div className="information-sources">
             <div className="browser-container">
@@ -721,6 +552,33 @@ const InformationSources: React.FC<InformationSourcesProps> = ({
                     {renderWebsiteInterface()}
                 </div>
             </div>
+
+            {/* Botón flotante para justificar */}
+            {(searchResults || twitterProfile) && (
+                <button 
+                    className={`floating-justification-btn ${isJustified ? 'is-justified' : ''}`}
+                    onClick={() => setIsJustificationModalOpen(true)}
+                    title={isJustified ? "Justificación completa" : "Justificar hallazgo"}
+                >
+                    <span className="btn-icon">{isJustified ? '✅' : '⚖️'}</span>
+                    <span className="btn-text">{isJustified ? 'Justificado' : 'Justificar'}</span>
+                </button>
+            )}
+
+            {/* Modal de Justificación */}
+            {isJustificationModalOpen && (
+                <div className="justification-modal-overlay" onClick={() => setIsJustificationModalOpen(false)}>
+                    <div className="justification-modal-content" onClick={(e) => e.stopPropagation()}>
+                        <button className="modal-close-btn" onClick={() => setIsJustificationModalOpen(false)}>×</button>
+                        {renderJustificationBox()}
+                        <div className="modal-actions">
+                            <button className="btn-close-modal" onClick={() => setIsJustificationModalOpen(false)}>
+                                Cerrar y Guardar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };

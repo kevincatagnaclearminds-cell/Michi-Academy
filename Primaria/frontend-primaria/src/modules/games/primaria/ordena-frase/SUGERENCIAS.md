@@ -69,3 +69,6 @@ Para agregar nuevas frases, edita `data/mockPhrases.ts`:
 
 
 
+
+
+

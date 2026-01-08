@@ -1,552 +1,275 @@
 .company-sidebar {
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+  background: #f8fafc;
+  border-radius: 20px;
   width: 100%;
-  height: 100%;
-  overflow-y: auto;
-  position: relative;
-  border: 1px solid #e0e0e0;
-  box-sizing: border-box;
-  border-left: 4px solid #3498db;
+  height: 100%; 
+  max-height: 100%;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
-  gap: 0;
-  justify-content: flex-start;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e2e8f0;
+  box-sizing: border-box;
 }
 
-/* Caso X/8 */
-.case-number-header {
-  background: #3498db;
+/* Banner Superior */
+.sidebar-banner {
+  background-color: #1e293b;
+  height: 75px; 
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 15px;
+  box-sizing: border-box;
+}
+
+.case-badge {
+  background: #4f46e5;
   color: white;
-  padding: 8px 15px;
-  font-weight: bold;
-  font-size: 0.9rem;
-  text-align: center;
-  border-radius: 12px 12px 0 0;
+  padding: 6px 14px;
+  border-radius: 30px;
+  font-size: 0.75rem;
+  font-weight: 800;
+  height: fit-content;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
-/* Header con Avatar y CEO */
-.sidebar-header {
-  background: #667eea;
-  padding: 15px 15px;
+.verified-seal {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 6px 12px;
+  border-radius: 30px;
+  backdrop-filter: blur(4px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  height: fit-content;
+}
+
+.seal-icon { font-size: 1rem; }
+.seal-text {
+  color: #cbd5e1;
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+/* Tarjeta de Perfil Superpuesta */
+.ceo-profile-card {
+  margin: -25px 15px 0 15px; /* Ajustado de -30px para dar espacio al badge */
+  background: white;
+  border-radius: 12px;
+  padding: 12px 15px; /* Reducido de 20px */
   display: flex;
   align-items: center;
   gap: 12px;
-  color: white;
-  position: relative;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  border: 1px solid #f1f5f9;
+  z-index: 2;
 }
 
-.company-avatar {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.2);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.8rem;
-  border: 2px solid rgba(255, 255, 255, 0.3);
-  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+.avatar-wrapper {
   flex-shrink: 0;
 }
 
-.ceo-info {
+.avatar-circle {
+  width: 45px; /* Reducido de 65px */
+  height: 45px; /* Reducido de 65px */
+  background: #f1f5f9;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.6rem; /* Reducido de 2.2rem */
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.ceo-details {
   flex: 1;
 }
 
-.ceo-label {
-  font-size: 0.75rem;
-  opacity: 0.9;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  margin-bottom: 5px;
+.ceo-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.role-chip {
+  font-size: 0.6rem;
+  font-weight: 900;
+  color: #6366f1;
+  letter-spacing: 1px;
+}
+
+.ceo-ruc-badge {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #64748b;
+  font-family: 'JetBrains Mono', monospace;
+  background: #f1f5f9;
+  padding: 4px 8px;
+  border-radius: 6px;
+  width: fit-content;
+  margin-top: 4px;
 }
 
 .ceo-name {
-  font-size: 1rem;
-  font-weight: bold;
+  font-size: 1rem; /* Reducido de 1.15rem */
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0;
+  line-height: 1.2;
 }
 
-.ceo-ruc {
-  font-size: 0.75rem;
-  opacity: 0.85;
-  margin-top: 4px;
-  font-family: 'Courier New', monospace;
-}
-
-/* Botones de acción al final */
-.sidebar-actions {
-  padding: 0;
-  display: flex;
-  gap: 10px;
-  margin-top: 0;
-}
-
-.btn-sidebar {
-  padding: 10px 16px;
-  border: none;
-  border-radius: 8px;
-  font-size: 0.85rem;
-  font-weight: bold;
-  cursor: pointer;
-  transition: all 0.2s;
-  white-space: nowrap;
+/* Contenido Principal */
+.sidebar-scrollable-content {
   flex: 1;
-}
-
-.btn-sidebar:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-.btn-reject {
-  background: #e74c3c;
-  color: white;
-}
-
-.btn-reject:hover:not(:disabled) {
-  background: #c0392b;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(231, 76, 60, 0.3);
-}
-
-.btn-invest {
-  background: #27ae60;
-  color: white;
-}
-
-.btn-invest:hover:not(:disabled) {
-  background: #229954;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(39, 174, 96, 0.3);
-}
-
-/* Información de la empresa */
-.sidebar-company-info {
-  padding: 10px 15px;
-  border-bottom: 1px solid #e0e0e0;
-}
-
-.company-name-sidebar {
-  font-size: 1.1rem;
-  color: #2c3e50;
-  margin: 0 0 5px 0;
-  font-weight: bold;
-}
-
-.company-sector-sidebar {
-  color: #7f8c8d;
-  font-style: italic;
-  margin-bottom: 6px;
-  font-size: 0.8rem;
-}
-
-.company-description-sidebar {
-  color: #555;
-  line-height: 1.4;
-  font-size: 0.75rem;
-}
-
-/* Estadísticas */
-.sidebar-stats {
-  padding: 10px 15px;
-  background: #f9f9f9;
-  border-bottom: 1px solid #e0e0e0;
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 8px;
-}
-
-.stat-item-sidebar {
+  overflow-y: hidden; /* ELIMINADO SCROLL */
+  padding: 15px; /* Reducido de 20px */
+  padding-bottom: 20px;
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 12px; /* Reducido de 18px */
 }
 
-.stat-label-sidebar {
-  font-size: 0.65rem;
-  text-transform: uppercase;
-  color: #95a5a6;
-  font-weight: 600;
-  letter-spacing: 0.3px;
-  line-height: 1.2;
+.sidebar-scrollable-content::-webkit-scrollbar {
+  width: 5px;
 }
 
-.stat-value-sidebar {
-  font-size: 0.95rem;
-  font-weight: bold;
-  line-height: 1.2;
+.sidebar-scrollable-content::-webkit-scrollbar-thumb {
+  background: #e2e8f0;
+  border-radius: 10px;
 }
 
-.stat-value-sidebar.interest {
-  color: #2980b9;
-}
-
-.stat-value-sidebar.investment {
-  color: #27ae60;
-}
-
-.stat-value-sidebar.period {
-  color: #9b59b6;
-}
-
-.stat-value-sidebar.risk {
-  color: white;
-  padding: 5px 10px;
-  border-radius: 6px;
-  font-size: 0.9rem;
-  text-align: center;
-  display: inline-block;
-  width: fit-content;
-}
-
-/* Redes Sociales */
-.sidebar-social {
-  padding: 10px 15px;
-  border-bottom: 1px solid #e0e0e0;
+/* Cards de Información */
+.info-card-sidebar, .investment-dash, .digital-presence-card {
   background: white;
-}
-
-/* Frame de Decisión Final */
-.decision-frame {
-  margin-top: auto;
-  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
   border-radius: 12px;
-  padding: 15px;
-  box-shadow: 0 4px 12px rgba(52, 152, 219, 0.15);
-  position: sticky;
-  bottom: 0;
-  z-index: 10;
+  padding: 12px 15px; 
+  border: 1px solid #e2e8f0;
 }
 
-.decision-frame-header {
-  display: flex;
-  align-items: center;
-  gap: 8px;
+.company-main-name {
+  font-size: 1.2rem; /* Reducido de 1.4rem */
+  font-weight: 900;
+  color: #1e293b;
+  margin: 0 0 4px 0;
+}
+
+.sector-pill {
+  display: inline-block;
+  background: #f1f5f9;
+  color: #475569;
+  padding: 4px 12px;
+  border-radius: 8px;
+  font-size: 0.75rem;
+  font-weight: 700;
   margin-bottom: 12px;
-  padding-bottom: 10px;
-  border-bottom: 2px solid #3498db;
 }
 
-.decision-icon {
-  font-size: 1.3rem;
+.company-desc-text {
+  font-size: 0.8rem; /* Reducido de 0.85rem */
+  color: #64748b;
+  line-height: 1.4;
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* Limitar líneas para ahorrar espacio */
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
-.decision-title {
-  font-size: 0.95rem;
-  font-weight: bold;
-  color: #2c3e50;
+/* Dashboard de Inversión */
+.dash-title {
+  font-size: 0.9rem;
+  font-weight: 800;
+  color: #334155;
+  margin: 0 0 15px 0;
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
 
-/* Selección de Riesgo */
-.sidebar-risk-selection {
-  padding: 0;
-  margin-bottom: 12px;
-  background: transparent;
-}
-
-.risk-selection-title {
-  font-size: 0.85rem;
-  font-weight: bold;
-  color: #2c3e50;
-  margin-bottom: 10px;
-}
-
-.risk-options-sidebar {
+.dash-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
 }
 
-.risk-button-sidebar {
-  padding: 8px 12px;
-  border: 2px solid #e0e0e0;
-  border-radius: 8px;
-  background: white;
-  color: #2c3e50;
-  font-size: 0.8rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
+.dash-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   text-align: center;
-}
-
-.risk-button-sidebar:hover:not(:disabled) {
-  border-color: #3498db;
-  background: #e3f2fd;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(52, 152, 219, 0.2);
-}
-
-.risk-button-sidebar.selected {
-  background: #3498db;
-  color: white;
-  border-color: #3498db;
-  box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
-}
-
-.risk-button-sidebar:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-.social-title {
-  font-size: 0.9rem;
-  font-weight: bold;
-  color: #2c3e50;
-  margin-bottom: 8px;
-}
-
-.social-links {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.social-link {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 10px;
-  background: #f9f9f9;
-  border-radius: 8px;
-  transition: all 0.3s ease;
-}
-
-.social-link:hover {
-  background: #e3f2fd;
-  transform: translateX(5px);
-}
-
-.social-icon {
-  font-size: 1.3rem;
-}
-
-.social-text {
-  font-size: 0.9rem;
-  color: #2c3e50;
-  font-weight: 500;
-}
-
-/* Valoración General */
-.sidebar-rating {
-  padding: 20px;
-  border-bottom: 1px solid #e0e0e0;
-  background: white;
-}
-
-.rating-header {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 15px;
-}
-
-.rating-icon {
-  font-size: 1.3rem;
-}
-
-.rating-title {
-  font-size: 1rem;
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-.rating-display {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
-  padding: 20px;
-  background: #f5f7fa;
+  background: #f8fafc;
+  padding: 12px 8px;
   border-radius: 12px;
-  margin-bottom: 15px;
-  border: 2px solid #e0e0e0;
+  border: 1px solid #f1f5f9;
 }
 
-.rating-main-number {
-  font-size: 3rem;
-  font-weight: bold;
-  color: #2c3e50;
-  line-height: 1;
+.dash-label {
+  font-size: 0.6rem;
+  font-weight: 700;
+  color: #94a3b8;
+  text-transform: uppercase;
+  margin-bottom: 4px;
 }
 
-.rating-main-stars {
-  display: flex;
-  gap: 5px;
-  font-size: 1.5rem;
-}
-
-.star-filled {
-  opacity: 1;
-  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
-}
-
-.star-empty {
-  opacity: 0.3;
-}
-
-.rating-total {
-  font-size: 0.9rem;
-  color: #7f8c8d;
-  font-weight: 600;
-}
-
-.rating-breakdown {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.breakdown-item {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.breakdown-label {
-  font-size: 0.85rem;
-  color: #7f8c8d;
-  font-weight: 600;
-  min-width: 70px;
-}
-
-.breakdown-bar {
-  flex: 1;
-  height: 8px;
-  background: #e0e0e0;
-  border-radius: 4px;
-  overflow: hidden;
-}
-
-.breakdown-fill {
-  height: 100%;
-  border-radius: 4px;
-  transition: width 0.3s ease;
-}
-
-.breakdown-fill.positive {
-  background: #27ae60;
-}
-
-.breakdown-fill.negative {
-  background: #e74c3c;
-}
-
-.breakdown-count {
-  font-size: 0.85rem;
-  font-weight: bold;
-  color: #2c3e50;
-  min-width: 30px;
-  text-align: right;
-}
-
-/* Comentarios */
-.sidebar-comments {
-  padding: 20px;
-  background: white;
-}
-
-.comments-title {
+.dash-value {
   font-size: 1rem;
-  font-weight: bold;
-  color: #2c3e50;
-  margin-bottom: 15px;
+  font-weight: 900;
+  color: #1e293b;
 }
 
-.comments-list {
+.dash-value.highlight {
+  color: #4f46e5;
+}
+
+.dash-sub {
+  font-size: 0.6rem;
+  color: #94a3b8;
+  margin-top: 2px;
+}
+
+/* Presencia Digital */
+.social-pill-container {
   display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.comment-item {
-  padding: 12px;
-  border-radius: 8px;
-  border-left: 3px solid;
-  background: #f9f9f9;
-}
-
-.comment-item.positive {
-  border-color: #27ae60;
-  background: #e8f5e9;
-}
-
-.comment-item.negative {
-  border-color: #e74c3c;
-  background: #ffebee;
-}
-
-.comment-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: 10px;
   flex-wrap: wrap;
   gap: 8px;
 }
 
-.comment-author-section {
+.social-pill {
   display: flex;
-  flex-direction: column;
-  gap: 5px;
+  align-items: center;
+  gap: 6px;
+  background: #f1f5f9;
+  padding: 6px 10px; 
+  border-radius: 10px;
+  font-size: 0.75rem; 
+  color: #475569;
+  font-weight: 600;
+  transition: all 0.2s;
   flex: 1;
+  min-width: 100px;
+  font-size: 13px
 }
 
-.comment-author {
-  font-weight: bold;
-  color: #2c3e50;
-  font-size: 0.95rem;
+.social-pill:hover {
+  background: #e2e8f0;
+  transform: translateY(-2px);
 }
 
-.comment-rating {
-  display: flex;
-  gap: 2px;
-  font-size: 0.85rem;
-}
-
-.comment-text {
-  color: #555;
-  font-size: 0.9rem;
-  line-height: 1.6;
-  margin-bottom: 8px;
-}
-
-.comment-date {
-  font-size: 0.75rem;
-  color: #7f8c8d;
-  white-space: nowrap;
-}
+/* Presencia Digital */
 
 @media (max-width: 768px) {
-  .sidebar-stats {
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 6px;
+  .ceo-profile-card {
+    flex-direction: column;
+    text-align: center;
   }
   
-  .stat-label-sidebar {
-    font-size: 0.6rem;
-  }
-  
-  .stat-value-sidebar {
-    font-size: 0.85rem;
-  }
-  
-  .company-avatar {
-    width: 60px;
-    height: 60px;
-    font-size: 2rem;
-  }
-  
-  .ceo-name {
-    font-size: 1rem;
-  }
-  
-  .risk-options-sidebar {
-    grid-template-columns: 1fr 1fr;
+  .ceo-header-row {
+    flex-direction: column;
+    gap: 5px;
   }
 }
-

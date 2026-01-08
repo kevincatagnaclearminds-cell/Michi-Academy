@@ -4,7 +4,7 @@
   background: linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #1e3c72 100%);
   background-size: 400% 400%;
   animation: gradientShift 15s ease infinite;
-  padding: 40px 20px;
+  padding: 0;
   overflow-y: auto;
   position: relative;
   font-family: 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
