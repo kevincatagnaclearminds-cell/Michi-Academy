@@ -12,7 +12,7 @@ import { useFinancialDetective } from "./hooks/useFinancialDetective";
 import { companies } from "./data";
 import "./detectives.css";
 
-const DetectivesFinancierosPage = () => {
+export const DetectivesFinancierosPage = () => {
   const [selectedCaseIndex, setSelectedCaseIndex] = useState<number | null>(null);
   const [availableCases, setAvailableCases] = useState<typeof companies>([]);
   const [gameCases, setGameCases] = useState<typeof companies>([]); // Los 3 casos del juego
