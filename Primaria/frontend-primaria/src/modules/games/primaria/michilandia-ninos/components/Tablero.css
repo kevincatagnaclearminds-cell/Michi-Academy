@@ -1,0 +1,323 @@
+/* ====== TABLERO CON IMAGEN ====== */
+.tablero-imagen-container {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* Tamaño que garantiza que se vea completo */
+  width: calc(100vh - 140px);
+  height: calc(100vh - 140px);
+  max-width: min(calc(100vh - 140px), 65vw);
+  max-height: min(calc(100vh - 140px), 65vw);
+  aspect-ratio: 1 / 1;
+  margin: 0 auto;
+  flex-shrink: 1;
+  overflow: visible;
+}
+
+/* Pantallas grandes (escritorio) */
+@media (min-width: 1400px) {
+  .tablero-imagen-container {
+    width: calc(100vh - 130px);
+    height: calc(100vh - 130px);
+    max-width: min(calc(100vh - 130px), 55vw);
+    max-height: min(calc(100vh - 130px), 55vw);
+  }
+}
+
+/* Pantallas extra grandes */
+@media (min-width: 1800px) {
+  .tablero-imagen-container {
+    width: calc(100vh - 120px);
+    height: calc(100vh - 120px);
+    max-width: min(calc(100vh - 120px), 50vw);
+    max-height: min(calc(100vh - 120px), 50vw);
+  }
+}
+
+.tablero-imagen {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: 10px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4), 0 0 0 3px rgba(255, 215, 0, 0.3),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+}
+
+/* ====== FICHA DEL JUGADOR ====== */
+.jugador-ficha-tablero {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Círculo de fondo */
+.ficha-circulo {
+  width: 42px;
+  height: 42px;
+  background: linear-gradient(145deg, #ffd700 0%, #ffa500 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 0 2px #fff, 0 0 12px rgba(255, 215, 0, 0.7),
+    0 3px 10px rgba(0, 0, 0, 0.4);
+  animation: pulsar-ficha 1.5s ease-in-out infinite;
+  padding: 3px;
+}
+
+.ficha-imagen {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+  filter: drop-shadow(1px 1px 2px rgba(0, 0, 0, 0.3));
+}
+
+@keyframes pulsar-ficha {
+  0%,
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 2px #fff, 0 0 12px rgba(255, 215, 0, 0.7),
+      0 3px 10px rgba(0, 0, 0, 0.4);
+  }
+  50% {
+    transform: scale(1.08);
+    box-shadow: 0 0 0 3px #fff, 0 0 20px rgba(255, 215, 0, 0.9),
+      0 5px 12px rgba(0, 0, 0, 0.5);
+  }
+}
+
+/* ====== RESPONSIVE ====== */
+
+/* Pantallas medianas */
+@media (max-width: 1200px) and (min-width: 1025px) {
+  .tablero-imagen-container {
+    width: calc(100vh - 150px);
+    height: calc(100vh - 150px);
+    max-width: min(calc(100vh - 150px), 60vw);
+    max-height: min(calc(100vh - 150px), 60vw);
+  }
+
+  .ficha-circulo {
+    width: 38px;
+    height: 38px;
+  }
+
+  .ficha-imagen {
+    width: 28px;
+    height: 28px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .tablero-imagen-container {
+    width: calc(100vh - 180px);
+    height: calc(100vh - 180px);
+    max-width: 90vw;
+    max-height: 50vh;
+  }
+
+  .ficha-circulo {
+    width: 35px;
+    height: 35px;
+  }
+
+  .ficha-imagen {
+    width: 26px;
+    height: 26px;
+  }
+}
+
+@media (max-width: 768px) {
+  .tablero-imagen-container {
+    width: 90vw;
+    height: 90vw;
+    max-width: 400px;
+    max-height: 400px;
+  }
+
+  .ficha-circulo {
+    width: 32px;
+    height: 32px;
+    padding: 2px;
+  }
+
+  .ficha-imagen {
+    width: 24px;
+    height: 24px;
+  }
+}
+
+@media (max-width: 480px) {
+  .tablero-imagen-container {
+    width: 95vw;
+    height: 95vw;
+    max-width: 350px;
+    max-height: 350px;
+  }
+
+  .ficha-circulo {
+    width: 28px;
+    height: 28px;
+    padding: 2px;
+  }
+
+  .ficha-imagen {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+/* Barra indicadora de propietario sobre cada negocio */
+.negocio-owner-wrapper {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  z-index: 8;
+  pointer-events: none;
+}
+
+.negocio-owner-bar {
+  position: absolute;
+  top: -22px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 36px;
+  height: 6px;
+  border-radius: 5px;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.22);
+  border: 2px solid rgba(255, 255, 255, 0.6);
+}
+
+.negocio-owner-badge {
+  position: absolute;
+  top: -40px;
+  left: 50%;
+  transform: translateX(-50%);
+  min-width: 36px;
+  height: 18px;
+  padding: 0 8px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 700;
+  color: #fff;
+  background: currentColor;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.28);
+  border: 2px solid rgba(255, 255, 255, 0.12);
+  pointer-events: none;
+}
+
+/* Vertical badges for left/right sides */
+.owner-badge-side-left,
+.owner-badge-side-right {
+  min-width: 18px;
+  width: 18px;
+  height: 36px;
+  padding: 0;
+  border-radius: 8px;
+  font-size: 11px;
+}
+
+/* Position owner indicators to the free side of the tile */
+.negocio-owner-wrapper.owner-side-top .negocio-owner-bar {
+  top: -65px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 36px;
+  height: 6px;
+}
+.negocio-owner-wrapper.owner-side-top .negocio-owner-badge {
+  top: -60px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 86px;
+}
+
+.negocio-owner-wrapper.owner-side-bottom .negocio-owner-bar {
+  top: 61px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 36px;
+  height: 6px;
+}
+.negocio-owner-wrapper.owner-side-bottom .negocio-owner-badge {
+  top: 43px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 86px;
+}
+
+.negocio-owner-wrapper.owner-side-left .negocio-owner-bar {
+  left: -66px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 6px;
+  height: 36px;
+  border-radius: 5px;
+}
+.negocio-owner-wrapper.owner-side-left .negocio-owner-badge {
+  left: -60px;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 88px;
+}
+
+.negocio-owner-wrapper.owner-side-right .negocio-owner-bar {
+  left: 60px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 6px;
+  height: 36px;
+  border-radius: 5px;
+}
+.negocio-owner-wrapper.owner-side-right .negocio-owner-badge {
+  left: 42px;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 88px;
+}
+
+@media (max-width: 768px) {
+  .negocio-owner-bar {
+    top: -18px;
+    width: 30px;
+    height: 6px;
+  }
+  .negocio-owner-badge {
+    top: -36px;
+    left: calc(50% + 18px);
+    width: 18px;
+    height: 18px;
+    font-size: 11px;
+  }
+}
+/* Rotate badge text for left and right sides */
+.owner-badge-side-left .owner-text {
+  transform: rotate(-90deg);
+}
+
+.owner-badge-side-right .owner-text {
+  transform: rotate(90deg);
+}
+
+/* Shared text styling */
+.owner-text {
+  font-size: 90%;
+  font-weight: 700;
+  color: #fff;
+  white-space: nowrap;
+  display: block;
+  text-align: center;
+
+  /* Borde negro */
+  text-shadow:
+    -1px -1px 0 #000,
+     1px -1px 0 #000,
+    -1px  1px 0 #000,
+     1px  1px 0 #000;
+}
+
+

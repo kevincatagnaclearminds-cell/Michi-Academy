@@ -1,0 +1,336 @@
+/* ====== MODAL DE COMPRA ====== */
+.modal-compra-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  padding: 1rem;
+  box-sizing: border-box;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.modal-compra-container {
+  background: rgba(26, 35, 126, 0.85);
+  backdrop-filter: blur(30px);
+  -webkit-backdrop-filter: blur(30px);
+  border-radius: 28px;
+  padding: 0;
+  max-width: 800px;
+  width: 95%;
+  max-height: 90vh;
+  overflow: hidden;
+  box-shadow: 
+    0 25px 80px rgba(0, 0, 0, 0.6),
+    0 0 0 1px rgba(255, 255, 255, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  animation: slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  border: 3px solid transparent;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* ====== HEADER ====== */
+.modal-compra-header {
+  text-align: center;
+  padding: 1.8rem 2rem;
+  position: relative;
+}
+
+.modal-compra-header::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 10%;
+  right: 10%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+}
+
+.modal-compra-header h2 {
+  font-family: "Fredoka", "Baloo 2", cursive, sans-serif;
+  color: #ffd700;
+  font-size: 2.2rem;
+  margin: 0 0 0.5rem 0;
+  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5), 0 0 30px rgba(255, 215, 0, 0.3);
+  letter-spacing: 1px;
+}
+
+.modal-compra-header p {
+  font-family: "Nunito", sans-serif;
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0;
+  font-size: 1.15rem;
+  font-weight: 600;
+}
+
+.modal-compra-header p strong {
+  color: white;
+  font-weight: 800;
+}
+
+/* ====== CONTENT ====== */
+.modal-compra-content {
+  display: flex;
+  gap: 2.5rem;
+  align-items: center;
+  padding: 2rem 2.5rem 2.5rem;
+  overflow-y: auto;
+  max-height: calc(90vh - 120px);
+}
+
+.modal-carta-container {
+  flex-shrink: 0;
+}
+
+/* ====== INFO ====== */
+.modal-compra-info {
+  flex: 1;
+  animation: fadeInRight 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both;
+  min-width: 0;
+}
+
+@keyframes fadeInRight {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.modal-compra-info h3 {
+  font-family: "Fredoka", "Baloo 2", cursive, sans-serif;
+  color: white;
+  font-size: 2rem;
+  margin: 0 0 1.8rem 0;
+  text-align: center;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+  letter-spacing: 0.5px;
+}
+
+.modal-precio-container,
+.modal-dinero-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.2rem 1.5rem;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  border-radius: 16px;
+  margin-bottom: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
+}
+
+.modal-precio-container:hover,
+.modal-dinero-container:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.modal-precio-label,
+.modal-dinero-label {
+  font-family: "Nunito", sans-serif;
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 1.15rem;
+  font-weight: 600;
+}
+
+.modal-precio-valor {
+  font-family: "Poppins", sans-serif;
+  color: #ffd700;
+  font-size: 1.6rem;
+  font-weight: 800;
+  text-shadow: 0 2px 8px rgba(255, 215, 0, 0.4);
+}
+
+.modal-dinero-valor {
+  font-family: "Poppins", sans-serif;
+  color: #69f0ae;
+  font-size: 1.6rem;
+  font-weight: 800;
+  text-shadow: 0 2px 8px rgba(76, 175, 80, 0.4);
+}
+
+.modal-dinero-valor.dinero-insuficiente {
+  color: #ff5252;
+  text-shadow: 0 2px 8px rgba(244, 67, 54, 0.4);
+}
+
+/* ====== ADVERTENCIA ====== */
+.modal-advertencia {
+  background: rgba(244, 67, 54, 0.15);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(244, 67, 54, 0.5);
+  color: #ff8a80;
+  padding: 1rem 1.2rem;
+  border-radius: 14px;
+  text-align: center;
+  margin: 1.2rem 0;
+  font-family: "Nunito", sans-serif;
+  font-weight: 700;
+  font-size: 1.05rem;
+  animation: shake 0.5s ease-in-out;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-8px); }
+  40% { transform: translateX(8px); }
+  60% { transform: translateX(-5px); }
+  80% { transform: translateX(5px); }
+}
+
+/* ====== ACCIONES ====== */
+.modal-compra-acciones {
+  display: flex;
+  gap: 1.2rem;
+  margin-top: 2rem;
+}
+
+.btn-comprar,
+.btn-subastar {
+  flex: 1;
+  padding: 1.1rem 1.5rem;
+  border: none;
+  border-radius: 16px;
+  font-family: "Poppins", sans-serif;
+  font-size: 1.1rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-comprar::before,
+.btn-subastar::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 50%;
+  background: linear-gradient(180deg, rgba(255,255,255,0.2) 0%, transparent 100%);
+  pointer-events: none;
+}
+
+.btn-comprar {
+  background: linear-gradient(135deg, #4caf50 0%, #2e7d32 100%);
+  color: white;
+  box-shadow: 0 6px 25px rgba(76, 175, 80, 0.5);
+}
+
+.btn-comprar:hover:not(:disabled) {
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 10px 35px rgba(76, 175, 80, 0.65);
+}
+
+.btn-comprar:disabled {
+  background: linear-gradient(135deg, #555 0%, #444 100%);
+  cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
+}
+
+.btn-subastar {
+  background: linear-gradient(135deg, #ff9800 0%, #f57c00 100%);
+  color: white;
+  box-shadow: 0 6px 25px rgba(255, 152, 0, 0.5);
+}
+
+.btn-subastar:hover {
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 10px 35px rgba(255, 152, 0, 0.65);
+}
+
+/* ====== RESPONSIVE ====== */
+@media (max-width: 750px) {
+  .modal-compra-container {
+    border-radius: 24px;
+  }
+
+  .modal-compra-header {
+    padding: 1.5rem;
+  }
+
+  .modal-compra-content {
+    flex-direction: column;
+    align-items: center;
+    gap: 1.8rem;
+    padding: 1.5rem;
+  }
+
+  .modal-compra-header h2 {
+    font-size: 1.7rem;
+  }
+
+  .modal-compra-info {
+    width: 100%;
+  }
+
+  .modal-compra-info h3 {
+    font-size: 1.5rem;
+    margin-bottom: 1.2rem;
+  }
+
+  .modal-precio-container,
+  .modal-dinero-container {
+    padding: 1rem 1.2rem;
+  }
+
+  .modal-precio-valor,
+  .modal-dinero-valor {
+    font-size: 1.3rem;
+  }
+
+  .btn-comprar,
+  .btn-subastar {
+    padding: 0.9rem 1rem;
+    font-size: 1rem;
+    letter-spacing: 1px;
+  }
+}
+
+@media (max-width: 480px) {
+  .modal-compra-acciones {
+    flex-direction: column;
+    gap: 0.8rem;
+  }
+
+  .btn-comprar,
+  .btn-subastar {
+    width: 100%;
+  }
+}
