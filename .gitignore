@@ -53,3 +53,13 @@ pnpm-debug.log*
 config.local.json
 settings.local.json
 
+# Archivos placeholder
+**/.placeholder.*
+.placeholder.*
+
+# Node modules en la raíz (si se crean por error)
+node_modules/
+node_modules/**/*
+!node_modules/.gitkeep
+node_modules/.package-lock.json
+

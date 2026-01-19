@@ -2,6 +2,8 @@
 
 # Dependencias
 node_modules/
+node_modules/**/*
+!node_modules/.gitkeep
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
@@ -9,6 +11,8 @@ pnpm-debug.log*
 # Nota: package-lock.json SÍ debe commitearse para asegurar versiones consistentes
 # yarn.lock
 # pnpm-lock.yaml
+# Pero ignorar el .package-lock.json dentro de node_modules
+node_modules/.package-lock.json
 
 # Build output
 dist/
@@ -84,4 +88,12 @@ storybook-static/
 # Archivos de backup
 *.bak
 *.backup
+
+# Archivos generados por herramientas de desarrollo
+node_modules/.bin/
+node_modules/.package-lock.json
+
+# Archivos placeholder
+**/.placeholder.*
+.placeholder.*
 

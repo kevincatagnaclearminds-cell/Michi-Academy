@@ -1,21 +1,36 @@
 # Backend - Node.js / TypeScript / Express / Prisma
 
-# Dependencias
+# ============================================
+# DEPENDENCIAS
+# ============================================
+# Nota: package-lock.json SÍ debe commitearse para asegurar versiones consistentes
+# yarn.lock
+# pnpm-lock.yaml
 node_modules/
+**/node_modules/
+!node_modules/.gitkeep
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
-# Nota: package-lock.json SÍ debe commitearse para asegurar versiones consistentes
-# yarn.lock
-# pnpm-lock.yaml
 
-# Build output
+# Archivos específicos dentro de node_modules que no deben rastrearse
+node_modules/.package-lock.json
+node_modules/.bin/
+node_modules/.prisma/
+node_modules/@prisma/
+node_modules/@types/
+
+# ============================================
+# BUILD OUTPUT
+# ============================================
 dist/
 build/
 *.tsbuildinfo
 
-# Variables de entorno (CRÍTICO - NUNCA commitees)
+# ============================================
+# VARIABLES DE ENTORNO (CRÍTICO - NUNCA commitees)
+# ============================================
 .env
 .env.local
 .env.development
@@ -24,7 +39,9 @@ build/
 .env.test
 .env.*.local
 
-# Logs
+# ============================================
+# LOGS
+# ============================================
 logs/
 *.log
 npm-debug.log*
@@ -33,50 +50,90 @@ yarn-error.log*
 lerna-debug.log*
 pnpm-debug.log*
 
-# Runtime data
+# ============================================
+# RUNTIME DATA
+# ============================================
 pids/
 *.pid
 *.seed
 *.pid.lock
 
-# Coverage directory usado por herramientas como istanbul
+# ============================================
+# COVERAGE / TESTING
+# ============================================
 coverage/
 *.lcov
 .nyc_output/
+.coverage/
 
-# Dependency directories
+# ============================================
+# DEPENDENCY DIRECTORIES
+# ============================================
 jspm_packages/
 
+# ============================================
+# CACHE
+# ============================================
 # TypeScript cache
 *.tsbuildinfo
 
-# Optional npm cache directory
+# npm cache
 .npm
 
-# Optional eslint cache
+# eslint cache
 .eslintcache
 
-# Optional REPL history
+# Node REPL history
 .node_repl_history
 
+# ============================================
+# PACKAGE MANAGER
+# ============================================
 # Output of 'npm pack'
 *.tgz
 
 # Yarn Integrity file
 .yarn-integrity
 
-# Prisma
+# ============================================
+# PRISMA
+# ============================================
 # Nota: Las migraciones SÍ deben commitearse, pero no el cliente generado
 # El cliente se genera con: npx prisma generate
 
-# Archivos de IDE
+# Cliente generado de Prisma
+**/.prisma/client/
+node_modules/.prisma/client/
+node_modules/@prisma/client/
+
+# Directorios de Prisma en node_modules
+**/node_modules/.prisma/
+**/node_modules/@prisma/
+**/node_modules/@prisma/client/
+
+# Archivos binarios de Prisma
+**/node_modules/.bin/
+
+# Directorio temporal de Prisma (si se crea)
+.prisma/
+
+# ============================================
+# IDE / EDITORES
+# ============================================
 .idea/
 .vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
 *.swp
 *.swo
 *~
 
-# OS files
+# ============================================
+# OS FILES
+# ============================================
 .DS_Store
 .DS_Store?
 ._*
@@ -84,16 +141,30 @@ jspm_packages/
 .Trashes
 ehthumbs.db
 Thumbs.db
+desktop.ini
 
-# Testing
-coverage/
-.nyc_output/
-
-# Archivos temporales
+# ============================================
+# ARCHIVOS TEMPORALES
+# ============================================
 *.tmp
 *.temp
 .cache/
 
-# Docker volumes (si se crean localmente)
-postgres_data/
+# Archivos placeholder
+**/.placeholder.*
+.placeholder.*
 
+# ============================================
+# DOCKER
+# ============================================
+postgres_data/
+docker-compose.override.yml
+
+# ============================================
+# OTRAS HERRAMIENTAS
+# ============================================
+# Prettier
+.prettierignore
+
+# EditorConfig
+.editorconfig
