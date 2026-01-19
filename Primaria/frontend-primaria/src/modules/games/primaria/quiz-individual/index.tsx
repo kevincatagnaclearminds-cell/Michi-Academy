@@ -1,14 +1,22 @@
-import React from "react";
+import { UserQuizPage } from './pages/UserQuizPage';
+import { AdminQuizPage } from './pages/AdminQuizPage';
+import './quiz-individual.css';
+
+// TODO: Reemplazar con lógica real de roles cuando esté implementada
+const isAdmin = () => {
+  // Temporal: verificar si el usuario es admin
+  // Por ahora, puedes usar localStorage o un prop
+  const userRole = localStorage.getItem('userRole');
+  return userRole === 'admin';
+};
 
 const QuizIndividualPrimariaPage = () => {
-  return (
-    <div>
-      <h1>Quiz Individual - Educación Financiera (Primaria)</h1>
-      <p>Aquí va el quiz individual adaptado a temas financieros para niños.</p>
-    </div>
-  );
+  // Decidir qué vista mostrar según el rol
+  if (isAdmin()) {
+    return <AdminQuizPage />;
+  }
+
+  return <UserQuizPage />;
 };
 
 export default QuizIndividualPrimariaPage;
-
-

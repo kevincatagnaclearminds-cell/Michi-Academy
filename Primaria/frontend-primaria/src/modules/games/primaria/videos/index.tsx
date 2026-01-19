@@ -1,14 +1,22 @@
-import React from "react";
+import { UserVideosPage } from './pages/UserVideosPage';
+import { AdminVideosPage } from './pages/AdminVideosPage';
+import './videos.css';
+
+// TODO: Reemplazar con lógica real de roles cuando esté implementada
+const isAdmin = () => {
+  // Temporal: verificar si el usuario es admin
+  // Por ahora, puedes usar localStorage o un prop
+  const userRole = localStorage.getItem('userRole');
+  return userRole === 'admin';
+};
 
 const VideosPrimariaPage = () => {
-  return (
-    <div>
-      <h1>Videos Cortos - Educación Financiera (Niños)</h1>
-      <p>Aquí se listan los videos infantiles y se abren los quiz individuales al terminar.</p>
-    </div>
-  );
+  // Decidir qué vista mostrar según el rol
+  if (isAdmin()) {
+    return <AdminVideosPage />;
+  }
+
+  return <UserVideosPage />;
 };
 
 export default VideosPrimariaPage;
-
-

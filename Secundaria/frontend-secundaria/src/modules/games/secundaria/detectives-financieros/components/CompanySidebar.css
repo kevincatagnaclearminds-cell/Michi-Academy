@@ -1,0 +1,275 @@
+.company-sidebar {
+  background: #f8fafc;
+  border-radius: 20px;
+  width: 100%;
+  height: 100%; 
+  max-height: 100%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e2e8f0;
+  box-sizing: border-box;
+}
+
+/* Banner Superior */
+.sidebar-banner {
+  background-color: #1e293b;
+  height: 75px; 
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 15px;
+  box-sizing: border-box;
+}
+
+.case-badge {
+  background: #4f46e5;
+  color: white;
+  padding: 6px 14px;
+  border-radius: 30px;
+  font-size: 0.75rem;
+  font-weight: 800;
+  height: fit-content;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.verified-seal {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 6px 12px;
+  border-radius: 30px;
+  backdrop-filter: blur(4px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  height: fit-content;
+}
+
+.seal-icon { font-size: 1rem; }
+.seal-text {
+  color: #cbd5e1;
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+/* Tarjeta de Perfil Superpuesta */
+.ceo-profile-card {
+  margin: -25px 15px 0 15px; /* Ajustado de -30px para dar espacio al badge */
+  background: white;
+  border-radius: 12px;
+  padding: 12px 15px; /* Reducido de 20px */
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  border: 1px solid #f1f5f9;
+  z-index: 2;
+}
+
+.avatar-wrapper {
+  flex-shrink: 0;
+}
+
+.avatar-circle {
+  width: 45px; /* Reducido de 65px */
+  height: 45px; /* Reducido de 65px */
+  background: #f1f5f9;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.6rem; /* Reducido de 2.2rem */
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.ceo-details {
+  flex: 1;
+}
+
+.ceo-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.role-chip {
+  font-size: 0.6rem;
+  font-weight: 900;
+  color: #6366f1;
+  letter-spacing: 1px;
+}
+
+.ceo-ruc-badge {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #64748b;
+  font-family: 'JetBrains Mono', monospace;
+  background: #f1f5f9;
+  padding: 4px 8px;
+  border-radius: 6px;
+  width: fit-content;
+  margin-top: 4px;
+}
+
+.ceo-name {
+  font-size: 1rem; /* Reducido de 1.15rem */
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0;
+  line-height: 1.2;
+}
+
+/* Contenido Principal */
+.sidebar-scrollable-content {
+  flex: 1;
+  overflow-y: hidden; /* ELIMINADO SCROLL */
+  padding: 15px; /* Reducido de 20px */
+  padding-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px; /* Reducido de 18px */
+}
+
+.sidebar-scrollable-content::-webkit-scrollbar {
+  width: 5px;
+}
+
+.sidebar-scrollable-content::-webkit-scrollbar-thumb {
+  background: #e2e8f0;
+  border-radius: 10px;
+}
+
+/* Cards de Información */
+.info-card-sidebar, .investment-dash, .digital-presence-card {
+  background: white;
+  border-radius: 12px;
+  padding: 12px 15px; 
+  border: 1px solid #e2e8f0;
+}
+
+.company-main-name {
+  font-size: 1.2rem; /* Reducido de 1.4rem */
+  font-weight: 900;
+  color: #1e293b;
+  margin: 0 0 4px 0;
+}
+
+.sector-pill {
+  display: inline-block;
+  background: #f1f5f9;
+  color: #475569;
+  padding: 4px 12px;
+  border-radius: 8px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.company-desc-text {
+  font-size: 0.8rem; /* Reducido de 0.85rem */
+  color: #64748b;
+  line-height: 1.4;
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* Limitar líneas para ahorrar espacio */
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Dashboard de Inversión */
+.dash-title {
+  font-size: 0.9rem;
+  font-weight: 800;
+  color: #334155;
+  margin: 0 0 15px 0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.dash-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.dash-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  background: #f8fafc;
+  padding: 12px 8px;
+  border-radius: 12px;
+  border: 1px solid #f1f5f9;
+}
+
+.dash-label {
+  font-size: 0.6rem;
+  font-weight: 700;
+  color: #94a3b8;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+.dash-value {
+  font-size: 1rem;
+  font-weight: 900;
+  color: #1e293b;
+}
+
+.dash-value.highlight {
+  color: #4f46e5;
+}
+
+.dash-sub {
+  font-size: 0.6rem;
+  color: #94a3b8;
+  margin-top: 2px;
+}
+
+/* Presencia Digital */
+.social-pill-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.social-pill {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #f1f5f9;
+  padding: 6px 10px; 
+  border-radius: 10px;
+  font-size: 0.75rem; 
+  color: #475569;
+  font-weight: 600;
+  transition: all 0.2s;
+  flex: 1;
+  min-width: 100px;
+  font-size: 13px
+}
+
+.social-pill:hover {
+  background: #e2e8f0;
+  transform: translateY(-2px);
+}
+
+/* Presencia Digital */
+
+@media (max-width: 768px) {
+  .ceo-profile-card {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .ceo-header-row {
+    flex-direction: column;
+    gap: 5px;
+  }
+}
