@@ -9,29 +9,30 @@ datasource db {
 }
 
 model Users {
-  id               Int       @id @default(autoincrement())
   email            String    @unique @db.VarChar(255)
   password         String    @db.VarChar(255)
-  level            Level     // Niveles educativos: elementary (1-3), middle_school (4-7), junior_high (8-10), high_school (1-3 bachillerato)
-  grade            Int?      // Grado como número entero
-  account_type     AccountType?
+  level            String    @db.VarChar(50)
+  grade            Int?
+  account_type     String?   @db.VarChar(10)
   recovery_token   String?   @db.VarChar(255)
   token_expiration DateTime? @db.Timestamptz(6)
+  refresh_token    String?   @db.VarChar(255)
+  refresh_token_expires_at DateTime? @db.Timestamptz(6)
   created_at       DateTime? @default(now()) @db.Timestamptz(6)
   updated_at       DateTime? @default(now()) @db.Timestamptz(6)
+  id               String    @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
 
   @@index([level])
+  @@index([email])
+  @@index([recovery_token])
+  @@index([refresh_token])
+  @@index([created_at])
+  @@index([account_type, level])
 }
 
-enum Level {
-  elementary      // Para grados 1-3
-  middle_school  // Para grados 4-7
-  junior_high    // Para grados 8-10
-  high_school    // Para grados 1-3 de bachillerato
-}
-
-enum AccountType {
-  student
-  teacher
-  admin
+enum nivel_educativo {
+  basica
+  basica_media
+  basica_superior
+  bachillerato
 }

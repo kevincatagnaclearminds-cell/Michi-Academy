@@ -16,22 +16,21 @@ export const sendRecoveryEmail = async (
     token: string,
     level: string
 ) => {
-    // URL base unificada para recuperación de contraseña
     const baseUrl = process.env.FRONTEND_URL || 'http://localhost:3000';
     const resetLink = `${baseUrl}/reset-password?token=${token}`;
 
     const mailOption = {
-        from: `"Educación Financiera " <${env.EMAIL_USER}>`,
+        from: `"Financial Education" <${env.EMAIL_USER}>`,
         to: email,
-        subject: 'Recupera tu contraseña',
+        subject: 'Reset your password',
         html: `
-            <h1>Hola Estudiante</h1>
-            <p>Has solicitado restablecer tu contraseña para el nivel de <strong>${level}</strong>.</p>
-            <p>Haz clic en el siguiente enlace para continuar:</p>
+            <h1>Hello Student</h1>
+            <p>You have requested to reset your password for the <strong>${level}</strong> level.</p>
+            <p>Click on the following link to continue:</p>
             <a href="${resetLink}" style="padding: 10px 20px; background-color: #4CAF50; color: white; text-decoration: none; border-radius: 5px;">
-                Restablecer Contraseña
+                Reset Password
             </a>
-            <p>Este enlace expirará en 1 hora.</p>
+            <p>This link will expire in 1 hour.</p>
         `
     };
     

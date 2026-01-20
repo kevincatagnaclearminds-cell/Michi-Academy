@@ -4,7 +4,7 @@ import { env } from '../../config/env';
 
 export interface AuthRequest extends Request {
   user?: {
-    id: number;
+    id: string;
     email: string;
     nivel: string;
   };
@@ -15,13 +15,13 @@ export const authGuard = (req: AuthRequest, res: Response, next: NextFunction) =
     const token = req.headers.authorization?.replace('Bearer ', '');
 
     if (!token) {
-      return res.status(401).json({ message: 'Token de autenticación requerido' });
+      return res.status(401).json({ message: 'Authentication token required' });
     }
 
-    const decoded = jwt.verify(token, env.JWT_SECRET) as { id: number; email: string; nivel: string };
+    const decoded = jwt.verify(token, env.JWT_SECRET) as { id: string; email: string; nivel: string };
     req.user = decoded;
     next();
   } catch (error) {
-    return res.status(401).json({ message: 'Token inválido o expirado' });
+    return res.status(401).json({ message: 'Invalid or expired token' });
   }
 };

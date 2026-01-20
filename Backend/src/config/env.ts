@@ -1,17 +1,52 @@
 import dotenv from 'dotenv';
+import { z, ZodError } from 'zod';
 
 dotenv.config();
 
-export const env = {
-  PORT: process.env.PORT || 4000,
-  NODE_ENV: process.env.NODE_ENV || 'development',
-  DATABASE_URL_PRIMARIA: process.env.DATABASE_URL_PRIMARIA,
-  DATABASE_URL_SECUNDARIA: process.env.DATABASE_URL_SECUNDARIA,
-  DATABASE_URL: process.env.DATABASE_URL || 'postgresql://postgres:05051997@localhost:5435/login_MichiAcademy',
-  JWT_SECRET: process.env.JWT_SECRET || 'your-secret-key-change-in-production',
-  JWT_EXPIRES_IN: process.env.JWT_EXPIRES_IN || '24h',
-  CORS_ORIGIN: process.env.CORS_ORIGIN || 'http://localhost:3000',
+const envSchema = z.object({
+  PORT: z.string().default('4000').transform(Number),
+  NODE_ENV: z.enum(['development', 'production', 'test']).default('development'),
+  DATABASE_URL: z.string().min(1, 'DATABASE_URL is required'),
+  JWT_SECRET: z.string().min(32, 'JWT_SECRET must be at least 32 characters long'),
+  JWT_EXPIRES_IN: z.string().default('24h'),
+  JWT_REFRESH_EXPIRES_IN: z.string().default('7d'),
+  CORS_ORIGINS: z.string().optional().transform((val) => 
+    val ? val.split(',').map(origin => origin.trim()) : undefined
+  ),
+  
+  EMAIL_USER: z.string().email().optional(),
+  EMAIL_PASS: z.string().optional(),
+  LOG_LEVEL: z.enum(['error', 'warn', 'info', 'debug']).default('info'),
+  LOG_DIR: z.string().default('logs'),
+  REDIS_URL: z.string().optional(),
+  REDIS_HOST: z.string().default('localhost'),
+  REDIS_PORT: z.string().default('6379').transform(Number),
+  REDIS_PASSWORD: z.string().optional(),
+  REDIS_TTL: z.string().default('3600').transform(Number),
+});
 
-  EMAIL_USER: process.env.EMAIL_USER,
-  EMAIL_PASS: process.env.EMAIL_PASS,
+const parseEnv = () => {
+  try {
+    return envSchema.parse({
+      PORT: process.env.PORT,
+      NODE_ENV: process.env.NODE_ENV,
+      DATABASE_URL: process.env.DATABASE_URL,
+      JWT_SECRET: process.env.JWT_SECRET,
+      JWT_EXPIRES_IN: process.env.JWT_EXPIRES_IN,
+      JWT_REFRESH_EXPIRES_IN: process.env.JWT_REFRESH_EXPIRES_IN || '7d',
+      CORS_ORIGINS: process.env.CORS_ORIGINS,
+      EMAIL_USER: process.env.EMAIL_USER,
+      EMAIL_PASS: process.env.EMAIL_PASS,
+      LOG_LEVEL: process.env.LOG_LEVEL,
+      LOG_DIR: process.env.LOG_DIR,
+    });
+  } catch (error) {
+    if (error instanceof  ZodError) {
+      const errorMessages = error.issues.map(err => `${err.path.join('.')}: ${err.message}`).join('\n');
+      throw new Error(`❌ Invalid environment variables:\n${errorMessages}`);
+    }
+    throw error;
+  }
 };
+
+export const env = parseEnv();

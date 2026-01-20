@@ -1,20 +1,25 @@
 import { Router } from 'express';
 import { authController } from './auth.controller';
 import { authGuard } from '../../shared/guards/auth.guard';
+import { validateDto } from '../../shared/validators/validation.middleware';
+import { LoginDto } from './dtos/login.dto';
+import { RegisterDto } from './dtos/register.dto';
+import { authLimiter, passwordResetLimiter } from '../../app/middlewares/rate-limiter';
 
 const router = Router();
 
-// Login unificado
-router.post('/login', authController.login.bind(authController));
+router.post('/login', authLimiter, validateDto(LoginDto), authController.login);
 
-// Registro
-router.post('/register', authController.register.bind(authController));
+router.post('/register', authLimiter, validateDto(RegisterDto), authController.register);
 
-// Obtener usuario actual
-router.get('/me', authGuard, authController.getCurrentUser.bind(authController));
+router.get('/me', authGuard, authController.getCurrentUser);
 
-// Recuperación de contraseña
-router.post('/forgot-password', authController.forgotPassword.bind(authController));
-router.post('/reset-password', authController.resetPassword.bind(authController));
+router.post('/forgot-password', passwordResetLimiter, authController.forgotPassword);
+
+router.post('/reset-password', passwordResetLimiter, authController.resetPassword);
+
+router.post('/refresh', authController.refreshToken);
+
+router.post('/logout', authGuard, authController.logout);
 
 export default router;

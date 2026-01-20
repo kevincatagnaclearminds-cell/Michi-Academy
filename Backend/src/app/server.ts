@@ -5,48 +5,74 @@ dotenv.config();
 import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
+import compression from 'compression';
+import swaggerUi from 'swagger-ui-express';
 import { env } from '../config/env';
 import routes from './routes';
 import { errorHandler } from './middlewares/error-handler';
 import { logger } from './middlewares/logger';
+import { generalLimiter } from './middlewares/rate-limiter';
+import { swaggerSpec } from '../config/swagger';
+import { healthCheck } from './middlewares/health-check';
+import { requestIdMiddleware } from './middlewares/request-id';
+import { timeoutMiddleware } from './middlewares/timeout';
 
 const app = express();
 
-// Middlewares de seguridad
+app.use(requestIdMiddleware);
+
 app.use(helmet());
 app.use(cors({
-  origin: [
+  origin: env.CORS_ORIGINS || [
+    env.CORS_ORIGIN,
     'http://localhost:3000',
     'http://localhost:3001'
   ],
   credentials: true,
 }));
 
-// Middlewares de parsing
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(compression({
+  level: 6,
+  threshold: 1024,
+  filter: (req, res) => {
+    if (req.headers['x-no-compression']) {
+      return false;
+    }
+    return compression.filter(req, res);
+  },
+}));
 
-// Middleware de logging
+app.use(generalLimiter);
+
+app.use(timeoutMiddleware(30000));
+
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ extended: true, limit: '10mb' }));
+
 app.use(logger);
 
-// Rutas
+if (env.NODE_ENV === 'development') {
+  app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, {
+    customCss: '.swagger-ui .topbar { display: none }',
+    customSiteTitle: 'Michi Academy API Documentation',
+  }));
+}
+
 app.use(routes);
 
-// Ruta de salud
-app.get('/health', (req, res) => {
-  res.json({ status: 'ok', message: 'API funcionando correctamente' });
-});
+app.get('/health', healthCheck);
 
-// Manejo de errores
 app.use(errorHandler);
 
-// Iniciar servidor
 const PORT = env.PORT;
 
 app.listen(PORT, () => {
   console.log(`🚀 Servidor corriendo en http://localhost:${PORT}`);
   console.log(`📝 Entorno: ${env.NODE_ENV}`);
   console.log(`🔗 CORS habilitado para: ${env.CORS_ORIGIN}`);
+  if (env.NODE_ENV === 'development') {
+    console.log(`📚 Documentación API: http://localhost:${PORT}/api-docs`);
+  }
 });
 
 export default app;

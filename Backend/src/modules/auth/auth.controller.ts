@@ -3,88 +3,76 @@ import { authService } from './auth.service';
 import { LoginDto } from './dtos/login.dto';
 import { RegisterDto } from './dtos/register.dto';
 import { AuthRequest } from '../../shared/guards/auth.guard';
+import { ResponseHelper } from '../../shared/utils/response';
+import { asyncHandler } from '../../shared/utils/async-handler';
 
 export class AuthController {
-  async login(req: Request, res: Response) {
-    try {
-      const { email, password } = req.body;
+  login = asyncHandler(async (req: Request, res: Response) => {
+    const loginDto: LoginDto = req.body;
+    const result = await authService.login(loginDto);
+    return ResponseHelper.success(res, 200, 'Login successful', result);
+  });
 
-      if(!email || !password) {
-        return res.status(400).json({
-          message: 'Email y contraseña son requeridos'
-        });
-      }
+  register = asyncHandler(async (req: Request, res: Response) => {
+    const registerDto: RegisterDto = req.body;
+    const result = await authService.register(registerDto);
+    return ResponseHelper.success(res, 201, 'User registered successfully', result);
+  });
 
-      const loginDto: LoginDto = { email, password };
-
-      const result = await authService.login(loginDto);
-      res.json(result);
-    } catch (error: any) {
-      res.status(error.statusCode || 500).json({
-        message: error.message || 'Error al iniciar sesión',
-      });
+  getCurrentUser = asyncHandler(async (req: AuthRequest, res: Response) => {
+    if (!req.user) {
+      return ResponseHelper.error(res, 401, 'User not authenticated');
     }
-  }
 
-  async register(req: Request, res: Response) {
-    try {
-      const registerDto: RegisterDto = req.body;
+    const user = await authService.getCurrentUser(req.user.id);
+    return ResponseHelper.success(res, 200, 'User retrieved successfully', { user });
+  });
 
-      const result = await authService.register(registerDto);
-      res.status(201).json(result);
-    } catch (error: any) {
-      res.status(error.statusCode || 500).json({
-        message: error.message || 'Error al registrar usuario',
-      });
+  forgotPassword = asyncHandler(async (req: Request, res: Response) => {
+    const { email } = req.body;
+    
+    if (!email) {
+      return ResponseHelper.error(res, 400, 'Email is required');
     }
-  }
 
-  async getCurrentUser(req: AuthRequest, res: Response) {
-    try {
-      if (!req.user) {
-        return res.status(401).json({ message: 'Usuario no autenticado' });
-      }
+    await authService.solicitarRecuperacion(email);
+    return ResponseHelper.success(
+      res,
+      200,
+      'If the email exists, a recovery link has been sent'
+    );
+  });
 
-      const user = await authService.getCurrentUser(req.user.id);
-      res.json({ user });
-    } catch (error: any) {
-      res.status(error.statusCode || 500).json({
-        message: error.message || 'Error al obtener usuario',
-      });
+  resetPassword = asyncHandler(async (req: Request, res: Response) => {
+    const { token, newPassword } = req.body;
+
+    if (!token || !newPassword) {
+      return ResponseHelper.error(res, 400, 'Token and new password are required');
     }
-  }
 
-  async forgotPassword(req: Request, res: Response) {
-    try {
-      const { email } = req.body;
-      
-      if (!email) {
-        return res.status(400).json({ message: 'Email es requerido' });
-      }
+    await authService.resetearPassword(token, newPassword);
+    return ResponseHelper.success(res, 200, 'Password updated successfully');
+  });
 
-      await authService.solicitarRecuperacion(email);
+  refreshToken = asyncHandler(async (req: Request, res: Response) => {
+    const { refreshToken } = req.body;
 
-      res.json({ message: 'Si el correo existe, se ha enviado un enlace de recuperación' });
-    } catch (error: any) {
-      res.status(error.statusCode || 500).json({ message: error.message });
+    if (!refreshToken) {
+      return ResponseHelper.error(res, 400, 'Refresh token is required');
     }
-  }
 
-  async resetPassword(req: Request, res: Response) {
-    try {
-      const { token, newPassword } = req.body;
+    const result = await authService.refreshToken(refreshToken);
+    return ResponseHelper.success(res, 200, 'Token refreshed successfully', result);
+  });
 
-      if (!token || !newPassword) {
-        return res.status(400).json({ message: 'Token y nueva contraseña son requeridos' });
-      }
-
-      const result = await authService.resetearPassword(token, newPassword);
-
-      res.json(result);
-    } catch(error: any) {
-      res.status(error.statusCode || 500).json({ message: error.message });
+  logout = asyncHandler(async (req: AuthRequest, res: Response) => {
+    if (!req.user) {
+      return ResponseHelper.error(res, 401, 'User not authenticated');
     }
-  }
+
+    await authService.logout(req.user.id);
+    return ResponseHelper.success(res, 200, 'Logged out successfully');
+  });
 }
 
 export const authController = new AuthController();

@@ -10,47 +10,75 @@ import crypto from 'crypto';
 import { sendRecoveryEmail } from '../../shared/utils/mailer';
 
 export class AuthService {
+  private parseExpiresIn(expiresIn: string): number {
+    const match = expiresIn.match(/^(\d+)([smhd])$/);
+    if (!match) return 3600;
+
+    const value = parseInt(match[1]);
+    const unit = match[2];
+
+    switch (unit) {
+      case 's': return value;
+      case 'm': return value * 60;
+      case 'h': return value * 3600;
+      case 'd': return value * 86400;
+      default: return 3600;
+    }
+  }
   async login(loginDto: LoginDto) {
     const { email, password } = loginDto;
 
     const usuario = await authRepository.findByEmail(email);
     if (!usuario) {
-      throw new AppError('Credenciales inválidas', 401);
+      throw new AppError('Invalid credentials', 401);
     }
 
     const isPasswordValid = await comparePassword(password, usuario.password);
     if (!isPasswordValid) {
-      throw new AppError('Credenciales inválidas', 401);
+      throw new AppError('Invalid credentials', 401);
     }
 
-    const token = jwt.sign(
+    const expiresIn = env.JWT_EXPIRES_IN || '24h';
+    const expiresInSeconds = this.parseExpiresIn(expiresIn);
+
+    const accessToken = jwt.sign(
       { id: usuario.id, email: usuario.email, nivel: usuario.level },
       String(env.JWT_SECRET),
-      { expiresIn: env.JWT_EXPIRES_IN as any }
+      { expiresIn: expiresIn as any }
     );
+
+    const refreshToken = crypto.randomBytes(32).toString('hex');
+    const refreshExpiresIn = env.JWT_REFRESH_EXPIRES_IN || '7d';
+    const refreshExpiresInSeconds = this.parseExpiresIn(refreshExpiresIn);
+    const refreshExpiresAt = new Date();
+    refreshExpiresAt.setSeconds(refreshExpiresAt.getSeconds() + refreshExpiresInSeconds);
+
+    await authRepository.updateRefreshToken(usuario.id, refreshToken, refreshExpiresAt);
 
     return {
       user: {
-        id: usuario.id.toString(),
+        id: usuario.id,
         email: usuario.email,
         username: usuario.email.split('@')[0],
         name: usuario.email.split('@')[0],
-        level: usuario.level
+        level: usuario.level,
+        grade: usuario.grade,
+        account_type: usuario.account_type,
+        active: true
       },
-      token,
+      accessToken,
+      refreshToken,
+      expiresIn: expiresInSeconds,
+      refreshExpiresIn: refreshExpiresInSeconds,
     };
   }
 
   async register(registerDto: RegisterDto) {
     const { email, password, level, grade, account_type } = registerDto;
 
-    if (!level) {
-      throw new AppError('El nivel educativo es requerido', 400);
-    }
-
     const existingUser = await authRepository.findByEmail(email);
     if (existingUser) {
-      throw new AppError('El email ya está registrado', 400);
+      throw new AppError('Email is already registered', 400);
     }
 
     const hashedPassword = await hashPassword(password);
@@ -63,36 +91,83 @@ export class AuthService {
       account_type
     });
 
-    const token = jwt.sign(
+    const expiresIn = env.JWT_EXPIRES_IN || '24h';
+    const expiresInSeconds = this.parseExpiresIn(expiresIn);
+
+    const accessToken = jwt.sign(
       { id: usuario.id, email: usuario.email, nivel: usuario.level },
       String(env.JWT_SECRET),
-      { expiresIn: env.JWT_EXPIRES_IN as any }
+      { expiresIn: expiresIn as any }
     );
+
+    const refreshToken = crypto.randomBytes(32).toString('hex');
+    const refreshExpiresIn = env.JWT_REFRESH_EXPIRES_IN || '7d';
+    const refreshExpiresInSeconds = this.parseExpiresIn(refreshExpiresIn);
+    const refreshExpiresAt = new Date();
+    refreshExpiresAt.setSeconds(refreshExpiresAt.getSeconds() + refreshExpiresInSeconds);
+
+    await authRepository.updateRefreshToken(usuario.id, refreshToken, refreshExpiresAt);
 
     return {
       user: {
-        id: usuario.id.toString(),
+        id: usuario.id,
         email: usuario.email,
         username: usuario.email.split('@')[0],
         name: usuario.email.split('@')[0],
-        level: usuario.level
+        level: usuario.level,
+        grade: usuario.grade,
+        account_type: usuario.account_type,
+        active: true
       },
-      token,
+      accessToken,
+      refreshToken,
+      expiresIn: expiresInSeconds,
+      refreshExpiresIn: refreshExpiresInSeconds,
     };
   }
 
-  async getCurrentUser(userId: number) {
+  async refreshToken(refreshToken: string) {
+    const usuario = await authRepository.findByRefreshToken(refreshToken);
+
+    if (!usuario || !usuario.refresh_token_expires_at || usuario.refresh_token_expires_at < new Date()) {
+      throw new AppError('Invalid or expired refresh token', 401);
+    }
+
+    const expiresIn = env.JWT_EXPIRES_IN || '24h';
+    const expiresInSeconds = this.parseExpiresIn(expiresIn);
+
+    const accessToken = jwt.sign(
+      { id: usuario.id, email: usuario.email },
+      String(env.JWT_SECRET),
+      { expiresIn: expiresIn as any }
+    );
+
+    return {
+      accessToken,
+      expiresIn: expiresInSeconds,
+    };
+  }
+
+  async logout(userId: string) {
+    await authRepository.revokeRefreshToken(userId);
+    return { message: 'Logged out successfully' };
+  }
+
+  async getCurrentUser(userId: string) {
     const usuario = await authRepository.findById(userId);
     if (!usuario) {
-      throw new AppError('Usuario no encontrado', 404);
+      throw new AppError('User not found', 404);
     }
 
     return {
-      id: usuario.id.toString(),
+      id: usuario.id,
       email: usuario.email,
       username: usuario.email.split('@')[0],
       name: usuario.email.split('@')[0],
-      level: usuario.level
+      level: usuario.level,
+      grade: usuario.grade,
+      account_type: usuario.account_type,
+      active: true
     };
   }
 
@@ -100,7 +175,7 @@ export class AuthService {
     const usuario = await authRepository.findByEmail(email);
 
     if(!usuario) {
-      throw new AppError('No existe un usuario con ese correo electronico', 404);
+      throw new AppError('No user found with that email address', 404);
     }
 
     const token = crypto.randomBytes(32).toString('hex');
@@ -111,21 +186,21 @@ export class AuthService {
 
     await sendRecoveryEmail(usuario.email, token, usuario.level);
 
-    return { message: 'Correo enviado correctamente' };
+    return { message: 'Recovery email sent successfully' };
   }
 
   async resetearPassword(token: string, newPassword: string) {
     const usuario = await authRepository.findByToken(token);
 
     if(!usuario || !usuario.token_expiration || usuario.token_expiration < new Date()) {
-      throw new AppError('El enlace de recuperación es inválido o ha expirado', 404);
+      throw new AppError('Recovery link is invalid or has expired', 404);
     }
 
     const hashedPassword = await hashPassword(newPassword);
 
     await authRepository.updatePassword(usuario.id, hashedPassword);
 
-    return { message: 'Contraseña actualizada correctamente' }
+    return { message: 'Password updated successfully' }
   }
 }
 
