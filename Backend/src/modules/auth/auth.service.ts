@@ -10,21 +10,21 @@ import crypto from 'crypto';
 import { sendRecoveryEmail } from '../../shared/utils/mailer';
 
 export class AuthService {
-  async login(loginDto: LoginDto, nivel: 'primaria' | 'secundaria') {
+  async login(loginDto: LoginDto) {
     const { email, password } = loginDto;
 
-    const usuario = await authRepository.findByEmail(email, nivel);
+    const usuario = await authRepository.findByEmail(email);
     if (!usuario) {
       throw new AppError('Credenciales inválidas', 401);
     }
 
-    const isPasswordValid = await comparePassword(password, usuario.contrasena);
+    const isPasswordValid = await comparePassword(password, usuario.password);
     if (!isPasswordValid) {
       throw new AppError('Credenciales inválidas', 401);
     }
 
     const token = jwt.sign(
-      { id: usuario.id, email: usuario.email, nivel: nivel },
+      { id: usuario.id, email: usuario.email, nivel: usuario.level },
       String(env.JWT_SECRET),
       { expiresIn: env.JWT_EXPIRES_IN as any }
     );
@@ -35,16 +35,20 @@ export class AuthService {
         email: usuario.email,
         username: usuario.email.split('@')[0],
         name: usuario.email.split('@')[0],
-        nivel
+        level: usuario.level
       },
       token,
     };
   }
 
-  async register(registerDto: RegisterDto, nivel: 'primaria' | 'secundaria') {
-    const { email, password } = registerDto;
+  async register(registerDto: RegisterDto) {
+    const { email, password, level, grade, account_type } = registerDto;
 
-    const existingUser = await authRepository.findByEmail(email, nivel);
+    if (!level) {
+      throw new AppError('El nivel educativo es requerido', 400);
+    }
+
+    const existingUser = await authRepository.findByEmail(email);
     if (existingUser) {
       throw new AppError('El email ya está registrado', 400);
     }
@@ -53,15 +57,14 @@ export class AuthService {
 
     const usuario = await authRepository.create({
       email,
-      contrasena: hashedPassword,
-    }, nivel);
-
-    if(!usuario) {
-      throw new AppError('Error al crear el usuario', 500);
-    }
+      password: hashedPassword,
+      level,
+      grade,
+      account_type
+    });
 
     const token = jwt.sign(
-      { id: usuario.id, email: usuario.email, nivel: nivel },
+      { id: usuario.id, email: usuario.email, nivel: usuario.level },
       String(env.JWT_SECRET),
       { expiresIn: env.JWT_EXPIRES_IN as any }
     );
@@ -72,14 +75,14 @@ export class AuthService {
         email: usuario.email,
         username: usuario.email.split('@')[0],
         name: usuario.email.split('@')[0],
-        nivel
+        level: usuario.level
       },
       token,
     };
   }
 
-  async getCurrentUser(userId: number, nivel: 'primaria' | 'secundaria') {
-    const usuario = await authRepository.findById(userId, nivel);
+  async getCurrentUser(userId: number) {
+    const usuario = await authRepository.findById(userId);
     if (!usuario) {
       throw new AppError('Usuario no encontrado', 404);
     }
@@ -89,12 +92,12 @@ export class AuthService {
       email: usuario.email,
       username: usuario.email.split('@')[0],
       name: usuario.email.split('@')[0],
-      nivel
+      level: usuario.level
     };
   }
 
-  async solicitarRecuperacion(email: string, nivel: 'primaria' | 'secundaria') {
-    const usuario = await authRepository.findByEmail(email, nivel);
+  async solicitarRecuperacion(email: string) {
+    const usuario = await authRepository.findByEmail(email);
 
     if(!usuario) {
       throw new AppError('No existe un usuario con ese correo electronico', 404);
@@ -104,25 +107,25 @@ export class AuthService {
     const expiracion = new Date();
     expiracion.setHours(expiracion.getHours() + 1);
 
-    await authRepository.updateRecoveryToken(usuario.id, token, expiracion, nivel);
+    await authRepository.updateRecoveryToken(usuario.id, token, expiracion);
 
-    await sendRecoveryEmail(usuario.email, token, nivel);
+    await sendRecoveryEmail(usuario.email, token, usuario.level);
 
     return { message: 'Correo enviado correctamente' };
   }
 
-  async resetearPassword(token: string, newPassword: string, nivel: 'primaria' | 'secundaria') {
-    const usuario = await authRepository.findByToken(token, nivel);
+  async resetearPassword(token: string, newPassword: string) {
+    const usuario = await authRepository.findByToken(token);
 
-    if(!usuario || !usuario.expiracion_token || usuario.expiracion_token < new Date()) {
-      throw new AppError('El enlace de recuperación  es inválido o ha expirado', 404);
+    if(!usuario || !usuario.token_expiration || usuario.token_expiration < new Date()) {
+      throw new AppError('El enlace de recuperación es inválido o ha expirado', 404);
     }
 
     const hashedPassword = await hashPassword(newPassword);
 
-    await authRepository.updatePassword(usuario.id, hashedPassword, nivel);
+    await authRepository.updatePassword(usuario.id, hashedPassword);
 
-    return { message: 'Constraseña actualizada correctamente' }
+    return { message: 'Contraseña actualizada correctamente' }
   }
 }
 

@@ -7,18 +7,17 @@ import { AuthRequest } from '../../shared/guards/auth.guard';
 export class AuthController {
   async login(req: Request, res: Response) {
     try {
-      const { nivel } = req.body;
-      const { email, password} = req.body;
+      const { email, password } = req.body;
 
       if(!email || !password) {
         return res.status(400).json({
-          message: 'Email y constraseña son requeridos'
+          message: 'Email y contraseña son requeridos'
         });
       }
 
       const loginDto: LoginDto = { email, password };
 
-      const result = await authService.login(loginDto, nivel);
+      const result = await authService.login(loginDto);
       res.json(result);
     } catch (error: any) {
       res.status(error.statusCode || 500).json({
@@ -29,10 +28,9 @@ export class AuthController {
 
   async register(req: Request, res: Response) {
     try {
-      const { nivel } = req.body;
       const registerDto: RegisterDto = req.body;
 
-      const result = await authService.register(registerDto, nivel);
+      const result = await authService.register(registerDto);
       res.status(201).json(result);
     } catch (error: any) {
       res.status(error.statusCode || 500).json({
@@ -47,7 +45,7 @@ export class AuthController {
         return res.status(401).json({ message: 'Usuario no autenticado' });
       }
 
-      const user = await authService.getCurrentUser(req.user.id, req.user.nivel);
+      const user = await authService.getCurrentUser(req.user.id);
       res.json({ user });
     } catch (error: any) {
       res.status(error.statusCode || 500).json({
@@ -58,8 +56,13 @@ export class AuthController {
 
   async forgotPassword(req: Request, res: Response) {
     try {
-      const { email, nivel } = req.body;
-      await authService.solicitarRecuperacion(email, nivel);
+      const { email } = req.body;
+      
+      if (!email) {
+        return res.status(400).json({ message: 'Email es requerido' });
+      }
+
+      await authService.solicitarRecuperacion(email);
 
       res.json({ message: 'Si el correo existe, se ha enviado un enlace de recuperación' });
     } catch (error: any) {
@@ -69,8 +72,13 @@ export class AuthController {
 
   async resetPassword(req: Request, res: Response) {
     try {
-      const { token, newPassword, nivel } = req.body;
-      const result = await authService.resetearPassword(token, newPassword, nivel);
+      const { token, newPassword } = req.body;
+
+      if (!token || !newPassword) {
+        return res.status(400).json({ message: 'Token y nueva contraseña son requeridos' });
+      }
+
+      const result = await authService.resetearPassword(token, newPassword);
 
       res.json(result);
     } catch(error: any) {

@@ -6,7 +6,7 @@ export interface AuthRequest extends Request {
   user?: {
     id: number;
     email: string;
-    nivel: 'primaria' | 'secundaria';
+    nivel: string;
   };
 }
 
@@ -18,7 +18,7 @@ export const authGuard = (req: AuthRequest, res: Response, next: NextFunction) =
       return res.status(401).json({ message: 'Token de autenticación requerido' });
     }
 
-    const decoded = jwt.verify(token, env.JWT_SECRET) as { id: number; email: string; nivel: 'primaria' | 'secundaria' };
+    const decoded = jwt.verify(token, env.JWT_SECRET) as { id: number; email: string; nivel: string };
     req.user = decoded;
     next();
   } catch (error) {

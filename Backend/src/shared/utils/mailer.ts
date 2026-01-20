@@ -14,21 +14,19 @@ const transporter = nodemailer.createTransport({
 export const sendRecoveryEmail = async (
     email: string,
     token: string,
-    nivel: 'primaria' | 'secundaria'
+    level: string
 ) => {
-    const baseUrl = nivel === 'primaria'
-    ? 'https://primaria.app.com/reset'
-    : 'https://secundaria.app.com/reset';
-
-    const resetLink = `${baseUrl}?token=${token}&nivel=${nivel}`;
+    // URL base unificada para recuperación de contraseña
+    const baseUrl = process.env.FRONTEND_URL || 'http://localhost:3000';
+    const resetLink = `${baseUrl}/reset-password?token=${token}`;
 
     const mailOption = {
         from: `"Educación Financiera " <${env.EMAIL_USER}>`,
         to: email,
-        subject: 'Recupera tu constraseña',
+        subject: 'Recupera tu contraseña',
         html: `
             <h1>Hola Estudiante</h1>
-            <p>Has solicitado restablecer tu contraseña para el nivel de <strong>${nivel}</strong>.</p>
+            <p>Has solicitado restablecer tu contraseña para el nivel de <strong>${level}</strong>.</p>
             <p>Haz clic en el siguiente enlace para continuar:</p>
             <a href="${resetLink}" style="padding: 10px 20px; background-color: #4CAF50; color: white; text-decoration: none; border-radius: 5px;">
                 Restablecer Contraseña

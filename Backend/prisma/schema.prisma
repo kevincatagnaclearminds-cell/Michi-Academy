@@ -12,9 +12,9 @@ model Users {
   id               Int       @id @default(autoincrement())
   email            String    @unique @db.VarChar(255)
   password         String    @db.VarChar(255)
-  level            String    @db.VarChar(50)
-  grade            Int?
-  account_type     String?   @db.VarChar(10)
+  level            Level     // Niveles educativos: elementary (1-3), middle_school (4-7), junior_high (8-10), high_school (1-3 bachillerato)
+  grade            Int?      // Grado como número entero
+  account_type     AccountType?
   recovery_token   String?   @db.VarChar(255)
   token_expiration DateTime? @db.Timestamptz(6)
   created_at       DateTime? @default(now()) @db.Timestamptz(6)
@@ -23,9 +23,15 @@ model Users {
   @@index([level])
 }
 
-enum nivel_educativo {
-  basica
-  basica_media
-  basica_superior
-  bachillerato
+enum Level {
+  elementary      // Para grados 1-3
+  middle_school  // Para grados 4-7
+  junior_high    // Para grados 8-10
+  high_school    // Para grados 1-3 de bachillerato
+}
+
+enum AccountType {
+  student
+  teacher
+  admin
 }

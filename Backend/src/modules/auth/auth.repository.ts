@@ -1,63 +1,48 @@
 import { prisma } from '../../config/prisma';
-import { UsuariosPrimaria, UsuariosSecundaria } from '@prisma/client';
-
-interface UserTable {
-  findUnique: Function;
-  create: Function;
-  update: Function;
-  findFirst: Function;
-}
+import { Users } from '@prisma/client';
 
 export class AuthRepository {
-  private getTable(nivel: 'primaria' | 'secundaria'): UserTable {
-    return (nivel === 'primaria' ? prisma.usuariosPrimaria : prisma.usuariosSecundaria) as UserTable;
-  }
-
-  async findByEmail(email: string, nivel: 'primaria' | 'secundaria'): Promise<UsuariosPrimaria | UsuariosSecundaria | null> {
-    return await this.getTable(nivel).findUnique({
+  async findByEmail(email: string): Promise<Users | null> {
+    return await prisma.users.findUnique({
       where: { email }
     });
   }
 
-  async create(data: { email: string; contrasena: string; tipo_cuenta?: string }, nivel: 'primaria' | 'secundaria'): Promise<UsuariosPrimaria | UsuariosSecundaria | null> {
-    const table = this.getTable(nivel);
-    return await table.create({ data });
+  async create(data: { email: string; password: string; level: string; grade?: number; account_type?: string }): Promise<Users> {
+    return await prisma.users.create({ data });
   }
 
-  async findById(id: number, nivel: 'primaria' | 'secundaria'): Promise<UsuariosPrimaria | UsuariosSecundaria | null> {
-    return await this.getTable(nivel).findUnique({
+  async findById(id: number): Promise<Users | null> {
+    return await prisma.users.findUnique({
       where: { id }
     });
   }
 
-  async updateRecoveryToken(id: number, token: string, expiracion: Date, nivel: 'primaria' | 'secundaria') {
-    const table = this.getTable(nivel);
-    return await table.update({
+  async updateRecoveryToken(id: number, token: string, expiracion: Date) {
+    return await prisma.users.update({
       where: { id },
       data: {
-        token_recuperacion: token,
-        expiracion_token: expiracion
+        recovery_token: token,
+        token_expiration: expiracion
       }
     });
   }
 
-  async findByToken(token: string, nivel: 'primaria' | 'secundaria') {
-    const table = this.getTable(nivel);
-    return await table.findFirst({
-      where: { token_recuperacion: token }
-    })
+  async findByToken(token: string): Promise<Users | null> {
+    return await prisma.users.findFirst({
+      where: { recovery_token: token }
+    });
   }
 
-  async updatePassword(id: number, hashedPassword: string, nivel: 'primaria' | 'secundaria') {
-    const table = this.getTable(nivel);
-    return await table.update({
+  async updatePassword(id: number, hashedPassword: string) {
+    return await prisma.users.update({
       where: { id },
       data: {
-        contrasena: hashedPassword,
-        token_recuperacion: null,
-        expiracion_token: null
+        password: hashedPassword,
+        recovery_token: null,
+        token_expiration: null
       }
-    })
+    });
   }
 }
 
