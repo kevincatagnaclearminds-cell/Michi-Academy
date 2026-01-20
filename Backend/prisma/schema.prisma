@@ -8,20 +8,24 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model UsuariosPrimaria {
-  id                 Int       @id @default(autoincrement())
-  email              String    @unique @db.VarChar(255)
-  contrasena         String    @db.VarChar(255)
-  tipo_cuenta        String?   @db.VarChar(10)
-  token_recuperacion String?   @db.VarChar(255)
-  expiracion_token   DateTime?
+model Users {
+  id               Int       @id @default(autoincrement())
+  email            String    @unique @db.VarChar(255)
+  password         String    @db.VarChar(255)
+  level            String    @db.VarChar(50)
+  grade            Int?
+  account_type     String?   @db.VarChar(10)
+  recovery_token   String?   @db.VarChar(255)
+  token_expiration DateTime? @db.Timestamptz(6)
+  created_at       DateTime? @default(now()) @db.Timestamptz(6)
+  updated_at       DateTime? @default(now()) @db.Timestamptz(6)
+
+  @@index([level])
 }
 
-model UsuariosSecundaria {
-  id                 Int       @id @default(autoincrement())
-  email              String    @unique @db.VarChar(255)
-  contrasena         String    @db.VarChar(255)
-  tipo_cuenta        String?   @db.VarChar(10)
-  token_recuperacion String?   @db.VarChar(255)
-  expiracion_token   DateTime?
+enum nivel_educativo {
+  basica
+  basica_media
+  basica_superior
+  bachillerato
 }

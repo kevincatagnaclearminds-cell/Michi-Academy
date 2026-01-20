@@ -1,16 +1,16 @@
-version: '3.9'
+version: '4.0'
 
 services:
   postgres:
-    image: postgres:15
+    image: postgres:18
     container_name: postgres_db
     restart: always
     environment:
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: admin123
-      POSTGRES_DB: login_MichiAcademy
+      POSTGRES_PASSWORD: 05051997
+      POSTGRES_DB: michi_academy
     ports:
-      - "5432:5432"
+      - "5435:5435"
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
