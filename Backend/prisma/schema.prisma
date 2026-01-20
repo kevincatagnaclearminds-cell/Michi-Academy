@@ -9,18 +9,21 @@ datasource db {
 }
 
 model Users {
-  email            String    @unique @db.VarChar(255)
-  password         String    @db.VarChar(255)
-  level            String    @db.VarChar(50)
-  grade            Int?
-  account_type     String?   @db.VarChar(10)
-  recovery_token   String?   @db.VarChar(255)
-  token_expiration DateTime? @db.Timestamptz(6)
-  created_at       DateTime? @default(now()) @db.Timestamptz(6)
-  updated_at       DateTime? @default(now()) @db.Timestamptz(6)
-  id               String    @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  email                    String    @unique @db.VarChar(255)
+  password                 String    @db.VarChar(255)
+  level                    String    @db.VarChar(50)
+  grade                    Int?
+  account_type             String?   @db.VarChar(10)
+  recovery_token           String?   @db.VarChar(255)
+  token_expiration         DateTime? @db.Timestamptz(6)
+  created_at               DateTime? @default(now()) @db.Timestamptz(6)
+  updated_at               DateTime? @default(now()) @db.Timestamptz(6)
+  id                       String    @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  refresh_token            String?   @db.VarChar(255)
+  refresh_token_expires_at DateTime? @db.Timestamptz(6)
 
   @@index([level])
+  @@index([refresh_token])
 }
 
 enum nivel_educativo {
