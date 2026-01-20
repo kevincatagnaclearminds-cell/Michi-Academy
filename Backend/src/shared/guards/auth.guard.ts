@@ -18,8 +18,12 @@ export const authGuard = (req: AuthRequest, res: Response, next: NextFunction) =
       return res.status(401).json({ message: 'Authentication token required' });
     }
 
-    const decoded = jwt.verify(token, env.JWT_SECRET) as { id: string; email: string; nivel: string };
-    req.user = decoded;
+    if (!env.JWT_SECRET) {
+      return res.status(500).json({ message: 'Server configuration error' });
+    }
+
+    const decoded = jwt.verify(token, env.JWT_SECRET);
+    req.user = decoded as { id: string; email: string; nivel: string };
     next();
   } catch (error) {
     return res.status(401).json({ message: 'Invalid or expired token' });

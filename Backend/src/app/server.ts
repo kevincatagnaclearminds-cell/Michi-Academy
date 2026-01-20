@@ -68,7 +68,7 @@ const PORT = env.PORT;
 app.listen(PORT, () => {
   console.log(`🚀 Servidor corriendo en http://localhost:${PORT}`);
   console.log(`📝 Entorno: ${env.NODE_ENV}`);
-  console.log(`🔗 CORS habilitado para: ${env.CORS_ORIGINS?.join(', ') || 'http://localhost:3000'}`);
+  console.log(`🔗 CORS habilitado para: ${env.CORS_ORIGINS}`);
   if (env.NODE_ENV === 'development') {
     console.log(`📚 Documentación API: http://localhost:${PORT}/api-docs`);
   }

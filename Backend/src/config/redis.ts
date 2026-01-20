@@ -10,7 +10,8 @@ declare global {
 let redisClient: Redis | null = null;
 
 export const getRedisClient = (): Redis | null => {
-  if (!env.REDIS_URL && env.REDIS_HOST === 'localhost') {
+  // Solo conectar si REDIS_URL está explícitamente definido
+  if (!env.REDIS_URL) {
     log.warn('Redis not configured, caching will be disabled');
     return null;
   }
@@ -30,9 +31,9 @@ export const getRedisClient = (): Redis | null => {
       });
     } else {
       redisClient = new Redis({
-        host: env.REDIS_HOST,
-        port: env.REDIS_PORT,
-        password: env.REDIS_PASSWORD,
+        host: env.REDIS_HOST || 'localhost',
+        port: parseInt(env.REDIS_PORT, 10),
+        password: env.REDIS_PASSWORD || undefined,
         retryStrategy: (times) => {
           const delay = Math.min(times * 50, 2000);
           return delay;

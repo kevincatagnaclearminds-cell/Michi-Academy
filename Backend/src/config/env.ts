@@ -14,15 +14,15 @@ const envSchema = z.object({
     val ? val.split(',').map(origin => origin.trim()) : undefined
   ),
   
-  EMAIL_USER: z.string().email().optional(),
+  EMAIL_USER: z.string().optional().or(z.literal('')),
   EMAIL_PASS: z.string().optional(),
   LOG_LEVEL: z.enum(['error', 'warn', 'info', 'debug']).default('info'),
   LOG_DIR: z.string().default('logs'),
   REDIS_URL: z.string().optional(),
   REDIS_HOST: z.string().default('localhost'),
-  REDIS_PORT: z.string().default('6379').transform(Number),
+  REDIS_PORT: z.string().default('6379'),
   REDIS_PASSWORD: z.string().optional(),
-  REDIS_TTL: z.string().default('3600').transform(Number),
+  REDIS_TTL: z.string().default('3600'),
 });
 
 const parseEnv = () => {
@@ -33,12 +33,17 @@ const parseEnv = () => {
       DATABASE_URL: process.env.DATABASE_URL,
       JWT_SECRET: process.env.JWT_SECRET,
       JWT_EXPIRES_IN: process.env.JWT_EXPIRES_IN,
-      JWT_REFRESH_EXPIRES_IN: process.env.JWT_REFRESH_EXPIRES_IN || '7d',
+      JWT_REFRESH_EXPIRES_IN: process.env.JWT_REFRESH_EXPIRES_IN,
       CORS_ORIGINS: process.env.CORS_ORIGINS,
       EMAIL_USER: process.env.EMAIL_USER,
       EMAIL_PASS: process.env.EMAIL_PASS,
       LOG_LEVEL: process.env.LOG_LEVEL,
       LOG_DIR: process.env.LOG_DIR,
+      REDIS_URL: process.env.REDIS_URL,
+      REDIS_HOST: process.env.REDIS_HOST,
+      REDIS_PORT: process.env.REDIS_PORT,
+      REDIS_PASSWORD: process.env.REDIS_PASSWORD,
+      REDIS_TTL: process.env.REDIS_TTL,
     });
   } catch (error) {
     if (error instanceof  ZodError) {
