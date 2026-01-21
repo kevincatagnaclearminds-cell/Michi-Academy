@@ -1,0 +1,75 @@
+.video-upload-form {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 2rem;
+  background: var(--input-bg);
+  border-radius: 12px;
+  color: var(--text-white);
+}
+
+.video-upload-form h2 {
+  margin-bottom: 1.5rem;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: var(--text-white);
+}
+
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid var(--input-border);
+  border-radius: 8px;
+  background: var(--dark-blue-bg);
+  color: var(--text-white);
+  font-family: inherit;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: var(--neon-blue);
+}
+
+.video-upload-form button {
+  width: 100%;
+  padding: 0.75rem;
+  background: var(--neon-blue);
+  color: var(--text-white);
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.video-upload-form button:hover:not(:disabled) {
+  background: var(--neon-blue-dark);
+}
+
+.video-upload-form button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.error-message {
+  padding: 1rem;
+  background: var(--error-red);
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+
+.success-message {
+  padding: 1rem;
+  background: #28a745;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+

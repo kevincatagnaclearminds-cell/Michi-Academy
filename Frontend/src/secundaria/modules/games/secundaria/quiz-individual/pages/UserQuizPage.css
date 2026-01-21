@@ -1,0 +1,7 @@
+.user-quiz-page {
+  min-height: 100vh;
+  background: var(--dark-blue-bg);
+  padding: 2rem;
+  color: var(--text-white);
+}
+

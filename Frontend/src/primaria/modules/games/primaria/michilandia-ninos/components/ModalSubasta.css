@@ -1,0 +1,229 @@
+.modal-subasta-overlay {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+}
+
+.modal-subasta-container {
+  width: 90%;
+  max-width: 1080px;
+  background: linear-gradient(
+    145deg,
+    rgba(30, 30, 50, 0.98),
+    rgba(15, 18, 30, 0.98)
+  );
+  color: #fff;
+  border-radius: 24px;
+  overflow: hidden;
+  border: 3px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 22px 70px rgba(0, 0, 0, 0.6), 0 0 0 2px rgba(0, 255, 213, 0.08);
+}
+
+.modal-subasta-header {
+  display: flex;
+  justify-content: space-between;
+  padding: 18px 22px;
+  color: #fff;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  background: linear-gradient(135deg, #0fb39c 0%, #0a7d74 60%, #0a6762 100%);
+}
+
+.subasta-turno-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.subasta-color-dot {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.2);
+}
+
+.subasta-turno {
+  margin: 0;
+  font-weight: 600;
+}
+
+.modal-subasta-header h2 {
+  margin: 4px 0 0;
+  font-size: 1.4rem;
+  font-weight: 800;
+}
+
+.subasta-negocio {
+  margin: 4px 0 0;
+  font-size: 0.95rem;
+  opacity: 0.9;
+}
+
+.subasta-negocio {
+  margin: 4px 0 0;
+  font-size: 1rem;
+  opacity: 0.9;
+}
+
+.subasta-bid-info {
+  text-align: right;
+}
+
+.subasta-bid-info strong {
+  display: block;
+  font-size: 1.8rem;
+}
+
+.subasta-precio-base {
+  display: block;
+  color: #e2e8f0;
+  opacity: 0.85;
+}
+
+.modal-subasta-body {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 16px;
+  padding: 18px 22px 22px;
+}
+
+.subasta-participantes h3 {
+  margin: 0 0 10px;
+  font-size: 1.05rem;
+  font-weight: 800;
+}
+
+.subasta-participantes-list {
+  display: grid;
+  gap: 10px;
+}
+
+.subasta-card {
+  background: rgba(255, 255, 255, 0.04);
+  border: 2px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  padding: 12px 14px;
+  transition: all 0.2s ease;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.02);
+}
+
+.subasta-card.en-turno {
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.subasta-card.retirado {
+  filter: grayscale(1);
+  opacity: 0.65;
+  border-color: #555;
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.subasta-card-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.subasta-color {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+}
+
+.subasta-nombre {
+  flex: 1;
+  font-weight: 600;
+}
+
+.subasta-lider,
+.subasta-retirado {
+  font-size: 0.75rem;
+  padding: 2px 6px;
+  border-radius: 6px;
+  background: linear-gradient(135deg, #ff7a3d 0%, #ff9a57 100%);
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(255, 138, 64, 0.3);
+}
+
+.subasta-retirado {
+  background: #4b5563;
+  color: #e5e7eb;
+}
+
+.subasta-card-body {
+  margin-top: 6px;
+  font-size: 0.95rem;
+  color: #e7ecf5;
+}
+
+.subasta-monto {
+  font-weight: 700;
+}
+
+.subasta-negocio-panel {
+  display: grid;
+  gap: 12px;
+  justify-items: center;
+}
+
+.subasta-acciones {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  width: 100%;
+}
+
+.btn-puja,
+.btn-retirarse {
+  padding: 12px 10px;
+  border-radius: 14px;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  font-weight: 800;
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, filter 0.15s ease;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+
+.btn-puja:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+  filter: brightness(1.05);
+}
+
+.btn-retirarse {
+  background: linear-gradient(135deg, #ff6b6b 0%, #f06595 100%);
+  border-color: rgba(255, 255, 255, 0.14);
+  box-shadow: 0 12px 32px rgba(240, 101, 149, 0.35);
+}
+
+.btn-retirarse:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 16px 38px rgba(240, 101, 149, 0.42);
+}
+
+.subasta-dinero {
+  font-size: 0.95rem;
+  color: #cbd5e1;
+  text-align: center;
+}
+
+.subasta-dinero strong {
+  color: #4ecdc4;
+  margin-left: 6px;
+}
+
+@media (max-width: 900px) {
+  .modal-subasta-body {
+    grid-template-columns: 1fr;
+  }
+}

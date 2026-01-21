@@ -1,0 +1,233 @@
+/* LoginForm.css - Futuristic Form Styles */
+
+/* Títulos */
+.start-free {
+    font-size: 14px;
+    color: #333333; /* Color oscuro como en la imagen */
+    margin-bottom: 10px;
+    opacity: 0.9;
+    font-family: 'Roboto', 'Open Sans', 'Lato', 'Montserrat', sans-serif;
+    font-weight: 500;
+}
+
+.sign-in-title {
+    font-size: 48px;
+    font-weight: bold;
+    color: #1a1a1a; /* Color oscuro/negro como en la imagen */
+    margin-bottom: 20px;
+    text-decoration: none; /* Sin subrayado para coincidir con la imagen */
+    font-family: 'Roboto', 'Open Sans', 'Lato', 'Montserrat', sans-serif;
+}
+
+/* Contenedor del formulario */
+.login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+/* Grupos de input */
+.input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.input-group label {
+    color: #333333; /* Color oscuro como en la imagen */
+    font-size: 16px;
+    font-weight: 500;
+    font-family: 'Roboto', 'Open Sans', 'Lato', 'Montserrat', sans-serif;
+    text-transform: none;
+}
+
+/* Wrapper de inputs */
+.input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+/* Campos de entrada */
+.input-wrapper input {
+    width: 100%;
+    padding: 12px 50px 12px 45px; /* Más padding izquierdo para el icono */
+    background: #FFFFFF !important; /* Blanco como en la imagen */
+    border: 2px solid #E0E0E0 !important; /* Borde gris claro */
+    border-radius: 12px; /* Bordes más redondeados */
+    color: #333333 !important; /* Texto oscuro */
+    font-size: 16px;
+    font-family: 'Roboto', 'Open Sans', 'Lato', 'Montserrat', sans-serif;
+    font-weight: 400;
+    transition: all 0.3s ease;
+}
+
+.input-wrapper input::placeholder {
+    color: #999999; /* Gris medio para placeholder */
+    font-family: 'Roboto', 'Open Sans', 'Lato', 'Montserrat', sans-serif;
+    font-weight: 400;
+}
+
+.input-wrapper input:focus {
+    outline: none;
+    border-color: #4CAF50; /* Verde para el focus */
+    background: #FFFFFF !important;
+    box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.2);
+    color: #333333;
+}
+
+.input-wrapper input:active,
+.input-wrapper input:hover {
+    background: #FFFFFF !important;
+    border-color: #BDBDBD;
+    color: #333333;
+}
+
+/* Iconos dentro de los campos */
+.input-icon {
+    position: absolute;
+    left: 15px; /* Icono a la izquierda como en la imagen */
+    color: #666666; /* Gris oscuro para los iconos */
+    opacity: 0.9;
+    font-size: 18px;
+}
+
+.toggle-password {
+    position: absolute;
+    right: 15px;
+    background: none;
+    border: none;
+    color: #666666; /* Gris oscuro */
+    cursor: pointer;
+    opacity: 0.9;
+    transition: opacity 0.3s;
+    font-size: 16px;
+    z-index: 2;
+}
+
+.toggle-password:hover {
+    opacity: 1;
+    color: #333333;
+}
+
+/* Botón de login */
+.btn-login {
+    background: #4CAF50; /* Verde brillante como en la imagen */
+    color: #FFFFFF;
+    border: none;
+    padding: 14px 25px;
+    border-radius: 12px; /* Bordes más redondeados */
+    font-size: 16px;
+    font-weight: bold;
+    font-family: 'Roboto', 'Open Sans', 'Lato', 'Montserrat', sans-serif;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: 10px;
+    box-shadow: 0 4px 15px rgba(76, 175, 80, 0.4);
+    width: 100%;
+}
+
+.btn-login:hover:not(:disabled) {
+    background-color: #45a049; /* Verde más oscuro al hover */
+    box-shadow: 0 6px 20px rgba(76, 175, 80, 0.5);
+}
+
+.btn-login:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* Enlace recuperar contraseña */
+.forgot-password-container {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 10px;
+    margin-bottom: 5px;
+}
+
+.forgot-password-link {
+    color: #1976D2; /* Azul para los enlaces */
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 14px;
+    font-family: 'Roboto', 'Open Sans', 'Lato', 'Montserrat', sans-serif;
+    transition: all 0.3s;
+}
+
+.forgot-password-link:hover {
+    text-decoration: underline;
+    color: #1565C0; /* Azul más oscuro al hover */
+}
+
+/* Mensajes de error */
+.error-message {
+    padding: 0.75rem;
+    background: rgba(220, 53, 69, 0.2);
+    border: 1px solid rgba(220, 53, 69, 0.5);
+    border-radius: 8px;
+    color: var(--error-red);
+    font-size: 0.9rem;
+    font-family: 'Roboto', 'Open Sans', 'Lato', 'Montserrat', sans-serif;
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+.error-text {
+    color: var(--error-red);
+    font-size: 0.85rem;
+    font-family: 'Roboto', 'Open Sans', 'Lato', 'Montserrat', sans-serif;
+    margin-top: 0.25rem;
+}
+
+/* Estados de input */
+.input-error {
+    border-color: #DC3545 !important;
+    background: #FFFFFF !important;
+}
+
+.input-valid {
+    border-color: #4CAF50 !important; /* Verde para válido */
+    background: #FFFFFF !important;
+}
+
+/* Iconos de validación */
+.input-icon-valid {
+    position: absolute;
+    right: 45px;
+    color: #4CAF50; /* Verde para válido */
+    font-size: 16px;
+    z-index: 2;
+}
+
+.input-wrapper:has(.toggle-password) .input-icon-valid {
+    right: 75px;
+}
+
+.input-icon-error {
+    position: absolute;
+    right: 45px;
+    color: #DC3545;
+    font-size: 16px;
+    z-index: 2;
+}
+
+.input-wrapper:has(.toggle-password) .input-icon-error {
+    right: 75px;
+}
+
+.error-text i {
+    margin-right: 5px;
+    font-size: 12px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .sign-in-title {
+        font-size: 36px;
+    }
+    
+    .login-form {
+        gap: 20px;
+    }
+}

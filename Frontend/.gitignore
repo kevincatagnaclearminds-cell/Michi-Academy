@@ -1,0 +1,99 @@
+# Frontend Unificado - React / Vite / TypeScript
+# Michi Academy - Primaria y Secundaria
+
+# Dependencias
+node_modules/
+node_modules/**/*
+!node_modules/.gitkeep
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+# Nota: package-lock.json SÍ debe commitearse para asegurar versiones consistentes
+# yarn.lock
+# pnpm-lock.yaml
+# Pero ignorar el .package-lock.json dentro de node_modules
+node_modules/.package-lock.json
+
+# Build output
+dist/
+dist-ssr/
+build/
+*.local
+
+# Variables de entorno (NUNCA commitees)
+.env
+.env.local
+.env.development
+.env.staging
+.env.production
+.env.test
+.env.*.local
+
+# Editor directories and files
+.idea/
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+*.swp
+*.swo
+*~
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# OS files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+# Testing
+coverage/
+.nyc_output/
+.jest/
+
+# Vite
+.vite/
+vite.config.*.timestamp-*
+
+# TypeScript
+*.tsbuildinfo
+
+# Archivos temporales
+*.tmp
+*.temp
+.cache/
+.temp/
+
+# PWA files (si se usan)
+sw.js
+workbox-*.js
+
+# Storybook build outputs
+storybook-static/
+
+# Archivos de backup
+*.bak
+*.backup
+
+# Archivos generados por herramientas de desarrollo
+node_modules/.bin/
+node_modules/.package-lock.json
+
+# Archivos placeholder
+**/.placeholder.*
+.placeholder.*

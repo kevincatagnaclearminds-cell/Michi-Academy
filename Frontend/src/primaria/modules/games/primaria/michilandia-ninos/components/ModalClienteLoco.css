@@ -1,0 +1,382 @@
+.modal-cliente-loco-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  padding: 1rem;
+  box-sizing: border-box;
+}
+
+.modal-cliente-loco-container {
+  background: rgba(26, 35, 126, 0.85);
+  backdrop-filter: blur(30px);
+  -webkit-backdrop-filter: blur(30px);
+  border-radius: 28px;
+  padding: 0;
+  max-width: 800px;
+  width: 95%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 25px 80px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  animation: slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  border: 3px solid transparent;
+}
+
+.modal-cliente-loco-header {
+  text-align: center;
+  padding: 1.8rem 2rem;
+  position: relative;
+}
+
+.modal-cliente-loco-header::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 10%;
+  right: 10%;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.3),
+    transparent
+  );
+}
+
+.modal-cliente-loco-header h2 {
+  font-family: "Fredoka", "Baloo 2", cursive, sans-serif;
+  color: #ffd700;
+  font-size: 2.2rem;
+  margin: 0 0 0.5rem 0;
+  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5), 0 0 30px rgba(255, 215, 0, 0.3);
+  letter-spacing: 1px;
+}
+
+.modal-cliente-loco-header p {
+  font-family: "Nunito", sans-serif;
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0 0 0.5rem 0;
+  font-size: 1.15rem;
+  font-weight: 600;
+}
+
+.modal-cliente-loco-header p strong {
+  color: white;
+  font-weight: 800;
+}
+
+.progreso-cliente-loco {
+  margin-top: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  display: inline-block;
+}
+
+.progreso-cliente-loco span {
+  font-family: "Nunito", sans-serif;
+  color: rgba(255, 255, 255, 0.95);
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+.modal-cliente-loco-content {
+  padding: 2rem 2.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.mensaje-cliente-loco {
+  text-align: center;
+}
+
+.mensaje-cliente-loco p {
+  font-family: "Nunito", sans-serif;
+  font-size: 1.15rem;
+  color: rgba(255, 255, 255, 0.95);
+  line-height: 1.6;
+  margin: 0;
+}
+
+.mensaje-cliente-loco strong {
+  color: #ffd700;
+  font-weight: 800;
+}
+
+.info-dinero-cliente {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.5rem;
+  background: linear-gradient(
+    135deg,
+    rgba(76, 175, 80, 0.2),
+    rgba(76, 175, 80, 0.3)
+  );
+  border-radius: 12px;
+  border: 2px solid rgba(76, 175, 80, 0.4);
+}
+
+.info-dinero-cliente .label {
+  font-family: "Nunito", sans-serif;
+  font-size: 1.1rem;
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: 700;
+}
+
+.info-dinero-cliente .valor {
+  font-family: "Fredoka", "Baloo 2", cursive, sans-serif;
+  font-size: 1.5rem;
+  color: #4caf50;
+  font-weight: 800;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.sin-productos {
+  text-align: center;
+  padding: 2rem;
+  background: rgba(255, 152, 0, 0.1);
+  border-radius: 16px;
+  border: 2px solid rgba(255, 152, 0, 0.3);
+}
+
+.sin-productos p {
+  font-family: "Nunito", sans-serif;
+  font-size: 1.2rem;
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0 0 1.5rem 0;
+}
+
+.btn-saltar {
+  font-family: "Fredoka", "Baloo 2", cursive, sans-serif;
+  padding: 1rem 2.5rem;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: white;
+  border: 3px solid;
+  border-radius: 16px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.btn-saltar:hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+.productos-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1rem;
+  max-height: 400px;
+  overflow-y: auto;
+  padding: 0.5rem;
+}
+
+.producto-card {
+  background: rgba(255, 255, 255, 0.05);
+  border: 3px solid transparent;
+  border-radius: 16px;
+  padding: 1.25rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  backdrop-filter: blur(10px);
+}
+
+.producto-card:hover:not(.sin-dinero) {
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+.producto-card.seleccionado {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: currentColor;
+  box-shadow: 0 0 20px currentColor;
+}
+
+.producto-card.sin-dinero {
+  opacity: 0.4;
+  cursor: not-allowed;
+  filter: grayscale(0.8);
+}
+
+.producto-nombre {
+  font-family: "Fredoka", "Baloo 2", cursive, sans-serif;
+  font-size: 1.1rem;
+  color: white;
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+  text-align: center;
+}
+
+.producto-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.producto-info .precio {
+  font-family: "Nunito", sans-serif;
+  font-size: 1.2rem;
+  color: #4caf50;
+  font-weight: 800;
+}
+
+.producto-info .stock {
+  font-family: "Nunito", sans-serif;
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.7);
+  font-weight: 600;
+}
+
+.etiqueta-sin-dinero {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  background: rgba(244, 67, 54, 0.9);
+  color: white;
+  padding: 0.25rem 0.75rem;
+  border-radius: 8px;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.check-seleccionado {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  background: rgba(76, 175, 80, 0.9);
+  color: white;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  font-weight: 900;
+  box-shadow: 0 2px 8px rgba(76, 175, 80, 0.5);
+}
+
+.modal-cliente-loco-footer {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  padding-top: 1rem;
+}
+
+.btn-confirmar {
+  font-family: "Fredoka", "Baloo 2", cursive, sans-serif;
+  padding: 1rem 3rem;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: white;
+  border: 3px solid;
+  border-radius: 16px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-confirmar:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.btn-confirmar:not(:disabled)::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+}
+
+.btn-confirmar:not(:disabled):hover::before {
+  width: 300px;
+  height: 300px;
+}
+
+.btn-confirmar:not(:disabled):hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+.btn-confirmar:active:not(:disabled) {
+  transform: translateY(-1px) scale(1.02);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .modal-cliente-loco-container {
+    width: 90%;
+    max-width: none;
+  }
+
+  .modal-cliente-loco-header h2 {
+    font-size: 1.8rem;
+  }
+
+  .modal-cliente-loco-content {
+    padding: 1.5rem;
+  }
+
+  .productos-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .btn-confirmar {
+    padding: 0.8rem 2rem;
+    font-size: 1rem;
+  }
+}
