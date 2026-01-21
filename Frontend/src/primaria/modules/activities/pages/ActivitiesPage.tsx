@@ -17,7 +17,7 @@ export const ActivitiesPage: React.FC = () => {
     }, []);
 
     // Lista de juegos disponibles para Primaria
-    const primariaGames: GameItem[] = [
+    const allPrimariaGames: GameItem[] = [
         {
             id: 'videos',
             name: 'Videos Educativos',
@@ -102,6 +102,10 @@ export const ActivitiesPage: React.FC = () => {
             available: true,
         },
     ];
+
+    // Juegos ocultos: videos, fabulas, quiz-individual
+    const hiddenGameIds = ['videos', 'fabulas', 'quiz-individual'];
+    const primariaGames = allPrimariaGames.filter(game => !hiddenGameIds.includes(game.id));
 
     return (
         <ActivitiesMenu

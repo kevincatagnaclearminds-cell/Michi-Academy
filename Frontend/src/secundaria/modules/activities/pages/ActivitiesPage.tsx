@@ -17,7 +17,7 @@ export const ActivitiesPage: React.FC = () => {
     }, []);
 
     // Lista de juegos disponibles para Secundaria
-    const secundariaGames: GameItem[] = [
+    const allSecundariaGames: GameItem[] = [
         {
             id: 'videos',
             name: 'Videos Educativos',
@@ -86,6 +86,10 @@ export const ActivitiesPage: React.FC = () => {
             available: true,
         },
     ];
+
+    // Juegos ocultos: videos, quiz-individual
+    const hiddenGameIds = ['videos', 'quiz-individual'];
+    const secundariaGames = allSecundariaGames.filter(game => !hiddenGameIds.includes(game.id));
 
     return (
         <ActivitiesMenu
