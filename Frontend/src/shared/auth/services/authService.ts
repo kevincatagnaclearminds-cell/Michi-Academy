@@ -1,4 +1,4 @@
-import { LoginResponse, User, LoginCredentials, RegisterCredentials, UserLevel, ApiResponse } from '../../types/auth.types';
+import { LoginResponse, User, LoginCredentials, RegisterCredentials, UserLevel, ApiResponse, getFrontendType } from '../../types/auth.types';
 import { apiService } from '../../services/api.service';
 import { API_CONFIG } from '../../config/api.config';
 
@@ -22,13 +22,20 @@ class AuthService {
           localStorage.setItem('token', loginData.accessToken);
           localStorage.setItem('user', JSON.stringify(loginData.user));
           
-          // Guardar el nivel del usuario desde la respuesta del backend
-          // El backend devuelve 'level', mapear a 'primaria'/'secundaria' si es necesario
-          const backendLevel = loginData.user.level || loginData.user.nivel;
-          const userLevel = backendLevel === 'primaria' || backendLevel === 'secundaria' 
-            ? backendLevel 
-            : (backendLevel?.includes('elementary') || backendLevel?.includes('middle') ? 'primaria' : 'secundaria') || level;
-          localStorage.setItem('userLevel', userLevel);
+          // Determinar el tipo de frontend según level y account_type
+          const frontendType = getFrontendType(loginData.user);
+          localStorage.setItem('frontendType', frontendType);
+          
+          // Guardar datos adicionales del usuario
+          if (loginData.user.level) {
+            localStorage.setItem('userLevel', loginData.user.level);
+          }
+          if (loginData.user.grade) {
+            localStorage.setItem('userGrade', String(loginData.user.grade));
+          }
+          if (loginData.user.account_type) {
+            localStorage.setItem('accountType', loginData.user.account_type);
+          }
           
           // Guardar refresh token si existe
           if (loginData.refreshToken) {
@@ -71,12 +78,20 @@ class AuthService {
           localStorage.setItem('token', registerData.accessToken);
           localStorage.setItem('user', JSON.stringify(registerData.user));
           
-          // Guardar el nivel del usuario desde la respuesta del backend
-          const backendLevel = registerData.user.level || registerData.user.nivel;
-          const userLevel = backendLevel === 'primaria' || backendLevel === 'secundaria' 
-            ? backendLevel 
-            : (backendLevel?.includes('elementary') || backendLevel?.includes('middle') ? 'primaria' : 'secundaria') || level;
-          localStorage.setItem('userLevel', userLevel);
+          // Determinar el tipo de frontend según level y account_type
+          const frontendType = getFrontendType(registerData.user);
+          localStorage.setItem('frontendType', frontendType);
+          
+          // Guardar datos adicionales del usuario
+          if (registerData.user.level) {
+            localStorage.setItem('userLevel', registerData.user.level);
+          }
+          if (registerData.user.grade) {
+            localStorage.setItem('userGrade', String(registerData.user.grade));
+          }
+          if (registerData.user.account_type) {
+            localStorage.setItem('accountType', registerData.user.account_type);
+          }
           
           if (registerData.refreshToken) {
             localStorage.setItem('refreshToken', registerData.refreshToken);
@@ -107,6 +122,9 @@ class AuthService {
       localStorage.removeItem('token');
       localStorage.removeItem('user');
       localStorage.removeItem('userLevel');
+      localStorage.removeItem('userGrade');
+      localStorage.removeItem('accountType');
+      localStorage.removeItem('frontendType');
       localStorage.removeItem('refreshToken');
     }
   }
@@ -126,6 +144,22 @@ class AuthService {
   getUserLevel(): UserLevel | null {
     const level = localStorage.getItem('userLevel');
     return (level === 'primaria' || level === 'secundaria') ? level : null;
+  }
+
+  getFrontendType(): 'primaria' | 'secundaria' | 'admin' | null {
+    const frontendType = localStorage.getItem('frontendType');
+    return (frontendType === 'primaria' || frontendType === 'secundaria' || frontendType === 'admin') 
+      ? frontendType 
+      : null;
+  }
+
+  getUserGrade(): number | null {
+    const grade = localStorage.getItem('userGrade');
+    return grade ? parseInt(grade, 10) : null;
+  }
+
+  getAccountType(): string | null {
+    return localStorage.getItem('accountType');
   }
 
   isAuthenticated(): boolean {

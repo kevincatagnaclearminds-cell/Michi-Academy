@@ -1,7 +1,8 @@
 import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { LoginForm } from '../components/LoginForm';
-import { UserLevel } from '../../types/auth.types';
+import { UserLevel, getLoginRedirectPath } from '../../types/auth.types';
+import { authService } from '../services/authService';
 import './LoginPage.css';
 
 export const LoginPage: React.FC = () => {
@@ -9,9 +10,8 @@ export const LoginPage: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Detectar el nivel desde la URL
-  // Si la URL contiene /primaria/ o /secundaria/, usar ese nivel
-  // Por defecto, usar primaria
+  // Detectar el nivel desde la URL (solo para mostrar el formulario correcto)
+  // La redirección real se hará según los datos del usuario del backend
   const getLevelFromPath = (): UserLevel => {
     const path = location.pathname.toLowerCase();
     if (path.includes('/primaria')) {
@@ -20,7 +20,6 @@ export const LoginPage: React.FC = () => {
     if (path.includes('/secundaria')) {
       return 'secundaria';
     }
-    // Por defecto, intentar detectar desde la URL completa
     return 'primaria'; // Valor por defecto
   };
 
@@ -28,11 +27,21 @@ export const LoginPage: React.FC = () => {
 
   const handleLoginSuccess = () => {
     console.log('Login exitoso, redirigiendo...');
-    // Redirigir según el nivel
-    const redirectPath = level === 'primaria' 
-      ? '/primaria/activities' 
-      : '/secundaria/activities';
-    navigate(redirectPath);
+    
+    // Obtener el usuario del localStorage (ya guardado por authService)
+    const user = authService.getCurrentUser();
+    
+    if (user) {
+      // Usar la función helper para determinar la ruta correcta
+      const redirectPath = getLoginRedirectPath(user);
+      navigate(redirectPath);
+    } else {
+      // Fallback: redirigir según la URL actual
+      const redirectPath = level === 'primaria' 
+        ? '/primaria/activities' 
+        : '/secundaria/activities';
+      navigate(redirectPath);
+    }
   };
 
   return (
