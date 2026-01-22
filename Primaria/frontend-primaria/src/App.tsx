@@ -1,13 +1,13 @@
 import React from 'react';
 //import { LoginPage } from './modules/auth/pages/LoginPage';
-import FabulasPage from './modules/games/primaria/fabulas';
+import DetectivesFinancierosPage from '../../../Secundaria/frontend-secundaria/src/modules/games/secundaria/detectives-financieros'
 
 
 
 const App: React.FC = () => {
   return (
     <div className="app">
-      <FabulasPage />
+      <DetectivesFinancierosPage />
     </div>
   );
 };
